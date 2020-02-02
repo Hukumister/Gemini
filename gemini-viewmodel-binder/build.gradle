@@ -1,0 +1,43 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "${version}"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation project(':gemini-core')
+    implementation rootProject.ext.appCompat
+    implementation rootProject.ext.kotlinStdlib
+    /**
+     * Rx java
+     */
+    implementation rootProject.ext.rxJava
+    implementation rootProject.ext.rxKotlin
+    implementation rootProject.ext.rxAndroid
+    /**
+     * ViewModel
+     */
+    implementation rootProject.ext.lifecycleViewModel
+    implementation rootProject.ext.lifecycleCommon
+
+    testImplementation rootProject.ext.junit
+}
+
+apply plugin: 'com.vanniktech.maven.publish'

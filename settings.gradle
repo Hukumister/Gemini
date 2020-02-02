@@ -1,3 +1,4 @@
-include ':gemini-core'
+include ':gemini-core',
+    'gemini-viewmodel-binder'
 
 

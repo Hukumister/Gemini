@@ -1,4 +1,11 @@
 ext {
+    minSdkVersion = 21
+    targetSdkVersion = 29
+    compileSdkVersion = 29
+    buildToolsVersion = '29.0.0'
+
+    def appCompatVersion = "1.1.0"
+    appCompat = "androidx.appcompat:appcompat:$appCompatVersion"
 
     def rxJavaVersion = "2.2.15"
     def rxAndroidVersion = "2.1.1"
@@ -9,6 +16,10 @@ ext {
 
     def timberVersion = "4.6.0"
     timber = "com.jakewharton.timber:timber:$timberVersion"
+
+    def lifecycleVersion = "2.1.0"
+    lifecycleViewModel = "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
+    lifecycleCommon = "androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion"
 
     junit = 'junit:junit:4.12'
     mockito = 'com.nhaarm an:mockito-kotlin-kt1.1:1.6.0'
