@@ -1,0 +1,18 @@
+ext {
+
+    def rxJavaVersion = "2.2.15"
+    def rxAndroidVersion = "2.1.1"
+    def rxKotlinVersion = "2.4.0"
+    rxJava = "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
+    rxAndroid = "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
+    rxKotlin = "io.reactivex.rxjava2:rxkotlin:$rxKotlinVersion"
+
+    def timberVersion = "4.6.0"
+    timber = "com.jakewharton.timber:timber:$timberVersion"
+
+    junit = 'junit:junit:4.12'
+    mockito = 'com.nhaarm an:mockito-kotlin-kt1.1:1.6.0'
+    assertJ = 'org.assertj:assertj-core:3.8.0'
+
+    kotlinStdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
+}
