@@ -36,7 +36,7 @@ abstract class ViewModelBinder<Action : Any, State : Any, ViewState : Any, Event
                         eventListenerConnection decorate { stream -> stream.observeOn(uiScheduler) }
                     }
                 }
-    }
+    }.apply { childBinding?.let(::addChild) }
 
     protected open val childBinding: ConnectionViewBinder<Action, ViewState>? = null
 
