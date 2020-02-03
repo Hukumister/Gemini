@@ -1,8 +1,8 @@
 package com.haroncode.gemini.core.elements
 
-import io.reactivex.Observable
+import org.reactivestreams.Publisher
 
 /**
  * @author HaronCode.
  */
-typealias Bootstrapper<Action> = () -> Observable<Action>
+typealias Bootstrapper<Action> = () -> Publisher<Action>

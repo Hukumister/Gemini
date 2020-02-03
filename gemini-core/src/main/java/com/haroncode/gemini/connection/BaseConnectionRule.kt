@@ -2,11 +2,10 @@ package com.haroncode.gemini.connection
 
 import com.haroncode.gemini.core.ConnectionRule
 import io.reactivex.Flowable
+import io.reactivex.FlowableTransformer
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
 import org.reactivestreams.Publisher
-
-typealias Transformer<In, Out> = (Flowable<In>) -> Flowable<Out>
 
 /**
  * @author HaronCode.
@@ -14,7 +13,7 @@ typealias Transformer<In, Out> = (Flowable<In>) -> Flowable<Out>
 open class BaseConnectionRule<Out : Any, In : Any>(
     val consumer: Consumer<In>,
     val publisher: Publisher<Out>,
-    val transformer: Transformer<Out, In>
+    val transformer: FlowableTransformer<Out, In>
 ) : ConnectionRule {
 
     override val isRetain: Boolean = false

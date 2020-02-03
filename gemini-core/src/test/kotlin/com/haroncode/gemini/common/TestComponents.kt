@@ -1,7 +1,19 @@
 package com.haroncode.gemini.common
 
-import com.haroncode.gemini.common.TestAction.*
-import com.haroncode.gemini.common.TestEffect.*
+import com.haroncode.gemini.common.TestAction.ActionForEvent
+import com.haroncode.gemini.common.TestAction.FulfillableAsync
+import com.haroncode.gemini.common.TestAction.FulfillableInstantly
+import com.haroncode.gemini.common.TestAction.MaybeFulfillable
+import com.haroncode.gemini.common.TestAction.TranslatesTo3Effects
+import com.haroncode.gemini.common.TestAction.Unfulfillable
+import com.haroncode.gemini.common.TestEffect.ConditionalThingHappened
+import com.haroncode.gemini.common.TestEffect.EffectForEvent
+import com.haroncode.gemini.common.TestEffect.FinishedAsync
+import com.haroncode.gemini.common.TestEffect.InstantEffect
+import com.haroncode.gemini.common.TestEffect.MultipleEffect1
+import com.haroncode.gemini.common.TestEffect.MultipleEffect2
+import com.haroncode.gemini.common.TestEffect.MultipleEffect3
+import com.haroncode.gemini.common.TestEffect.StartedAsync
 import com.haroncode.gemini.core.elements.Middleware
 import com.haroncode.gemini.core.elements.Reducer
 import io.reactivex.Flowable

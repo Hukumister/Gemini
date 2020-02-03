@@ -1,5 +1,6 @@
 package com.haroncode.gemini.connection
 
+import com.haroncode.gemini.connection.dsl.identityFlowableTransformer
 import com.haroncode.gemini.core.Store
 import com.haroncode.gemini.core.elements.StoreNavigator
 import io.reactivex.Flowable
@@ -19,5 +20,5 @@ class NavigationConnection<State : Any, Event : Any>(
         Flowable.fromPublisher(store.eventSource)
     ),
     consumer = Consumer { (state, event) -> storeNavigator.invoke(state, event) },
-    transformer = { input -> input }
+    transformer = identityFlowableTransformer()
 )
