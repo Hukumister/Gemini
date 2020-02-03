@@ -14,16 +14,16 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.vanniktech:gradle-maven-publish-plugin:0.8.0'
         classpath 'com.android.tools.build:gradle:3.5.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+
+        // For the library uploading to the Bintray
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.1'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
     }
 }
 
 allprojects {
-//   group = GROUP
-//   version = VERSION
-
     repositories {
         mavenCentral()
         google()
@@ -37,4 +37,13 @@ subprojects { project ->
             jvmTarget = "1.8"
         }
     }
+}
+
+ext {
+    // This params is for the library uploading to the Bintray
+    bintrayRepo = 'maven'
+    publishedGroupId = 'com.haroncode.gemini'
+    libraryVersion = '0.0.2'
+    gitUrl = 'https://github.com/HaronCode/Gemini'
+    allLicenses = ['MIT']
 }
