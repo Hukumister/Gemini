@@ -19,6 +19,7 @@ buildscript {
 
         // For the library uploading to the Bintray
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.1'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
     }
 }
 
@@ -40,11 +41,9 @@ subprojects { project ->
 
 ext {
     // This params is for the library uploading to the Bintray
-    bintrayRepo = 'Gemini'
-    bintrayName = 'Gemini'
+    bintrayRepo = 'maven'
     publishedGroupId = 'com.haroncode.gemini'
-    artifact = 'gemini'
-    libraryVersion = '0.0.3'
+    libraryVersion = '0.0.1'
     gitUrl = 'https://github.com/HaronCode/Gemini'
     allLicenses = ['MIT']
 }
