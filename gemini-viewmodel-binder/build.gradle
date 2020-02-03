@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'com.jfrog.bintray'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -40,4 +41,25 @@ dependencies {
     testImplementation rootProject.ext.junit
 }
 
-apply plugin: 'com.vanniktech.maven.publish'
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+bintray {
+    // User and ApiKey stored in local.properties
+    user = properties.getProperty("bintrayUser")
+    key = properties.getProperty("bintrayApiKey")
+    configurations = ['archives']
+
+    // Package info for Bintray
+    pkg {
+        name = "gemini-viewmodel-binder"
+        repo = bintrayRepo
+        licenses = allLicenses
+        vcsUrl = gitUrl
+        publish = true
+        version {
+            name = libraryVersion
+            released = new Date()
+        }
+    }
+}
