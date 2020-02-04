@@ -1,9 +1,9 @@
 package com.haroncode.gemini.binder.dsl
 
-import io.reactivex.functions.Consumer
-import org.reactivestreams.Publisher
 import com.haroncode.gemini.connection.BaseConnectionRule
 import com.haroncode.gemini.connection.Transformer
+import io.reactivex.functions.Consumer
+import org.reactivestreams.Publisher
 
 @Suppress("NOTHING_TO_INLINE")
 inline infix fun <Out : Any, In : Any> Pair<Publisher<Out>, Consumer<In>>.with(
