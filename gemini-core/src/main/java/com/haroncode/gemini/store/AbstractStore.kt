@@ -19,11 +19,11 @@ import org.reactivestreams.Subscriber
  * @author HaronCode.
  */
 abstract class AbstractStore<Action : Any, State : Any, Event : Any, Effect : Any>(
-        initialState: State,
-        private val reducer: Reducer<State, Effect>,
-        private val middleware: Middleware<Action, State, Effect>,
-        bootstrapper: Bootstrapper<Action>? = null,
-        private val eventProducer: EventProducer<State, Effect, Event>? = null
+    initialState: State,
+    private val reducer: Reducer<State, Effect>,
+    private val middleware: Middleware<Action, State, Effect>,
+    bootstrapper: Bootstrapper<Action>? = null,
+    private val eventProducer: EventProducer<State, Effect, Event>? = null
 ) : Store<Action, State, Event> {
 
     private val compositeDisposable = CompositeDisposable()
