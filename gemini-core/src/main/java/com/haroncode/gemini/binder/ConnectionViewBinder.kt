@@ -9,7 +9,7 @@ class ConnectionViewBinder<Action : Any, State : Any>(
     private val connectionFactory: (StoreView<Action, State>) -> List<ConnectionRule>
 ) : ViewBinder<Action, State> {
 
-    private var connectionDisposable = CompositeDisposable()
+    private val connectionDisposable = CompositeDisposable()
 
     override fun bindView(storeView: StoreView<Action, State>) {
         val connectionRuleList = connectionFactory.invoke(storeView)
