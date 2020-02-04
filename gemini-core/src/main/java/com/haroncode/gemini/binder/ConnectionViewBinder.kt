@@ -6,7 +6,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 
 class ConnectionViewBinder<Action : Any, State : Any>(
-        private val connectionFactory: (StoreView<Action, State>) -> List<ConnectionRule>
+    private val connectionFactory: (StoreView<Action, State>) -> List<ConnectionRule>
 ) : ViewBinder<Action, State> {
 
     private var connectionDisposable = CompositeDisposable()

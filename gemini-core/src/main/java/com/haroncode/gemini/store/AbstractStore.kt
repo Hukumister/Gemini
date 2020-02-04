@@ -1,5 +1,10 @@
 package com.haroncode.gemini.store
 
+import com.haroncode.gemini.core.Store
+import com.haroncode.gemini.core.elements.Bootstrapper
+import com.haroncode.gemini.core.elements.EventProducer
+import com.haroncode.gemini.core.elements.Middleware
+import com.haroncode.gemini.core.elements.Reducer
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.processors.BehaviorProcessor
@@ -9,11 +14,6 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.withLatestFrom
 import org.reactivestreams.Publisher
 import org.reactivestreams.Subscriber
-import com.haroncode.gemini.core.Store
-import com.haroncode.gemini.core.elements.Bootstrapper
-import com.haroncode.gemini.core.elements.EventProducer
-import com.haroncode.gemini.core.elements.Middleware
-import com.haroncode.gemini.core.elements.Reducer
 
 /**
  * @author HaronCode.

@@ -1,11 +1,11 @@
 package com.haroncode.gemini.routing
 
+import com.haroncode.gemini.connection.BaseConnectionRule
+import com.haroncode.gemini.core.elements.StoreNavigator
 import io.reactivex.Flowable
 import io.reactivex.functions.Consumer
 import io.reactivex.rxkotlin.Flowables
 import org.reactivestreams.Publisher
-import com.haroncode.gemini.connection.BaseConnectionRule
-import com.haroncode.gemini.core.elements.StoreNavigator
 
 class NavigationConnection<State : Any, Event : Any>(
     statePublisher: Publisher<State>,

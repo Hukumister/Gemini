@@ -14,10 +14,10 @@ import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 
 abstract class ViewModelBinder<Action : Any, State : Any, ViewState : Any, Event : Any>(
-        private val store: Store<Action, State, Event>,
-        transformer: (State) -> ViewState,
-        storeNavigator: StoreNavigator<State, Event>? = null,
-        uiScheduler: Scheduler = AndroidSchedulers.mainThread()
+    private val store: Store<Action, State, Event>,
+    transformer: (State) -> ViewState,
+    storeNavigator: StoreNavigator<State, Event>? = null,
+    uiScheduler: Scheduler = AndroidSchedulers.mainThread()
 ) : ViewModel(), ViewBinder<Action, ViewState> {
 
     private val parentBinder = binding<Action, ViewState> { storeView ->
@@ -25,14 +25,11 @@ abstract class ViewModelBinder<Action : Any, State : Any, ViewState : Any, Event
         connection { store to storeView with { input -> input.map(transformer).observeOn(uiScheduler) } }
         connection { storeView to store with noneTransformer() }
 
-        navigatorConnection(store, storeNavigator)?.let { connection ->
-            connection { connection decorate { stream -> stream.observeOn(uiScheduler) } }
-        }
+        navigatorConnection(store, storeNavigator)
+            ?.let { connection -> connection { connection decorate { stream -> stream.observeOn(uiScheduler) } } }
 
         eventListenerConnection(store, storeView)?.let { eventListenerConnection ->
-            connection {
-                eventListenerConnection decorate { stream -> stream.observeOn(uiScheduler) }
-            }
+            connection { eventListenerConnection decorate { stream -> stream.observeOn(uiScheduler) } }
         }
 
     }
@@ -46,24 +43,24 @@ abstract class ViewModelBinder<Action : Any, State : Any, ViewState : Any, Event
     fun addChildBinder(viewBinder: ViewBinder<Action, ViewState>) = binderDelegate.addBinder(viewBinder)
 
     private fun navigatorConnection(
-            store: Store<*, State, Event>,
-            storeNavigator: StoreNavigator<State, Event>?
+        store: Store<*, State, Event>,
+        storeNavigator: StoreNavigator<State, Event>?
     ) = storeNavigator?.let { navigator ->
         NavigationConnection(
-                statePublisher = store,
-                eventPublisher = store.eventSource,
-                storeNavigator = navigator
+            statePublisher = store,
+            eventPublisher = store.eventSource,
+            storeNavigator = navigator
         )
     }
 
     @Suppress("UNCHECKED_CAST")
     private fun eventListenerConnection(
-            store: Store<*, *, Event>,
-            storeView: StoreView<Action, ViewState>
+        store: Store<*, *, Event>,
+        storeView: StoreView<Action, ViewState>
     ) = (storeView as? EventListener<Event>)?.let { listener ->
         EventListenerConnection(
-                eventPublisher = store.eventSource,
-                eventListener = listener
+            eventPublisher = store.eventSource,
+            eventListener = listener
         )
     }
 

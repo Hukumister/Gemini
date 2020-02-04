@@ -1,8 +1,8 @@
 package com.haroncode.gemini.routing
 
+import com.haroncode.gemini.connection.BaseConnectionRule
 import io.reactivex.functions.Consumer
 import org.reactivestreams.Publisher
-import com.haroncode.gemini.connection.BaseConnectionRule
 
 class EventListenerConnection<Event : Any>(
     eventPublisher: Publisher<Event>,
