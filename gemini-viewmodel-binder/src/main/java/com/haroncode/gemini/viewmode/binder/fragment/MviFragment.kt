@@ -3,13 +3,13 @@ package com.haroncode.gemini.viewmode.binder.fragment
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import com.haroncode.gemini.core.StoreView
+import com.haroncode.gemini.viewmode.binder.viewmodel.ViewModelBinder
 import io.reactivex.processors.PublishProcessor
 import org.reactivestreams.Subscriber
-import com.haroncode.gemini.viewmode.binder.viewmodel.ViewModelBinder
 
-abstract class MviFragment<Action : Any, State : Any>(
-        @LayoutRes layoutRes: Int
-) : Fragment(layoutRes), StoreView<Action, State> {
+abstract class MviFragment<Action : Any, State : Any> @JvmOverloads constructor(
+    @LayoutRes contentLayoutId: Int = 0
+) : Fragment(contentLayoutId), StoreView<Action, State> {
 
     private val source = PublishProcessor.create<Action>()
 
