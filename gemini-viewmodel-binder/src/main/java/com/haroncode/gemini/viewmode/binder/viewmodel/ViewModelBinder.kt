@@ -21,7 +21,6 @@ abstract class ViewModelBinder<Action : Any, State : Any, ViewState : Any, Event
 ) : ViewModel(), ViewBinder<Action, ViewState> {
 
     private val parentBinder = binding<Action, ViewState> { storeView ->
-
         connection { store to storeView with { input -> input.map(transformer).observeOn(uiScheduler) } }
         connection { storeView to store with noneTransformer() }
 
@@ -31,7 +30,6 @@ abstract class ViewModelBinder<Action : Any, State : Any, ViewState : Any, Event
         eventListenerConnection(store, storeView)?.let { eventListenerConnection ->
             connection { eventListenerConnection decorate { stream -> stream.observeOn(uiScheduler) } }
         }
-
     }
 
     private val binderDelegate = BinderComposer(parentBinder)
@@ -41,6 +39,11 @@ abstract class ViewModelBinder<Action : Any, State : Any, ViewState : Any, Event
     override fun unbindView() = binderDelegate.unbindView()
 
     fun addChildBinder(viewBinder: ViewBinder<Action, ViewState>) = binderDelegate.addBinder(viewBinder)
+
+    override fun onCleared() = store.dispose()
+
+    @Suppress("NOTHING_TO_INLINE")
+    inline fun ViewBinder<Action, ViewState>.addToParent() = addChildBinder(this)
 
     private fun navigatorConnection(
         store: Store<*, State, Event>,
@@ -63,10 +66,4 @@ abstract class ViewModelBinder<Action : Any, State : Any, ViewState : Any, Event
             eventListener = listener
         )
     }
-
-    override fun onCleared() = store.dispose()
-
-    @Suppress("NOTHING_TO_INLINE")
-    inline fun ViewBinder<Action, ViewState>.addToParent() = addChildBinder(this)
-
 }
