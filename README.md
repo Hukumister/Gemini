@@ -15,3 +15,9 @@ allprojects {
     }
 }
 ```
+
+Add the dependencies:
+- Core classes:
+```groovy
+implementation "com.haroncode.gemini:gemini-core:${latest-version}"
+```
