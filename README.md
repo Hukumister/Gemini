@@ -31,7 +31,7 @@ implementation "com.haroncode.gemini:gemini-core:${latest-version}"
 ```
 MIT License
 
-Copyright (c) 2020 Nikita Zaltsman (@HaronCode) and inayatov Dias (@kdk96)
+Copyright (c) 2020 Nikita Zaltsman (@HaronCode) and Kinayatov Dias (@kdk96)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
