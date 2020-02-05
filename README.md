@@ -24,14 +24,14 @@ Add the dependencies:
 implementation "com.haroncode.gemini:gemini-core:${latest-version}"
 ```
 ## Participants
-+ idea and code - Zaltsman Nikita (@HaronCode)
++ idea, code and documentation - Zaltsman Nikita (@HaronCode)
 + review, code, writing unit tests - Kinayatov Dias (@kdk96)
 
 ## License
 ```
 MIT License
 
-Copyright (c) 2020 Nikita Zaltsman
+Copyright (c) 2020 Nikita Zaltsman (@HaronCode) and inayatov Dias (@kdk96)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
