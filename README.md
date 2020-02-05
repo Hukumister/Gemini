@@ -2,7 +2,7 @@
 [![jCenter](https://api.bintray.com/packages/haroncode/maven/gemini-core/images/download.svg)](https://bintray.com/haroncode/maven/gemini-core/_latestVersion)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)  
 
-This library is designed to simplify build the mvi architecture (a link to the articles by Hanes Dormann 
+This library is designed to simplify build the mvi architecture (a link to the articles by Hannes Dorfmann
 http://hannesdorfmann.com/android/mosby3-mvi-1), in android.
 
 ## Installing
