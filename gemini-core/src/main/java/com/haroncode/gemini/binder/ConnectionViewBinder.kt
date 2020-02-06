@@ -1,6 +1,6 @@
 package com.haroncode.gemini.binder
 
-import com.haroncode.gemini.connection.ConnectionRule
+import com.haroncode.gemini.core.ConnectionRule
 import com.haroncode.gemini.core.StoreView
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo

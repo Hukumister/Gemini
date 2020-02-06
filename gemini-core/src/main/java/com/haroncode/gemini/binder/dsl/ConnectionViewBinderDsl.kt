@@ -1,7 +1,7 @@
 package com.haroncode.gemini.binder.dsl
 
 import com.haroncode.gemini.binder.ConnectionViewBinder
-import com.haroncode.gemini.connection.ConnectionRule
+import com.haroncode.gemini.core.ConnectionRule
 import com.haroncode.gemini.core.StoreView
 
 fun <Action : Any, State : Any> binding(
