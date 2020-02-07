@@ -6,6 +6,9 @@ import io.reactivex.Flowable
 import io.reactivex.functions.Consumer
 import io.reactivex.rxkotlin.Flowables
 
+/**
+ * @author HaronCode.
+ */
 class NavigationConnection<State : Any, Event : Any>(
     override val isRetain: Boolean,
     store: Store<*, State, Event>,

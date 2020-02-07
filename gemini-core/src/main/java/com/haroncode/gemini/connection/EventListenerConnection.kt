@@ -4,6 +4,9 @@ import com.haroncode.gemini.routing.EventListener
 import io.reactivex.functions.Consumer
 import org.reactivestreams.Publisher
 
+/**
+ * @author HaronCode.
+ */
 class EventListenerConnection<Event : Any>(
     eventPublisher: Publisher<Event>,
     eventListener: EventListener<Event>
