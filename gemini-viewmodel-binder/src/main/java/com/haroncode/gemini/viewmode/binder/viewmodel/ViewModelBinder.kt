@@ -8,8 +8,8 @@ import com.haroncode.gemini.core.Store
 import com.haroncode.gemini.core.StoreView
 import com.haroncode.gemini.core.elements.StoreNavigator
 import com.haroncode.gemini.routing.EventListener
-import com.haroncode.gemini.routing.EventListenerConnection
-import com.haroncode.gemini.routing.NavigationConnection
+import com.haroncode.gemini.connection.EventListenerConnection
+import com.haroncode.gemini.connection.NavigationConnection
 import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 

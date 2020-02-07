@@ -1,4 +1,5 @@
 include ':gemini-core',
-    'gemini-viewmodel-binder'
+    'gemini-viewmodel-binder',
+    'gemini-lifecycle-binder'
 
 
