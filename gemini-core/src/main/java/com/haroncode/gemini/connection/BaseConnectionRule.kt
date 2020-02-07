@@ -17,6 +17,8 @@ open class BaseConnectionRule<Out : Any, In : Any>(
     val transformer: Transformer<Out, In>
 ) : ConnectionRule {
 
+    override val isRetain: Boolean = false
+
     override fun connect(): Disposable = Flowable.fromPublisher(publisher)
         .compose(transformer)
         .subscribe(consumer)
