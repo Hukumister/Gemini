@@ -2,7 +2,7 @@ package com.haroncode.gemini.binder
 
 import org.reactivestreams.Publisher
 
-interface Lifecycle : Publisher<Lifecycle.State> {
+interface BinderLifecycle : Publisher<BinderLifecycle.State> {
 
     enum class State {
         START,
