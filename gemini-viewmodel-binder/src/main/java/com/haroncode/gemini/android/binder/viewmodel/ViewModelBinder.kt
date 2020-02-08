@@ -1,4 +1,4 @@
-package com.haroncode.gemini.viewmode.binder.viewmodel
+package com.haroncode.gemini.android.binder.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.haroncode.gemini.binder.BinderComposer
@@ -50,8 +50,8 @@ abstract class ViewModelBinder<Action : Any, State : Any, ViewState : Any, Event
         storeNavigator: StoreNavigator<State, Event>?
     ) = storeNavigator?.let { navigator ->
         NavigationConnection(
-            statePublisher = store,
-            eventPublisher = store.eventSource,
+            isRetain = true,
+            store = store,
             storeNavigator = navigator
         )
     }

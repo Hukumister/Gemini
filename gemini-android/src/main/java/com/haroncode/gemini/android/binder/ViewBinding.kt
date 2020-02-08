@@ -1,4 +1,4 @@
-package com.haroncode.gemini.viewmode.binder
+package com.haroncode.gemini.android.binder
 
 import com.haroncode.gemini.core.Binder
 

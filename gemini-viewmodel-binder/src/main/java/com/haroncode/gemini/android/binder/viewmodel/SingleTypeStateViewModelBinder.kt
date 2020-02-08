@@ -1,4 +1,4 @@
-package com.haroncode.gemini.viewmode.binder.viewmodel
+package com.haroncode.gemini.android.binder.viewmodel
 
 import com.haroncode.gemini.core.Store
 import com.haroncode.gemini.core.elements.StoreNavigator

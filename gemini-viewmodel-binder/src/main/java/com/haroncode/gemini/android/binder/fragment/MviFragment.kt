@@ -1,9 +1,9 @@
-package com.haroncode.gemini.viewmode.binder.fragment
+package com.haroncode.gemini.android.binder.fragment
 
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import com.haroncode.gemini.core.StoreView
-import com.haroncode.gemini.viewmode.binder.viewmodel.ViewModelBinder
+import com.haroncode.gemini.android.binder.viewmodel.ViewModelBinder
 import io.reactivex.processors.PublishProcessor
 import org.reactivestreams.Subscriber
 
