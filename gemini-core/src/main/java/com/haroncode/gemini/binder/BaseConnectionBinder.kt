@@ -1,13 +1,14 @@
 package com.haroncode.gemini.binder
 
-import com.haroncode.gemini.binder.BinderLifecycle.State
-import com.haroncode.gemini.core.Binder
+import com.haroncode.gemini.core.StoreLifecycle.State
+import com.haroncode.gemini.core.ConnectionBinder
 import com.haroncode.gemini.core.ConnectionRule
+import com.haroncode.gemini.core.StoreLifecycle
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 
-class BaseBinder(binderLifecycle: BinderLifecycle) : Binder {
+class BaseConnectionBinder(storeLifecycle: StoreLifecycle) : ConnectionBinder {
 
     private val connectionRuleDisposables = CompositeDisposable()
     private val retainRuleDisposables = CompositeDisposable()
@@ -17,7 +18,7 @@ class BaseBinder(binderLifecycle: BinderLifecycle) : Binder {
     private var isActive: Boolean = false
 
     init {
-        Flowable.fromPublisher(binderLifecycle)
+        Flowable.fromPublisher(storeLifecycle)
             .distinctUntilChanged()
             .subscribe { state ->
                 when (state) {

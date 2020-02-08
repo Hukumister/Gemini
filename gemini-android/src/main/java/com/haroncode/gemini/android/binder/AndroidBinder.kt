@@ -1,7 +1,7 @@
 package com.haroncode.gemini.android.binder
 
 import androidx.lifecycle.LifecycleOwner
-import com.haroncode.gemini.binder.BaseBinder
+import com.haroncode.gemini.binder.BaseConnectionBinder
 import com.haroncode.gemini.android.binder.strategies.StartStopStrategy
 import io.reactivex.disposables.Disposable
 
@@ -19,9 +19,9 @@ object AndroidBinder {
         }
 
         fun create(view: T): Disposable {
-            val lifecycle = AndroidBinderLifecycle(view.lifecycle, bindingStrategy)
-            val lifecycleBinder = BaseBinder(lifecycle)
-            val androidLifecycleBinder = AndroidLifecycleBinder(lifecycleBinder)
+            val lifecycle = AndroidStoreLifecycle(view.lifecycle, bindingStrategy)
+            val lifecycleBinder = BaseConnectionBinder(lifecycle)
+            val androidLifecycleBinder = AndroidConnectionBinder(lifecycleBinder)
             viewBinding.onCreate(view, androidLifecycleBinder)
             return androidLifecycleBinder
         }

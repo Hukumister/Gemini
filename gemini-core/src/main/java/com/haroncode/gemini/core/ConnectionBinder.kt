@@ -5,7 +5,7 @@ import io.reactivex.disposables.Disposable
 /**
  * @author HaronCode.
  */
-interface Binder : Disposable {
+interface ConnectionBinder : Disposable {
 
     fun bind(connectionRule: ConnectionRule)
 }

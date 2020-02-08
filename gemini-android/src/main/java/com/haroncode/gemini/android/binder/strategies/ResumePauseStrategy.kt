@@ -2,7 +2,7 @@ package com.haroncode.gemini.android.binder.strategies
 
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import com.haroncode.gemini.binder.BinderLifecycle.State
+import com.haroncode.gemini.core.StoreLifecycle.State
 import com.haroncode.gemini.android.binder.BindingStrategy
 import com.haroncode.gemini.android.binder.StateSender
 

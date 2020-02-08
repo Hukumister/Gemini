@@ -1,21 +1,21 @@
 package com.haroncode.gemini.android.binder
 
 import androidx.lifecycle.Lifecycle
-import com.haroncode.gemini.binder.BinderLifecycle
+import com.haroncode.gemini.core.StoreLifecycle
 import io.reactivex.processors.BehaviorProcessor
 import org.reactivestreams.Subscriber
 
-class AndroidBinderLifecycle(
+class AndroidStoreLifecycle(
     lifecycle: Lifecycle,
     bindingStrategy: BindingStrategy
-) : BinderLifecycle {
+) : StoreLifecycle {
 
-    private val processor = BehaviorProcessor.create<BinderLifecycle.State>()
+    private val processor = BehaviorProcessor.create<StoreLifecycle.State>()
 
     init {
         val lifecycleObserver = bindingStrategy.handle(processor::onNext)
         lifecycle.addObserver(lifecycleObserver)
     }
 
-    override fun subscribe(subscriber: Subscriber<in BinderLifecycle.State>) = processor.subscribe(subscriber)
+    override fun subscribe(subscriber: Subscriber<in StoreLifecycle.State>) = processor.subscribe(subscriber)
 }

@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import com.haroncode.gemini.binder.dsl.noneTransformer
 import com.haroncode.gemini.binder.dsl.scheduleTransformer
 import com.haroncode.gemini.binder.dsl.with
-import com.haroncode.gemini.core.Binder
+import com.haroncode.gemini.core.ConnectionBinder
 import com.haroncode.gemini.core.Store
 import com.haroncode.gemini.core.StoreView
 import com.haroncode.gemini.android.binder.AndroidBinder
@@ -36,7 +36,7 @@ class TestFragment : Fragment(), StoreView<String, String> {
         private val store: Store<String, String, String>
     ) : ViewBinding<TestFragment> {
 
-        override fun onCreate(view: TestFragment, binder: Binder) {
+        override fun onCreate(view: TestFragment, binder: ConnectionBinder) {
             binder.bind(view to store with noneTransformer())
             binder.bind(store to view with scheduleTransformer(AndroidSchedulers.mainThread()))
         }
