@@ -31,7 +31,7 @@ abstract class AbstractStore<Action : Any, State : Any, Event : Any, Effect : An
     private val stateProcessor = BehaviorProcessor.createDefault(initialState)
     private val actionProcessor = PublishProcessor.create<Action>()
     private val effectProcessor = PublishProcessor.create<Effect>()
-    private val eventProcessor = BehaviorProcessor.create<Event>()
+    private val eventProcessor = PublishProcessor.create<Event>()
 
     init {
         Flowables.zip(
