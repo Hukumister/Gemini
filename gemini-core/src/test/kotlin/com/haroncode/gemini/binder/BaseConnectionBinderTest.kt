@@ -92,7 +92,6 @@ class BaseConnectionBinderTest {
         Assert.assertTrue(allDisconnected)
     }
 
-
     @Test
     fun `binder connect again all connections after stop event`() {
         val connections = listOf(
@@ -125,6 +124,16 @@ class BaseConnectionBinderTest {
 
         val countConnection = connectionRule.countConnection.get()
         Assert.assertEquals(countConnection, 1)
+    }
+
+    @Test
+    fun `correct work isDisposed method`() {
+        val beforeDispose = testConnectionBinder.isDisposed
+
+        testConnectionBinder.dispose()
+
+        Assert.assertFalse(beforeDispose)
+        Assert.assertTrue(testConnectionBinder.isDisposed)
     }
 
     class TestStoreLifecycle(

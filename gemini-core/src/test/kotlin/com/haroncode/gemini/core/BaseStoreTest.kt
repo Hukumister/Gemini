@@ -4,6 +4,7 @@ import com.haroncode.gemini.common.*
 import com.haroncode.gemini.common.TestAction.*
 import com.haroncode.gemini.connection.BaseConnectionRule
 import com.haroncode.gemini.store.BaseStore
+import io.reactivex.Flowable
 import io.reactivex.observers.TestObserver
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.TestScheduler
@@ -40,6 +41,7 @@ class BaseStoreTest {
         baseStore = BaseStore(
             initialState = TestState(),
             reducer = TestReducer(),
+            eventProducer = TestEventProducer(),
             bootstrapper = TestBootstrapper(testBootstrapperSubject),
             middleware = TestMiddleware(asyncWorkScheduler)
         )
@@ -79,25 +81,52 @@ class BaseStoreTest {
         val actions = listOf(
             Unfulfillable,
             Unfulfillable,
-            Unfulfillable
+            FulfillableInstantly
         )
 
         actions.forEach(testBootstrapperSubject::onNext)
 
-        assertEquals(1, testStatesObserver.onNextEvents().size)
+        assertEquals(2, testStatesObserver.onNextEvents().size)
     }
 
     @Test
-    fun `bootstraper correct work after create store2`() {
+    fun `event producer doesn't react on all effect`() {
         val actions = listOf(
             FulfillableInstantly,
             FulfillableInstantly,
             FulfillableInstantly
         )
 
-        actions.forEach(testBootstrapperSubject::onNext)
+        val events = Flowable.fromPublisher(baseStore.eventSource).test()
+        actions.forEach(testActionsSubject::onNext)
 
-        assertEquals(1 + actions.size, testStatesObserver.onNextEvents().size)
+        events.assertNoValues()
+    }
+
+    @Test
+    fun `event producer react on special effect`() {
+        val actions = listOf(
+            FulfillableInstantly,
+            ActionForEvent,
+            FulfillableInstantly
+        )
+
+        val events = Flowable.fromPublisher(baseStore.eventSource).test()
+        actions.forEach(testActionsSubject::onNext)
+
+        events.assertValueCount(1)
+    }
+
+    @Test
+    fun `event doesn't save last`() {
+        val actions = listOf(
+            FulfillableInstantly,
+            ActionForEvent,
+            FulfillableInstantly
+        )
+
+        actions.forEach(testActionsSubject::onNext)
+        Flowable.fromPublisher(baseStore.eventSource).test().assertNoValues()
     }
 
     @Test

@@ -31,10 +31,11 @@ sealed class TestAction {
     data class FulfillableAsync(val delayMs: Long) : TestAction()
     object TranslatesTo3Effects : TestAction()
     object MaybeFulfillable : TestAction()
+    object ActionForEvent : TestAction()
 }
 
-sealed class TestViewEvent{
-
+sealed class TestViewEvent {
+    object SimpleEvent : TestViewEvent()
 }
 
 sealed class TestEffect {
@@ -45,6 +46,7 @@ sealed class TestEffect {
     object MultipleEffect2 : TestEffect()
     object MultipleEffect3 : TestEffect()
     data class ConditionalThingHappened(val multiplier: Int) : TestEffect()
+    object EffectForEvent : TestEffect()
 }
 
 class TestReducer : Reducer<TestState, TestEffect> {
@@ -54,6 +56,7 @@ class TestReducer : Reducer<TestState, TestEffect> {
         is FinishedAsync -> state.copy(counter = state.counter + effect.amount, loading = false)
         is ConditionalThingHappened -> state.copy(counter = state.counter * effect.multiplier)
         StartedAsync -> state.copy(loading = true)
+        EffectForEvent -> state.copy()
         MultipleEffect1,
         MultipleEffect2,
         MultipleEffect3 -> state.copy(counter = state.counter + 1)
@@ -67,6 +70,7 @@ class TestMiddleware(
     override fun invoke(action: TestAction, state: TestState): Flowable<TestEffect> = when (action) {
         Unfulfillable -> Flowable.empty()
         FulfillableInstantly -> Flowable.just(InstantEffect(1))
+        ActionForEvent -> Flowable.just(EffectForEvent)
         is FulfillableAsync -> Flowable.just(DELAYED_FULFILL_AMOUNT)
             .delay(action.delayMs, TimeUnit.MILLISECONDS, asyncWorkScheduler)
             .map<TestEffect>(::FinishedAsync)
@@ -77,9 +81,11 @@ class TestMiddleware(
             MultipleEffect3
         )
         MaybeFulfillable ->
-            if (state.counter % 3 == 0) Flowable.just<TestEffect>(ConditionalThingHappened(
-                CONDITIONAL_MULTIPLIER
-            ))
+            if (state.counter % 3 == 0) Flowable.just<TestEffect>(
+                ConditionalThingHappened(
+                    CONDITIONAL_MULTIPLIER
+                )
+            )
             else Flowable.empty<TestEffect>()
     }
 }
