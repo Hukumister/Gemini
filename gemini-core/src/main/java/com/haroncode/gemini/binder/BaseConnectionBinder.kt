@@ -1,9 +1,9 @@
 package com.haroncode.gemini.binder
 
-import com.haroncode.gemini.core.StoreLifecycle.State
 import com.haroncode.gemini.core.ConnectionBinder
 import com.haroncode.gemini.core.ConnectionRule
 import com.haroncode.gemini.core.StoreLifecycle
+import com.haroncode.gemini.core.StoreLifecycle.State
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
