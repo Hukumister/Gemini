@@ -1,4 +1,4 @@
-package com.haroncode.gemini.binder.dsl
+package com.haroncode.gemini.connection.dsl
 
 import com.haroncode.gemini.connection.BaseConnectionRule
 import com.haroncode.gemini.connection.Transformer
