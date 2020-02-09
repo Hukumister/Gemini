@@ -55,7 +55,7 @@ bintray {
 
     // Package info for Bintray
     pkg {
-        name = "gemini-viewmodel-binder"
+        name = "gemini-android"
         repo = bintrayRepo
         licenses = allLicenses
         vcsUrl = gitUrl
@@ -75,7 +75,7 @@ install {
         pom.project {
             packaging 'aar'
             groupId publishedGroupId
-            artifactId "gemini-viewmodel-binder"
+            artifactId "gemini-android"
         }
     }
 }
