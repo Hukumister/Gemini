@@ -1,4 +1,4 @@
-package com.haroncode.gemini.core
+package com.haroncode.gemini.common
 
 import io.reactivex.observers.TestObserver
 
