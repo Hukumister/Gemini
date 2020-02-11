@@ -43,7 +43,7 @@ ext {
     // This params is for the library uploading to the Bintray
     bintrayRepo = 'maven'
     publishedGroupId = 'com.haroncode.gemini'
-    libraryVersion = '0.0.2'
+    libraryVersion = '0.0.3'
     gitUrl = 'https://github.com/HaronCode/Gemini'
     allLicenses = ['MIT']
 }

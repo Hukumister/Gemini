@@ -3,7 +3,7 @@ package com.haroncode.gemini.android.binder.viewmodel
 import androidx.lifecycle.ViewModel
 import com.haroncode.gemini.binder.BinderComposer
 import com.haroncode.gemini.binder.ViewBinder
-import com.haroncode.gemini.binder.dsl.*
+import com.haroncode.gemini.connection.dsl.*
 import com.haroncode.gemini.core.Store
 import com.haroncode.gemini.core.StoreView
 import com.haroncode.gemini.core.elements.StoreNavigator
