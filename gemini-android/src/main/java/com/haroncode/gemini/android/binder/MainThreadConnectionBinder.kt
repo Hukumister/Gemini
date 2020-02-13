@@ -4,7 +4,7 @@ import android.os.Looper
 import com.haroncode.gemini.core.ConnectionBinder
 import com.haroncode.gemini.core.ConnectionRule
 
-class AndroidConnectionBinder(
+class MainThreadConnectionBinder(
     private val connectionBinder: ConnectionBinder
 ) : ConnectionBinder {
 
