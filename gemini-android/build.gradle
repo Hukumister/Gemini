@@ -24,7 +24,6 @@ android {
 }
 
 dependencies {
-    implementation project(':gemini-core')
     implementation rootProject.ext.appCompat
     implementation rootProject.ext.kotlinStdlib
     /**
@@ -34,12 +33,13 @@ dependencies {
     implementation rootProject.ext.rxKotlin
     implementation rootProject.ext.rxAndroid
     /**
-     * ViewModel
+     * Test
      */
-    implementation rootProject.ext.lifecycleViewModel
-    implementation rootProject.ext.lifecycleCommon
-
     testImplementation rootProject.ext.junit
+    /**
+     * Project modules
+     */
+    implementation project(':gemini-core')
 }
 
 Properties properties = new Properties()
