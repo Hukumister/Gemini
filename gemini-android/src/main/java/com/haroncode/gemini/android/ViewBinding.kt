@@ -1,4 +1,4 @@
-package com.haroncode.gemini.android.binder
+package com.haroncode.gemini.android
 
 import com.haroncode.gemini.core.ConnectionBinder
 

@@ -1,4 +1,4 @@
-package com.haroncode.gemini.android.binder
+package com.haroncode.gemini.android.lifecycle
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver

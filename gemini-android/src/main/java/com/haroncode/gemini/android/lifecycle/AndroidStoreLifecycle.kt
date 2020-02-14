@@ -1,6 +1,7 @@
-package com.haroncode.gemini.android.binder
+package com.haroncode.gemini.android.lifecycle
 
 import androidx.lifecycle.Lifecycle
+import com.haroncode.gemini.android.BindingStrategy
 import com.haroncode.gemini.core.StoreLifecycle
 import io.reactivex.Flowable
 import io.reactivex.processors.BehaviorProcessor
@@ -14,7 +15,8 @@ class AndroidStoreLifecycle(
     private val processor = BehaviorProcessor.create<StoreLifecycle.Event>()
 
     init {
-        val lifecycleEventObserver = RxLifecycleEventObserver()
+        val lifecycleEventObserver =
+            RxLifecycleEventObserver()
         lifecycle.addObserver(lifecycleEventObserver)
 
         Flowable.fromPublisher(lifecycleEventObserver)

@@ -1,7 +1,7 @@
-package com.haroncode.gemini.android.binder.strategies
+package com.haroncode.gemini.android.strategies
 
 import androidx.lifecycle.Lifecycle
-import com.haroncode.gemini.android.binder.BindingStrategy
+import com.haroncode.gemini.android.BindingStrategy
 import com.haroncode.gemini.core.StoreLifecycle.Event
 
 object StartStopStrategy : BindingStrategy {
