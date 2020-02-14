@@ -3,7 +3,7 @@ package com.haroncode.gemini.binder
 import com.haroncode.gemini.core.ConnectionBinder
 import com.haroncode.gemini.core.ConnectionRule
 import com.haroncode.gemini.core.StoreLifecycle
-import com.haroncode.gemini.core.StoreLifecycle.State
+import com.haroncode.gemini.core.StoreLifecycle.Event
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -22,8 +22,8 @@ class BaseConnectionBinder(storeLifecycle: StoreLifecycle) : ConnectionBinder {
             .distinctUntilChanged()
             .subscribe { state ->
                 when (state) {
-                    State.START -> connectAll()
-                    State.STOP -> disconnectAll()
+                    Event.START -> connectAll()
+                    Event.STOP -> disconnectAll()
                 }
             }.addTo(lifecycleDisposables)
     }

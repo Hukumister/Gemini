@@ -2,7 +2,7 @@ package com.haroncode.gemini.binder
 
 import com.haroncode.gemini.core.ConnectionRule
 import com.haroncode.gemini.core.StoreLifecycle
-import com.haroncode.gemini.core.StoreLifecycle.State
+import com.haroncode.gemini.core.StoreLifecycle.Event
 import io.reactivex.disposables.Disposable
 import io.reactivex.processors.FlowableProcessor
 import io.reactivex.processors.PublishProcessor
@@ -19,7 +19,7 @@ class BaseConnectionBinderTest {
 
     private lateinit var testConnectionBinder: BaseConnectionBinder
     private lateinit var testStoreLifecycle: TestStoreLifecycle
-    private lateinit var testStoreLifecycleProcessor: FlowableProcessor<State>
+    private lateinit var testStoreLifecycleProcessor: FlowableProcessor<Event>
 
     @Before
     fun setUp() {
@@ -33,7 +33,7 @@ class BaseConnectionBinderTest {
     fun `binder subscribe if lifecycle is active`() {
         val connectionRule = TestConnectionRule(false)
 
-        testStoreLifecycleProcessor.onNext(State.START)
+        testStoreLifecycleProcessor.onNext(Event.START)
         testConnectionBinder.bind(connectionRule)
 
         Assert.assertTrue(connectionRule.isConnected.get())
@@ -43,7 +43,7 @@ class BaseConnectionBinderTest {
     fun `binder doesn't subscribe if lifecycle is active`() {
         val connectionRule = TestConnectionRule(false)
 
-        testStoreLifecycleProcessor.onNext(State.STOP)
+        testStoreLifecycleProcessor.onNext(Event.STOP)
         testConnectionBinder.bind(connectionRule)
 
         Assert.assertFalse(connectionRule.isConnected.get())
@@ -53,9 +53,9 @@ class BaseConnectionBinderTest {
     fun `binder doesn't dispose connection if it's retain connection`() {
         val connectionRule = TestConnectionRule(true)
 
-        testStoreLifecycleProcessor.onNext(State.START)
+        testStoreLifecycleProcessor.onNext(Event.START)
         testConnectionBinder.bind(connectionRule)
-        testStoreLifecycleProcessor.onNext(State.STOP)
+        testStoreLifecycleProcessor.onNext(Event.STOP)
 
         Assert.assertTrue(connectionRule.isConnected.get())
     }
@@ -68,9 +68,9 @@ class BaseConnectionBinderTest {
             TestConnectionRule(false)
         )
 
-        testStoreLifecycleProcessor.onNext(State.START)
+        testStoreLifecycleProcessor.onNext(Event.START)
         connections.forEach(testConnectionBinder::bind)
-        testStoreLifecycleProcessor.onNext(State.STOP)
+        testStoreLifecycleProcessor.onNext(Event.STOP)
 
         val allDisconnected = connections.all { connection -> !connection.isConnected.get() }
         Assert.assertTrue(allDisconnected)
@@ -84,7 +84,7 @@ class BaseConnectionBinderTest {
             TestConnectionRule(true)
         )
 
-        testStoreLifecycleProcessor.onNext(State.START)
+        testStoreLifecycleProcessor.onNext(Event.START)
         connections.forEach(testConnectionBinder::bind)
         testConnectionBinder.dispose()
 
@@ -100,11 +100,11 @@ class BaseConnectionBinderTest {
             TestConnectionRule(true)
         )
 
-        testStoreLifecycleProcessor.onNext(State.START)
+        testStoreLifecycleProcessor.onNext(Event.START)
         connections.forEach(testConnectionBinder::bind)
-        testStoreLifecycleProcessor.onNext(State.STOP)
+        testStoreLifecycleProcessor.onNext(Event.STOP)
 
-        testStoreLifecycleProcessor.onNext(State.START)
+        testStoreLifecycleProcessor.onNext(Event.START)
 
         val allConnected = connections.all { connection -> connection.isConnected.get() }
         Assert.assertTrue(allConnected)
@@ -114,13 +114,13 @@ class BaseConnectionBinderTest {
     fun `binder distinct events`() {
         val connectionRule = TestConnectionRule(true)
 
-        testStoreLifecycleProcessor.onNext(State.START)
+        testStoreLifecycleProcessor.onNext(Event.START)
         testConnectionBinder.bind(connectionRule)
-        testStoreLifecycleProcessor.onNext(State.STOP)
+        testStoreLifecycleProcessor.onNext(Event.STOP)
 
-        testStoreLifecycleProcessor.onNext(State.START)
-        testStoreLifecycleProcessor.onNext(State.START)
-        testStoreLifecycleProcessor.onNext(State.START)
+        testStoreLifecycleProcessor.onNext(Event.START)
+        testStoreLifecycleProcessor.onNext(Event.START)
+        testStoreLifecycleProcessor.onNext(Event.START)
 
         val countConnection = connectionRule.countConnection.get()
         Assert.assertEquals(countConnection, 1)
@@ -137,10 +137,10 @@ class BaseConnectionBinderTest {
     }
 
     class TestStoreLifecycle(
-        private val testProcessor: FlowableProcessor<State>
+        private val testProcessor: FlowableProcessor<Event>
     ) : StoreLifecycle {
 
-        override fun subscribe(subscriber: Subscriber<in State>) = testProcessor.subscribe(subscriber)
+        override fun subscribe(subscriber: Subscriber<in Event>) = testProcessor.subscribe(subscriber)
     }
 
     class TestConnectionRule(

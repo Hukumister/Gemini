@@ -4,7 +4,7 @@ import com.haroncode.gemini.binder.BaseConnectionBinder
 import com.haroncode.gemini.core.ConnectionBinder
 import com.haroncode.gemini.core.ConnectionRule
 import com.haroncode.gemini.core.StoreLifecycle
-import com.haroncode.gemini.core.StoreLifecycle.State
+import com.haroncode.gemini.core.StoreLifecycle.Event
 import io.reactivex.processors.PublishProcessor
 import org.reactivestreams.Subscriber
 
@@ -25,12 +25,12 @@ class TestConnectionBinder : ConnectionBinder {
 
     private class TestLifeCycle : StoreLifecycle {
 
-        private val testProcessor = PublishProcessor.create<State>()
+        private val testProcessor = PublishProcessor.create<Event>()
 
-        fun connectAll() = testProcessor.onNext(State.START)
+        fun connectAll() = testProcessor.onNext(Event.START)
 
-        fun disconnectAll() = testProcessor.onNext(State.STOP)
+        fun disconnectAll() = testProcessor.onNext(Event.STOP)
 
-        override fun subscribe(subscribers: Subscriber<in State>) = testProcessor.subscribe(subscribers)
+        override fun subscribe(subscribers: Subscriber<in Event>) = testProcessor.subscribe(subscribers)
     }
 }

@@ -1,17 +1,14 @@
 package com.haroncode.gemini.android.binder.strategies
 
-import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.LifecycleOwner
-import com.haroncode.gemini.core.StoreLifecycle.State
+import androidx.lifecycle.Lifecycle
 import com.haroncode.gemini.android.binder.BindingStrategy
-import com.haroncode.gemini.android.binder.StateSender
+import com.haroncode.gemini.core.StoreLifecycle.Event
 
 object StartStopStrategy : BindingStrategy {
 
-    override fun handle(sender: StateSender) = object : DefaultLifecycleObserver {
-
-        override fun onStart(owner: LifecycleOwner) = sender.invoke(State.START)
-
-        override fun onStop(owner: LifecycleOwner) = sender.invoke(State.STOP)
+    override fun handle(lifecycleState: Lifecycle.Event) = when (lifecycleState) {
+        Lifecycle.Event.ON_START -> Event.START
+        Lifecycle.Event.ON_STOP -> Event.STOP
+        else -> null
     }
 }
