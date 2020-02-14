@@ -23,6 +23,11 @@ Add the dependencies:
 ```groovy
 implementation "com.haroncode.gemini:gemini-core:${latest-version}"
 ```
+- Android binder:
+```groovy
+implementation "com.haroncode.gemini:gemini-android:${latest-version}"
+```
+
 ## Participants
 + idea, code and documentation - Zaltsman Nikita (@HaronCode)
 + review, code, writing unit tests - Kinayatov Dias (@kdk96)
