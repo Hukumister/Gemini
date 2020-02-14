@@ -24,7 +24,7 @@ android {
 }
 
 dependencies {
-    implementation rootProject.ext.appCompat
+    compileOnly rootProject.ext.appCompat
     implementation rootProject.ext.kotlinStdlib
     /**
      * Rx java
