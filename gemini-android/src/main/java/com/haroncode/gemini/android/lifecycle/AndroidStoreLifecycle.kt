@@ -15,8 +15,7 @@ class AndroidStoreLifecycle(
     private val processor = BehaviorProcessor.create<StoreLifecycle.Event>()
 
     init {
-        val lifecycleEventObserver =
-            RxLifecycleEventObserver()
+        val lifecycleEventObserver = RxLifecycleEventObserver()
         lifecycle.addObserver(lifecycleEventObserver)
 
         Flowable.fromPublisher(lifecycleEventObserver)
@@ -31,9 +30,6 @@ class AndroidStoreLifecycle(
 
     private fun storeEventOrEmpty(
         storeLifecycleEvent: StoreLifecycle.Event?
-    ) = if (storeLifecycleEvent != null) {
-        Flowable.just(storeLifecycleEvent)
-    } else {
-        Flowable.empty<StoreLifecycle.Event>()
-    }
+    ) = if (storeLifecycleEvent != null) Flowable.just(storeLifecycleEvent) else Flowable.empty<StoreLifecycle.Event>()
+
 }

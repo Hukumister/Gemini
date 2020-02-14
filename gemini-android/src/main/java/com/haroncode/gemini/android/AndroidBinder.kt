@@ -21,14 +21,10 @@ object AndroidBinder {
         }
 
         fun create(view: T): Disposable {
-            val lifecycle = AndroidStoreLifecycle(
-                view.lifecycle,
-                bindingStrategy
-            )
+            val lifecycle = AndroidStoreLifecycle(view.lifecycle, bindingStrategy)
 
             val baseConnectionBinder = BaseConnectionBinder(lifecycle)
-            val mainThreadConnectionBinder =
-                MainThreadConnectionBinder(baseConnectionBinder)
+            val mainThreadConnectionBinder = MainThreadConnectionBinder(baseConnectionBinder)
 
             viewBinding.onCreate(view, mainThreadConnectionBinder)
             return mainThreadConnectionBinder
