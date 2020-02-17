@@ -1,7 +1,6 @@
 package com.haroncode.gemini.android.binder.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.haroncode.gemini.connection.EventListenerConnection
 import com.haroncode.gemini.connection.NavigationConnection
 import com.haroncode.gemini.connection.dsl.decorate
 import com.haroncode.gemini.connection.dsl.noneTransformer
@@ -9,7 +8,6 @@ import com.haroncode.gemini.connection.dsl.with
 import com.haroncode.gemini.core.Store
 import com.haroncode.gemini.core.StoreView
 import com.haroncode.gemini.core.elements.StoreNavigator
-import com.haroncode.gemini.routing.EventListener
 import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 
