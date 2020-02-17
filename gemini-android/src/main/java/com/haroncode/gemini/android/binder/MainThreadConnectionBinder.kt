@@ -9,17 +9,17 @@ class MainThreadConnectionBinder(
 ) : ConnectionBinder {
 
     override fun bind(connectionRule: ConnectionRule) {
-        check(Looper.myLooper() == Looper.getMainLooper()) { "Method bind() can invoked only in main thread" }
+        check(Looper.myLooper() == Looper.getMainLooper()) { "Method bind() should be invoked only on main thread" }
         connectionBinder.bind(connectionRule)
     }
 
     override fun dispose() {
-        check(Looper.myLooper() == Looper.getMainLooper()) { "Method dispose() can invoked only in main thread" }
+        check(Looper.myLooper() == Looper.getMainLooper()) { "Method dispose() should be invoked only on main thread" }
         connectionBinder.dispose()
     }
 
     override fun isDisposed(): Boolean {
-        check(Looper.myLooper() == Looper.getMainLooper()) { "Method isDisposed() can invoked only in main thread" }
+        check(Looper.myLooper() == Looper.getMainLooper()) { "Method isDisposed() should be invoked only on main thread" }
         return connectionBinder.isDisposed
     }
 }

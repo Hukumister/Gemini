@@ -9,6 +9,8 @@ import io.reactivex.processors.PublishProcessor
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import org.junit.Assert
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.reactivestreams.Subscriber
@@ -30,13 +32,13 @@ class BaseConnectionBinderTest {
     }
 
     @Test
-    fun `binder subscribe if lifecycle is active`() {
+    fun `binder subscribes if lifecycle is active`() {
         val connectionRule = TestConnectionRule(false)
 
         testStoreLifecycleProcessor.onNext(Event.START)
         testConnectionBinder.bind(connectionRule)
 
-        Assert.assertTrue(connectionRule.isConnected.get())
+        assertTrue(connectionRule.isConnected.get())
     }
 
     @Test
@@ -46,7 +48,7 @@ class BaseConnectionBinderTest {
         testStoreLifecycleProcessor.onNext(Event.STOP)
         testConnectionBinder.bind(connectionRule)
 
-        Assert.assertFalse(connectionRule.isConnected.get())
+        assertFalse(connectionRule.isConnected.get())
     }
 
     @Test
@@ -57,11 +59,11 @@ class BaseConnectionBinderTest {
         testConnectionBinder.bind(connectionRule)
         testStoreLifecycleProcessor.onNext(Event.STOP)
 
-        Assert.assertTrue(connectionRule.isConnected.get())
+        assertTrue(connectionRule.isConnected.get())
     }
 
     @Test
-    fun `binder dispose all connection if event stop`() {
+    fun `binder disposes all connection if event stop`() {
         val connections = listOf(
             TestConnectionRule(false),
             TestConnectionRule(false),
@@ -73,11 +75,11 @@ class BaseConnectionBinderTest {
         testStoreLifecycleProcessor.onNext(Event.STOP)
 
         val allDisconnected = connections.all { connection -> !connection.isConnected.get() }
-        Assert.assertTrue(allDisconnected)
+        assertTrue(allDisconnected)
     }
 
     @Test
-    fun `binder dispose all connection if binder is disposed`() {
+    fun `binder disposes all connection if binder is disposed`() {
         val connections = listOf(
             TestConnectionRule(false),
             TestConnectionRule(false),
@@ -89,11 +91,11 @@ class BaseConnectionBinderTest {
         testConnectionBinder.dispose()
 
         val allDisconnected = connections.all { connection -> !connection.isConnected.get() }
-        Assert.assertTrue(allDisconnected)
+        assertTrue(allDisconnected)
     }
 
     @Test
-    fun `binder connect again all connections after stop event`() {
+    fun `binder connects again all connections after stop event`() {
         val connections = listOf(
             TestConnectionRule(false),
             TestConnectionRule(false),
@@ -107,11 +109,11 @@ class BaseConnectionBinderTest {
         testStoreLifecycleProcessor.onNext(Event.START)
 
         val allConnected = connections.all { connection -> connection.isConnected.get() }
-        Assert.assertTrue(allConnected)
+        assertTrue(allConnected)
     }
 
     @Test
-    fun `binder distinct events`() {
+    fun `binder doesn't react until changed events`() {
         val connectionRule = TestConnectionRule(true)
 
         testStoreLifecycleProcessor.onNext(Event.START)
@@ -127,13 +129,13 @@ class BaseConnectionBinderTest {
     }
 
     @Test
-    fun `correct work isDisposed method`() {
+    fun `method isDisposed correct works`() {
         val beforeDispose = testConnectionBinder.isDisposed
 
         testConnectionBinder.dispose()
 
-        Assert.assertFalse(beforeDispose)
-        Assert.assertTrue(testConnectionBinder.isDisposed)
+        assertFalse(beforeDispose)
+        assertTrue(testConnectionBinder.isDisposed)
     }
 
     class TestStoreLifecycle(

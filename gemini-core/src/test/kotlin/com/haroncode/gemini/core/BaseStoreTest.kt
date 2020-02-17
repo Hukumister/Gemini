@@ -77,7 +77,7 @@ class BaseStoreTest {
     }
 
     @Test
-    fun `bootstraper correct work after create store`() {
+    fun `bootstrapper correct work after create store`() {
         val actions = listOf(
             Unfulfillable,
             Unfulfillable,
@@ -90,7 +90,7 @@ class BaseStoreTest {
     }
 
     @Test
-    fun `event producer doesn't react on all effect`() {
+    fun `event producer doesn't react on all effects`() {
         val actions = listOf(
             FulfillableInstantly,
             FulfillableInstantly,
@@ -104,7 +104,7 @@ class BaseStoreTest {
     }
 
     @Test
-    fun `event producer react on special effect`() {
+    fun `event producer reacts on special effect`() {
         val actions = listOf(
             FulfillableInstantly,
             ActionForEvent,
