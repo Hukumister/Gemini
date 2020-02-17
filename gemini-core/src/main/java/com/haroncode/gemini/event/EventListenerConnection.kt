@@ -1,4 +1,4 @@
-package com.haroncode.gemini.android.binder.viewmodel
+package com.haroncode.gemini.event
 
 import com.haroncode.gemini.connection.BaseConnectionRule
 import io.reactivex.functions.Consumer

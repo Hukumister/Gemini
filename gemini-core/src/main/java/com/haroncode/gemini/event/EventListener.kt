@@ -1,4 +1,4 @@
-package com.haroncode.gemini.android.binder.viewmodel
+package com.haroncode.gemini.event
 
 /**
  * @author HaronCode.
