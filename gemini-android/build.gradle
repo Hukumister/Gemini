@@ -27,7 +27,7 @@ dependencies {
     compileOnly rootProject.ext.appCompat
     implementation rootProject.ext.kotlinStdlib
     /**
-     * Rxjava
+     * RxJava
      */
     implementation rootProject.ext.rxJava
     implementation rootProject.ext.rxKotlin
