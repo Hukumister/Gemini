@@ -24,8 +24,7 @@ android {
 }
 
 dependencies {
-    implementation project(':gemini-core')
-    implementation rootProject.ext.appCompat
+    compileOnly rootProject.ext.appCompat
     implementation rootProject.ext.kotlinStdlib
     /**
      * RxJava
@@ -34,12 +33,13 @@ dependencies {
     implementation rootProject.ext.rxKotlin
     implementation rootProject.ext.rxAndroid
     /**
-     * ViewModel
+     * Test
      */
-    implementation rootProject.ext.lifecycleViewModel
-    implementation rootProject.ext.lifecycleCommon
-
     testImplementation rootProject.ext.junit
+    /**
+     * Project modules
+     */
+    implementation project(':gemini-core')
 }
 
 Properties properties = new Properties()
@@ -55,7 +55,7 @@ bintray {
 
     // Package info for Bintray
     pkg {
-        name = "gemini-viewmodel-binder"
+        name = "gemini-android"
         repo = bintrayRepo
         licenses = allLicenses
         vcsUrl = gitUrl
@@ -75,7 +75,7 @@ install {
         pom.project {
             packaging 'aar'
             groupId publishedGroupId
-            artifactId "gemini-viewmodel-binder"
+            artifactId "gemini-android"
         }
     }
 }

@@ -1,15 +1,15 @@
-package com.haroncode.gemini.viewmode.binder.viewmodel
+package com.haroncode.gemini.android.binder.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.haroncode.gemini.binder.BinderComposer
-import com.haroncode.gemini.binder.ViewBinder
-import com.haroncode.gemini.binder.dsl.*
+import com.haroncode.gemini.connection.EventListenerConnection
+import com.haroncode.gemini.connection.NavigationConnection
+import com.haroncode.gemini.connection.dsl.decorate
+import com.haroncode.gemini.connection.dsl.noneTransformer
+import com.haroncode.gemini.connection.dsl.with
 import com.haroncode.gemini.core.Store
 import com.haroncode.gemini.core.StoreView
 import com.haroncode.gemini.core.elements.StoreNavigator
 import com.haroncode.gemini.routing.EventListener
-import com.haroncode.gemini.routing.EventListenerConnection
-import com.haroncode.gemini.routing.NavigationConnection
 import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 
@@ -20,38 +20,39 @@ abstract class ViewModelBinder<Action : Any, State : Any, ViewState : Any, Event
     uiScheduler: Scheduler = AndroidSchedulers.mainThread()
 ) : ViewModel(), ViewBinder<Action, ViewState> {
 
-    private val parentBinder = binding<Action, ViewState> { storeView ->
-        connection { store to storeView with { input -> input.map(transformer).observeOn(uiScheduler) } }
-        connection { storeView to store with noneTransformer() }
+    private val binderDelegate = ViewModelViewBinder<Action, ViewState> { storeView ->
+        add(store to storeView with { input -> input.map(transformer).observeOn(uiScheduler) })
+        add(storeView to store with noneTransformer())
 
-        navigatorConnection(store, storeNavigator)
-            ?.let { connection -> connection { connection decorate { stream -> stream.observeOn(uiScheduler) } } }
-
+        navigatorConnection(store, storeNavigator)?.let { connection ->
+            add(connection decorate { stream -> stream.observeOn(uiScheduler) })
+        }
         eventListenerConnection(store, storeView)?.let { eventListenerConnection ->
-            connection { eventListenerConnection decorate { stream -> stream.observeOn(uiScheduler) } }
+            add(eventListenerConnection decorate { stream -> stream.observeOn(uiScheduler) })
         }
     }
 
-    private val binderDelegate = BinderComposer(parentBinder)
+    fun addChildBinder(viewBinder: ViewModelViewBinder<Action, ViewState>) = binderDelegate.addChild(viewBinder)
 
     override fun bindView(storeView: StoreView<Action, ViewState>) = binderDelegate.bindView(storeView)
 
     override fun unbindView() = binderDelegate.unbindView()
 
-    fun addChildBinder(viewBinder: ViewBinder<Action, ViewState>) = binderDelegate.addBinder(viewBinder)
-
-    override fun onCleared() = store.dispose()
+    override fun onCleared() {
+        store.dispose()
+        binderDelegate.dispose()
+    }
 
     @Suppress("NOTHING_TO_INLINE")
-    inline fun ViewBinder<Action, ViewState>.addToParent() = addChildBinder(this)
+    inline fun ViewModelViewBinder<Action, ViewState>.addToParent() = addChildBinder(this)
 
     private fun navigatorConnection(
         store: Store<*, State, Event>,
         storeNavigator: StoreNavigator<State, Event>?
     ) = storeNavigator?.let { navigator ->
         NavigationConnection(
-            statePublisher = store,
-            eventPublisher = store.eventSource,
+            isRetain = true,
+            store = store,
             storeNavigator = navigator
         )
     }

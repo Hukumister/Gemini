@@ -1,10 +1,12 @@
-package com.haroncode.gemini.routing
+package com.haroncode.gemini.connection
 
-import com.haroncode.gemini.connection.BaseConnectionRule
-import io.reactivex.Flowable
+import com.haroncode.gemini.routing.EventListener
 import io.reactivex.functions.Consumer
 import org.reactivestreams.Publisher
 
+/**
+ * @author HaronCode.
+ */
 class EventListenerConnection<Event : Any>(
     eventPublisher: Publisher<Event>,
     eventListener: EventListener<Event>

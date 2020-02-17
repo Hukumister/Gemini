@@ -10,7 +10,7 @@ dependencies {
 
     implementation rootProject.ext.kotlinStdlib
     /**
-     * Rx java
+     * RxJava
      */
     implementation rootProject.ext.rxJava
     implementation rootProject.ext.rxKotlin

@@ -10,5 +10,4 @@ import org.reactivestreams.Publisher
 interface Store<Action : Any, State : Any, Event : Any> : Consumer<Action>, Publisher<State>, Disposable {
 
     val eventSource: Publisher<Event>
-
 }

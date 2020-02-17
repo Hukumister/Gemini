@@ -31,7 +31,7 @@ abstract class AbstractStore<Action : Any, State : Any, Event : Any, Effect : An
     private val stateProcessor = BehaviorProcessor.createDefault(initialState)
     private val actionProcessor = PublishProcessor.create<Action>()
     private val effectProcessor = PublishProcessor.create<Effect>()
-    private val eventProcessor = BehaviorProcessor.create<Event>()
+    private val eventProcessor = PublishProcessor.create<Event>()
 
     init {
         Flowables.zip(
@@ -43,7 +43,6 @@ abstract class AbstractStore<Action : Any, State : Any, Event : Any, Effect : An
             .addTo(compositeDisposable)
 
         actionProcessor
-            .doOnNext(::onAction)
             .withLatestFrom(stateProcessor)
             .flatMap { (action, state) -> middleware.invoke(action, state) }
             .subscribe(effectProcessor::onNext, ::onError)
@@ -69,9 +68,7 @@ abstract class AbstractStore<Action : Any, State : Any, Event : Any, Effect : An
         .distinctUntilChanged()
         .subscribe(subscriber)
 
-    override fun accept(action: Action) {
-        actionProcessor.offer(action)
-    }
+    override fun accept(action: Action) = actionProcessor.onNext(action)
 
     override fun isDisposed() = compositeDisposable.isDisposed
 
@@ -83,8 +80,6 @@ abstract class AbstractStore<Action : Any, State : Any, Event : Any, Effect : An
     ): Flowable<Event> = eventProducer?.invoke(state, effect)
         ?.let { event -> Flowable.just(event) }
         ?: Flowable.empty<Event>()
-
-    protected open fun onAction(action: Action) = Unit
 
     protected open fun onError(throwable: Throwable) = Unit
 
