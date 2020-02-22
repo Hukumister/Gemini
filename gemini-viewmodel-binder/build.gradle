@@ -43,42 +43,28 @@ dependencies {
     testImplementation rootProject.ext.junit
 }
 
-Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
+/**
+ Properties properties = new Properties()
+ properties.load(project.rootProject.file('local.properties').newDataInputStream())
 
-version = libraryVersion // Library version
+ version = libraryVersion // Library version
 
-bintray {
-    // User and ApiKey stored in local.properties
-    user = properties.getProperty("bintrayUser")
-    key = properties.getProperty("bintrayApiKey")
-    configurations = ['archives']
+ bintray {// User and ApiKey stored in local.properties
+ user = properties.getProperty("bintrayUser")
+ key = properties.getProperty("bintrayApiKey")
+ configurations = ['archives']
 
-    // Package info for Bintray
-    pkg {
-        name = "gemini-viewmodel-binder"
-        repo = bintrayRepo
-        licenses = allLicenses
-        vcsUrl = gitUrl
-        publish = true
-        version {
-            name = libraryVersion
-            released = new Date()
-        }
-    }
-}
+ // Package info for Bintray
+ pkg {name = "gemini-viewmodel-binder"
+ repo = bintrayRepo
+ licenses = allLicenses
+ vcsUrl = gitUrl
+ publish = true
+ version {name = libraryVersion
+ released = new Date()}}}group = publishedGroupId // Maven Group ID for the artifact
 
-group = publishedGroupId // Maven Group ID for the artifact
-
-install {
-    repositories.mavenInstaller {
-        // This generates POM.xml with proper parameters
-        pom.project {
-            packaging 'aar'
-            groupId publishedGroupId
-            artifactId "gemini-viewmodel-binder"
-        }
-    }
-}
-
-bintrayUpload.dependsOn install
+ install {repositories.mavenInstaller {// This generates POM.xml with proper parameters
+ pom.project {packaging 'aar'
+ groupId publishedGroupId
+ artifactId "gemini-viewmodel-binder"}}}bintrayUpload.dependsOn install
+ */
