@@ -11,5 +11,4 @@ class TestEventProducer : EventProducer<TestState, TestEffect, TestViewEvent> {
             null
         }
     }
-
 }

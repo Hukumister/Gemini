@@ -31,5 +31,4 @@ class AndroidStoreLifecycle(
     private fun storeEventOrEmpty(
         storeLifecycleEvent: StoreLifecycle.Event?
     ) = if (storeLifecycleEvent != null) Flowable.just(storeLifecycleEvent) else Flowable.empty<StoreLifecycle.Event>()
-
 }

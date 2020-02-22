@@ -32,5 +32,4 @@ abstract class MviFragment<Action : Any, ViewState : Any> @JvmOverloads construc
     final override fun accept(state: ViewState) = onViewStateChanged(state)
 
     final override fun subscribe(subscriber: Subscriber<in Action>) = source.subscribe(source)
-
 }

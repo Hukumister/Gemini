@@ -49,7 +49,7 @@ abstract class AbstractStore<Action : Any, State : Any, Event : Any, Effect : An
             .addTo(compositeDisposable)
 
         Flowables.zip(
-            stateProcessor.skip(1), //skip initial state
+            stateProcessor.skip(1), // skip initial state
             effectProcessor
         )
             .flatMap { (state, effect) -> produceEventFlowable(state, effect) }
@@ -82,5 +82,4 @@ abstract class AbstractStore<Action : Any, State : Any, Event : Any, Effect : An
         ?: Flowable.empty<Event>()
 
     protected open fun onError(throwable: Throwable) = Unit
-
 }
