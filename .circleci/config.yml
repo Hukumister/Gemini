@@ -1,6 +1,6 @@
 version: 1
 jobs:
-  check:
+  build:
 
     working_directory: ~/code
 
@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - checkout
-      
+
       - run:
           name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
           command: sudo chmod +x ./gradlew
