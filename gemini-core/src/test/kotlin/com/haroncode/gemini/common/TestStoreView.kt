@@ -5,7 +5,6 @@ import io.reactivex.observers.TestObserver
 import io.reactivex.processors.PublishProcessor
 import org.reactivestreams.Subscriber
 
-
 class TestStoreView(
     private val testActionSubject: PublishProcessor<TestAction>,
     private val testStateObserver: TestObserver<TestState>

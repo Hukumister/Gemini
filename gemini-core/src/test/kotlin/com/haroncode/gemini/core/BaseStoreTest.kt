@@ -9,10 +9,10 @@ import io.reactivex.observers.TestObserver
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.TestScheduler
 import io.reactivex.subjects.PublishSubject
+import java.util.concurrent.TimeUnit
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import java.util.concurrent.TimeUnit
 
 /**
  * @author HaronCode.
@@ -171,14 +171,14 @@ class BaseStoreTest {
     @Test
     fun `the number of state emissions should reflect the number of effects plus one for initial state in complex case`() {
         val actions = listOf(
-            FulfillableInstantly,  // maps to 1 effect
-            FulfillableInstantly,  // maps to 1 effect
-            MaybeFulfillable,       // maps to 1 in this case
-            Unfulfillable,          // maps to 0
-            FulfillableInstantly,  // maps to 1
-            FulfillableInstantly,  // maps to 1
-            MaybeFulfillable,       // maps to 0 in this case
-            TranslatesTo3Effects    // maps to 3
+            FulfillableInstantly, // maps to 1 effect
+            FulfillableInstantly, // maps to 1 effect
+            MaybeFulfillable, // maps to 1 in this case
+            Unfulfillable, // maps to 0
+            FulfillableInstantly, // maps to 1
+            FulfillableInstantly, // maps to 1
+            MaybeFulfillable, // maps to 0 in this case
+            TranslatesTo3Effects // maps to 3
         )
 
         actions.forEach(testActionsSubject::onNext)
@@ -190,7 +190,6 @@ class BaseStoreTest {
         )
         assertEquals(expectedState, testStatesObserver.onNextEvents().last())
     }
-
 
     @Test
     fun `there should be no state emission after store destroying`() {

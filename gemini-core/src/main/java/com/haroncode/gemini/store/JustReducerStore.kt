@@ -23,5 +23,4 @@ open class JustReducerStore<Action : Any, State : Any, Event : Any>(
 
         override fun invoke(action: Action, state: State): Flowable<Action> = Flowable.just(action)
     }
-
 }
