@@ -1,6 +1,6 @@
-package com.haroncode.gemini.connection
+package com.haroncode.gemini.event
 
-import com.haroncode.gemini.routing.EventListener
+import com.haroncode.gemini.connection.BaseConnectionRule
 import io.reactivex.functions.Consumer
 import org.reactivestreams.Publisher
 
