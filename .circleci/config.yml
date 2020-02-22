@@ -12,6 +12,7 @@ jobs:
 
     steps:
       - checkout
+
       - restore_cache:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
 
@@ -40,17 +41,9 @@ jobs:
           name: Run Tests
           command: ./gradlew test
 
-      - run:
-          name: Build debug
-          command: ./gradlew assembleDebug
-
       - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
           path: app/build/reports
           destination: reports
 
       - store_test_results: # for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
           path: app/build/test-results
-
-      - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
-          path: app/build/outputs/apk/debug
-          destination: build
