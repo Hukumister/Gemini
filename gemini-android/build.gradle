@@ -1,0 +1,70 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'com.github.dcendents.android-maven'
+apply from: "$project.rootDir/сodequality/ktlint.gradle"
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "${version}"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compileOnly rootProject.ext.appCompat
+    implementation rootProject.ext.kotlinStdlib
+    /**
+     * RxJava
+     */
+    implementation rootProject.ext.rxJava
+    implementation rootProject.ext.rxKotlin
+    implementation rootProject.ext.rxAndroid
+    /**
+     * Test
+     */
+    testImplementation rootProject.ext.junit
+    /**
+     * Project modules
+     */
+    implementation project(':gemini-core')
+}
+
+/**
+ Properties properties = new Properties()
+ properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+ version = libraryVersion // Library version
+
+ bintray {// User and ApiKey stored in local.properties
+ user = properties.getProperty("bintrayUser")
+ key = properties.getProperty("bintrayApiKey")
+ configurations = ['archives']
+
+ // Package info for Bintray
+ pkg {name = "gemini-android"
+ repo = bintrayRepo
+ licenses = allLicenses
+ vcsUrl = gitUrl
+ publish = true
+ version {name = libraryVersion
+ released = new Date()}}}group = publishedGroupId // Maven Group ID for the artifact
+
+ install {repositories.mavenInstaller {// This generates POM.xml with proper parameters
+ pom.project {packaging 'aar'
+ groupId publishedGroupId
+ artifactId "gemini-android"}}}bintrayUpload.dependsOn install
+ */
