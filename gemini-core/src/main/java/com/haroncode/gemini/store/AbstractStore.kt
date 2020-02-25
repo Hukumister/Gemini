@@ -1,10 +1,8 @@
 package com.haroncode.gemini.store
 
 import com.haroncode.gemini.core.Store
-import com.haroncode.gemini.core.elements.Bootstrapper
-import com.haroncode.gemini.core.elements.EventProducer
-import com.haroncode.gemini.core.elements.Middleware
-import com.haroncode.gemini.core.elements.Reducer
+import com.haroncode.gemini.core.elements.*
+import com.haroncode.gemini.util.combineNullable
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.processors.BehaviorProcessor
@@ -20,10 +18,11 @@ import org.reactivestreams.Subscriber
  */
 abstract class AbstractStore<Action : Any, State : Any, Event : Any, Effect : Any>(
     initialState: State,
-    private val reducer: Reducer<State, Effect>,
-    private val middleware: Middleware<Action, State, Effect>,
+    reducer: Reducer<State, Effect>,
+    middleware: Middleware<Action, State, Effect>,
     bootstrapper: Bootstrapper<Action>? = null,
-    private val eventProducer: EventProducer<State, Effect, Event>? = null
+    eventProducer: EventProducer<State, Effect, Event>? = null,
+    errorHandler: ErrorHandler<State>? = null
 ) : Store<Action, State, Event> {
 
     private val compositeDisposable = CompositeDisposable()
@@ -33,19 +32,34 @@ abstract class AbstractStore<Action : Any, State : Any, Event : Any, Effect : An
     private val effectProcessor = PublishProcessor.create<Effect>()
     private val eventProcessor = PublishProcessor.create<Event>()
 
+    private val reducerWrapper = errorHandler
+        ?.let { handler -> ReducerWrapper(reducer, handler) }
+        ?: reducer
+
+    private val middlewareWrapper = errorHandler
+        ?.let { handler -> MiddlewareWrapper(middleware, handler) }
+        ?: middleware
+
+    private val bootstrapperWrapper = combineNullable(bootstrapper, errorHandler) { bootstrapper, errorHandler ->
+        BootstrapperWrapper(bootstrapper, errorHandler, initialState)
+    } ?: bootstrapper
+
+    private val eventProducerWrapper = combineNullable(eventProducer, errorHandler) { eventProducer, errorHandler ->
+        EventProducerWrapper(eventProducer, errorHandler)
+    } ?: eventProducer
+
     init {
         Flowables.zip(
             stateProcessor,
             effectProcessor
-        )
-            .map { (state, effect) -> reducer.invoke(state, effect) }
-            .subscribe(stateProcessor::onNext, ::onError)
+        ) { state, effect -> reducerWrapper.invoke(state, effect) }
+            .subscribe(stateProcessor::onNext)
             .addTo(compositeDisposable)
 
         actionProcessor
             .withLatestFrom(stateProcessor)
-            .flatMap { (action, state) -> middleware.invoke(action, state) }
-            .subscribe(effectProcessor::onNext, ::onError)
+            .flatMap { (action, state) -> middlewareWrapper.invoke(action, state) }
+            .subscribe(effectProcessor::onNext)
             .addTo(compositeDisposable)
 
         Flowables.zip(
@@ -53,11 +67,12 @@ abstract class AbstractStore<Action : Any, State : Any, Event : Any, Effect : An
             effectProcessor
         )
             .flatMap { (state, effect) -> produceEventFlowable(state, effect) }
-            .subscribe(eventProcessor::onNext, ::onError)
+            .subscribe(eventProcessor::onNext)
             .addTo(compositeDisposable)
 
-        bootstrapper?.invoke()
-            ?.subscribe(::accept, ::onError)
+        bootstrapperWrapper?.invoke()
+            ?.let { publisher -> Flowable.fromPublisher(publisher) }
+            ?.subscribe(::accept)
             ?.addTo(compositeDisposable)
     }
 
@@ -77,9 +92,56 @@ abstract class AbstractStore<Action : Any, State : Any, Event : Any, Effect : An
     private fun produceEventFlowable(
         state: State,
         effect: Effect
-    ): Flowable<Event> = eventProducer?.invoke(state, effect)
+    ): Flowable<Event> = eventProducerWrapper?.invoke(state, effect)
         ?.let { event -> Flowable.just(event) }
         ?: Flowable.empty<Event>()
 
-    protected open fun onError(throwable: Throwable) = Unit
+    private class ReducerWrapper<State, Effect>(
+        private val reducer: Reducer<State, Effect>,
+        private val errorHandler: ErrorHandler<State>
+    ) : Reducer<State, Effect> {
+
+        override fun invoke(state: State, effect: Effect): State = try {
+            reducer.invoke(state, effect)
+        } catch (exception: Exception) {
+            errorHandler.invoke(state, exception)
+            state
+        }
+    }
+
+    private class MiddlewareWrapper<Action, State, Effect>(
+        private val middleware: Middleware<Action, State, Effect>,
+        private val errorHandler: ErrorHandler<State>
+    ) : Middleware<Action, State, Effect> {
+
+        override fun invoke(action: Action, state: State): Publisher<Effect> =
+            Flowable.fromPublisher(middleware.invoke(action, state))
+                .doOnError { throwable -> errorHandler.invoke(state, throwable) }
+                .onErrorResumeNext(Flowable.empty())
+    }
+
+    private class BootstrapperWrapper<Action, State>(
+        private val bootstrapper: Bootstrapper<Action>,
+        private val errorHandler: ErrorHandler<State>,
+        private val state: State
+    ) : Bootstrapper<Action> {
+
+        override fun invoke(): Publisher<Action> =
+            Flowable.fromPublisher(bootstrapper.invoke())
+                .doOnError { throwable -> errorHandler.invoke(state, throwable) }
+                .onErrorResumeNext(Flowable.empty())
+    }
+
+    private class EventProducerWrapper<State, Effect, Event>(
+        private val eventProducer: EventProducer<State, Effect, Event>,
+        private val errorHandler: ErrorHandler<State>
+    ) : EventProducer<State, Effect, Event> {
+
+        override fun invoke(state: State, effect: Effect): Event? = try {
+            eventProducer.invoke(state, effect)
+        } catch (exception: Exception) {
+            errorHandler.invoke(state, exception)
+            null
+        }
+    }
 }

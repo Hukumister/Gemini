@@ -1,11 +1,27 @@
 package com.haroncode.gemini.common
 
-import com.haroncode.gemini.common.TestAction.*
-import com.haroncode.gemini.common.TestEffect.*
+import com.haroncode.gemini.common.TestAction.ActionForEvent
+import com.haroncode.gemini.common.TestAction.FulfillableAsync
+import com.haroncode.gemini.common.TestAction.FulfillableInstantly
+import com.haroncode.gemini.common.TestAction.LeadsToExceptionInMiddleware
+import com.haroncode.gemini.common.TestAction.MaybeFulfillable
+import com.haroncode.gemini.common.TestAction.TranslatesTo3Effects
+import com.haroncode.gemini.common.TestAction.TranslatesToExceptionInReducer
+import com.haroncode.gemini.common.TestAction.Unfulfillable
+import com.haroncode.gemini.common.TestEffect.ConditionalThingHappened
+import com.haroncode.gemini.common.TestEffect.EffectForEvent
+import com.haroncode.gemini.common.TestEffect.FinishedAsync
+import com.haroncode.gemini.common.TestEffect.InstantEffect
+import com.haroncode.gemini.common.TestEffect.LeadsToExceptionInReducer
+import com.haroncode.gemini.common.TestEffect.MultipleEffect1
+import com.haroncode.gemini.common.TestEffect.MultipleEffect2
+import com.haroncode.gemini.common.TestEffect.MultipleEffect3
+import com.haroncode.gemini.common.TestEffect.StartedAsync
 import com.haroncode.gemini.core.elements.Middleware
 import com.haroncode.gemini.core.elements.Reducer
 import io.reactivex.Flowable
 import io.reactivex.Scheduler
+import java.io.IOException
 import java.util.concurrent.TimeUnit
 
 /**
@@ -32,6 +48,8 @@ sealed class TestAction {
     object TranslatesTo3Effects : TestAction()
     object MaybeFulfillable : TestAction()
     object ActionForEvent : TestAction()
+    object LeadsToExceptionInMiddleware : TestAction()
+    object TranslatesToExceptionInReducer : TestAction()
 }
 
 sealed class TestViewEvent {
@@ -47,6 +65,7 @@ sealed class TestEffect {
     object MultipleEffect3 : TestEffect()
     data class ConditionalThingHappened(val multiplier: Int) : TestEffect()
     object EffectForEvent : TestEffect()
+    object LeadsToExceptionInReducer : TestEffect()
 }
 
 class TestReducer : Reducer<TestState, TestEffect> {
@@ -60,6 +79,7 @@ class TestReducer : Reducer<TestState, TestEffect> {
         MultipleEffect1,
         MultipleEffect2,
         MultipleEffect3 -> state.copy(counter = state.counter + 1)
+        LeadsToExceptionInReducer -> throw IllegalStateException()
     }
 }
 
@@ -87,5 +107,7 @@ class TestMiddleware(
                 )
             )
             else Flowable.empty<TestEffect>()
+        LeadsToExceptionInMiddleware -> Flowable.error(IOException())
+        TranslatesToExceptionInReducer -> Flowable.just(LeadsToExceptionInReducer)
     }
 }

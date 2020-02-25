@@ -1,12 +1,11 @@
 package com.haroncode.gemini.common
 
 import com.haroncode.gemini.core.elements.Bootstrapper
-import io.reactivex.Observable
-import io.reactivex.subjects.Subject
+import io.reactivex.processors.FlowableProcessor
 
 class TestBootstrapper(
-    private val testActionSubject: Subject<TestAction>
+    private val testActionPublisher: FlowableProcessor<TestAction>
 ) : Bootstrapper<TestAction> {
 
-    override fun invoke(): Observable<TestAction> = testActionSubject.hide()
+    override fun invoke() = testActionPublisher.hide()
 }

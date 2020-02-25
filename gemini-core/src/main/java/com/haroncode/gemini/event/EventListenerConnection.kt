@@ -1,6 +1,7 @@
 package com.haroncode.gemini.event
 
 import com.haroncode.gemini.connection.BaseConnectionRule
+import com.haroncode.gemini.connection.dsl.identityFlowableTransformer
 import io.reactivex.functions.Consumer
 import org.reactivestreams.Publisher
 
@@ -13,5 +14,5 @@ class EventListenerConnection<Event : Any>(
 ) : BaseConnectionRule<Event, Event>(
     publisher = eventPublisher,
     consumer = Consumer { event -> eventListener.onEvent(event) },
-    transformer = { input -> input }
+    transformer = identityFlowableTransformer()
 )

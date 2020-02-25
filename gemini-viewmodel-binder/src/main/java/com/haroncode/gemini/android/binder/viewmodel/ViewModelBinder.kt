@@ -3,7 +3,7 @@ package com.haroncode.gemini.android.binder.viewmodel
 import androidx.lifecycle.ViewModel
 import com.haroncode.gemini.connection.NavigationConnection
 import com.haroncode.gemini.connection.dsl.decorate
-import com.haroncode.gemini.connection.dsl.noneTransformer
+import com.haroncode.gemini.connection.dsl.identityTransformer
 import com.haroncode.gemini.connection.dsl.with
 import com.haroncode.gemini.core.Store
 import com.haroncode.gemini.core.StoreView
@@ -22,7 +22,7 @@ abstract class ViewModelBinder<Action : Any, State : Any, ViewState : Any, Event
 
     private val binderDelegate = ViewModelViewBinder<Action, ViewState> { storeView ->
         add(store to storeView with { input -> input.map(transformer).observeOn(uiScheduler) })
-        add(storeView to store with noneTransformer())
+        add(storeView to store with identityTransformer())
 
         navigatorConnection(store, storeNavigator)?.let { connection ->
             add(connection decorate { stream -> stream.observeOn(uiScheduler) })

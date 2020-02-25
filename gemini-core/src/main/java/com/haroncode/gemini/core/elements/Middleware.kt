@@ -1,8 +1,8 @@
 package com.haroncode.gemini.core.elements
 
-import io.reactivex.Flowable
+import org.reactivestreams.Publisher
 
 /**
  * @author HaronCode.
  */
-typealias Middleware<Action, State, Effect> = (action: Action, state: State) -> Flowable<Effect>
+typealias Middleware<Action, State, Effect> = (action: Action, state: State) -> Publisher<Effect>
