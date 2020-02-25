@@ -2,6 +2,9 @@ package com.haroncode.gemini.common
 
 import com.haroncode.gemini.core.elements.ErrorHandler
 
+/**
+ * @author kdk96.
+ */
 class TestErrorHandler<State> : ErrorHandler<State> {
 
     var lastState: State? = null
