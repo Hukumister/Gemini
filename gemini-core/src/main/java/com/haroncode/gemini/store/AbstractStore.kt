@@ -1,11 +1,8 @@
 package com.haroncode.gemini.store
 
 import com.haroncode.gemini.core.Store
-import com.haroncode.gemini.core.elements.Bootstrapper
-import com.haroncode.gemini.core.elements.ErrorHandler
-import com.haroncode.gemini.core.elements.EventProducer
-import com.haroncode.gemini.core.elements.Middleware
-import com.haroncode.gemini.core.elements.Reducer
+import com.haroncode.gemini.core.elements.*
+import com.haroncode.gemini.util.combineNullable
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.processors.BehaviorProcessor
@@ -35,13 +32,20 @@ abstract class AbstractStore<Action : Any, State : Any, Event : Any, Effect : An
     private val effectProcessor = PublishProcessor.create<Effect>()
     private val eventProcessor = PublishProcessor.create<Event>()
 
-    private val reducerWrapper = errorHandler?.let { ReducerWrapper(reducer, errorHandler) } ?: reducer
-    private val middlewareWrapper = errorHandler?.let { MiddlewareWrapper(middleware, errorHandler) } ?: middleware
-    private val bootstrapperWrapper = errorHandler?.let {
-        bootstrapper?.let { BootstrapperWrapper(bootstrapper, errorHandler, initialState) }
+    private val reducerWrapper = errorHandler
+        ?.let { handler -> ReducerWrapper(reducer, handler) }
+        ?: reducer
+
+    private val middlewareWrapper = errorHandler
+        ?.let { handler -> MiddlewareWrapper(middleware, handler) }
+        ?: middleware
+
+    private val bootstrapperWrapper = combineNullable(bootstrapper, errorHandler) { bootstrapper, errorHandler ->
+        BootstrapperWrapper(bootstrapper, errorHandler, initialState)
     } ?: bootstrapper
-    private val eventProducerWrapper = errorHandler?.let {
-        eventProducer?.let { EventProducerWrapper(eventProducer, errorHandler) }
+
+    private val eventProducerWrapper = combineNullable(eventProducer, errorHandler) { eventProducer, errorHandler ->
+        EventProducerWrapper(eventProducer, errorHandler)
     } ?: eventProducer
 
     init {
