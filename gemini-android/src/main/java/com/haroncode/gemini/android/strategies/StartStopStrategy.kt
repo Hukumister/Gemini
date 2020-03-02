@@ -1,14 +1,19 @@
 package com.haroncode.gemini.android.strategies
 
 import androidx.lifecycle.Lifecycle
-import com.haroncode.gemini.android.BindingStrategy
-import com.haroncode.gemini.core.StoreLifecycle.Event
+import androidx.lifecycle.LifecycleOwner
+import com.haroncode.gemini.android.LifecycleStrategy
+import com.haroncode.gemini.connector.StoreLifecycle.Event
+import io.reactivex.Maybe
 
-object StartStopStrategy : BindingStrategy {
-
-    override fun handle(lifecycleState: Lifecycle.Event) = when (lifecycleState) {
-        Lifecycle.Event.ON_START -> Event.START
-        Lifecycle.Event.ON_STOP -> Event.STOP
-        else -> null
+object StartStopStrategy : LifecycleStrategy {
+    
+    override fun handle(
+        source: LifecycleOwner,
+        lifecycleState: Lifecycle.Event
+    ) = when (lifecycleState) {
+        Lifecycle.Event.ON_START -> Maybe.just(Event.START)
+        Lifecycle.Event.ON_STOP -> Maybe.just(Event.STOP)
+        else -> Maybe.empty()
     }
 }
