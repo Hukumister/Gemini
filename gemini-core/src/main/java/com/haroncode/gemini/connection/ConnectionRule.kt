@@ -1,4 +1,4 @@
-package com.haroncode.gemini.core
+package com.haroncode.gemini.connection
 
 import io.reactivex.disposables.Disposable
 
@@ -10,4 +10,9 @@ interface ConnectionRule {
     val isRetain: Boolean
 
     fun connect(): Disposable
+
+    interface Factory<P : Any> {
+
+        fun create(param: P): Collection<ConnectionRule>
+    }
 }

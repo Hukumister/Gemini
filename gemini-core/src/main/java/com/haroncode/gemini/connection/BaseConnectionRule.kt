@@ -1,6 +1,5 @@
 package com.haroncode.gemini.connection
 
-import com.haroncode.gemini.core.ConnectionRule
 import io.reactivex.Flowable
 import io.reactivex.FlowableTransformer
 import io.reactivex.disposables.Disposable
