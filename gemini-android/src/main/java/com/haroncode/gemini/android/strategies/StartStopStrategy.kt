@@ -7,7 +7,7 @@ import com.haroncode.gemini.connector.StoreLifecycle.Event
 import io.reactivex.Maybe
 
 object StartStopStrategy : LifecycleStrategy {
-    
+
     override fun handle(
         source: LifecycleOwner,
         lifecycleState: Lifecycle.Event

@@ -13,5 +13,3 @@ class StoreAutoDisposeConnectionRule(
 
     override fun connect() = store
 }
-
-
