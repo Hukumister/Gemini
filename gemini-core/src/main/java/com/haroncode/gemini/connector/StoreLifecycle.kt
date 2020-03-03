@@ -2,6 +2,9 @@ package com.haroncode.gemini.connector
 
 import org.reactivestreams.Publisher
 
+/**
+ * @author HaronCode.
+ */
 interface StoreLifecycle : Publisher<StoreLifecycle.Event> {
 
     /**

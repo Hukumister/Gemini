@@ -3,6 +3,9 @@ package com.haroncode.gemini.connector
 import io.reactivex.functions.Consumer
 import io.reactivex.subscribers.DisposableSubscriber
 
+/**
+ * @author HaronCode.
+ */
 class LifecycleEventSource(
     private val lifecycle: StoreLifecycle
 ) {
