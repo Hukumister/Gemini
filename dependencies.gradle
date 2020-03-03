@@ -17,7 +17,7 @@ ext {
     def timberVersion = "4.6.0"
     timber = "com.jakewharton.timber:timber:$timberVersion"
 
-    def lifecycleVersion = "2.1.0"
+    def lifecycleVersion = "2.2.0"
     lifecycleViewModel = "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
     lifecycleCommon = "androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion"
 
