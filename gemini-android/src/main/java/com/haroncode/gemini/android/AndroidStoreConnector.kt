@@ -1,6 +1,5 @@
 package com.haroncode.gemini.android
 
-import android.annotation.SuppressLint
 import androidx.lifecycle.LifecycleOwner
 import com.haroncode.gemini.android.lifecycle.StoreLifecycleEventObserver
 import com.haroncode.gemini.android.strategies.StartStopStrategy
@@ -20,8 +19,7 @@ object AndroidStoreConnector {
             this.lifecycleStrategy = lifecycleStrategy
             return this
         }
-
-        @SuppressLint("CheckResult")
+        
         fun connect(view: T) {
             val connectionRules = factory.create(view)
             val storeConnector = BaseStoreConnector(connectionRules)
