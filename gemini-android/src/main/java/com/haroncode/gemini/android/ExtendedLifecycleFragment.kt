@@ -12,17 +12,17 @@ open class ExtendedLifecycleFragment(
 
     private var instanceStateSaved: Boolean = false
 
-    private val realRemovingObservers = mutableSetOf<ExtendedLifecycleObserver>()
+    private val extendedLifecycleObservers = mutableSetOf<ExtendedLifecycleObserver>()
 
     private val extendedLifecycle = ExtendedLifecycle(
         lifecycle = super.getLifecycle(),
-        realRemovingObserversHolder = object : RealRemovingObserversHolder {
+        extendedLifecycleObserversHolder = object : ExtendedLifecycleObserversHolder {
             override fun add(observer: ExtendedLifecycleObserver) {
-                realRemovingObservers.add(observer)
+                extendedLifecycleObservers.add(observer)
             }
 
             override fun remove(observer: ExtendedLifecycleObserver) {
-                realRemovingObservers.remove(observer)
+                extendedLifecycleObservers.remove(observer)
             }
         }
     )
@@ -50,7 +50,7 @@ open class ExtendedLifecycleFragment(
 
         val isFinishing = activity?.isFinishing == true || isRealRemoving
 
-        if (isFinishing) realRemovingObservers.forEach(ExtendedLifecycleObserver::onFinish)
+        if (isFinishing) extendedLifecycleObservers.forEach(ExtendedLifecycleObserver::onFinish)
     }
 
     private val isRealRemoving: Boolean

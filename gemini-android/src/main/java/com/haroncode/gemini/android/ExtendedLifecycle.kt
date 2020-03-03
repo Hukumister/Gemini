@@ -3,23 +3,23 @@ package com.haroncode.gemini.android
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 
-internal interface RealRemovingObserversHolder {
+internal interface ExtendedLifecycleObserversHolder {
     fun add(observer: ExtendedLifecycleObserver)
     fun remove(observer: ExtendedLifecycleObserver)
 }
 
 internal class ExtendedLifecycle(
     private val lifecycle: Lifecycle,
-    private val realRemovingObserversHolder: RealRemovingObserversHolder
+    private val extendedLifecycleObserversHolder: ExtendedLifecycleObserversHolder
 ) : Lifecycle() {
 
     override fun addObserver(observer: LifecycleObserver) {
-        if (observer is ExtendedLifecycleObserver) realRemovingObserversHolder.add(observer)
+        if (observer is ExtendedLifecycleObserver) extendedLifecycleObserversHolder.add(observer)
         lifecycle.addObserver(observer)
     }
 
     override fun removeObserver(observer: LifecycleObserver) {
-        if (observer is ExtendedLifecycleObserver) realRemovingObserversHolder.remove(observer)
+        if (observer is ExtendedLifecycleObserver) extendedLifecycleObserversHolder.remove(observer)
         lifecycle.removeObserver(observer)
     }
 
