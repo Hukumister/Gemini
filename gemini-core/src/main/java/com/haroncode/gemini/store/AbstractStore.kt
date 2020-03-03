@@ -1,8 +1,8 @@
 package com.haroncode.gemini.store
 
+import com.haroncode.gemini.common.combineNullable
 import com.haroncode.gemini.core.Store
 import com.haroncode.gemini.core.elements.*
-import com.haroncode.gemini.util.combineNullable
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.processors.BehaviorProcessor

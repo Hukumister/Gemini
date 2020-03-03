@@ -40,7 +40,8 @@ dependencies {
     /**
      * Project modules
      */
-    compileOnly project(':gemini-core')
+    implementation project(':gemini-core')
+    implementation project(':gemini-common')
 }
 
 /**

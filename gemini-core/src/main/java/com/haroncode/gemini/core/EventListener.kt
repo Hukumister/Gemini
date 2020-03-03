@@ -1,4 +1,4 @@
-package com.haroncode.gemini.event
+package com.haroncode.gemini.core
 
 /**
  * @author HaronCode.

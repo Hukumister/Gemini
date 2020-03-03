@@ -15,8 +15,14 @@ dependencies {
      */
     implementation rootProject.ext.rxJava
     implementation rootProject.ext.rxKotlin
-
+    /**
+     * Test
+     */
     implementation rootProject.ext.junit
+    /**
+     * Project modules
+     */
+    implementation project(':gemini-common')
 }
 
 /**
