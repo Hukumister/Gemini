@@ -19,7 +19,7 @@ object AndroidStoreConnector {
             this.lifecycleStrategy = lifecycleStrategy
             return this
         }
-        
+
         fun connect(view: T) {
             val connectionRules = factory.create(view)
             val storeConnector = BaseStoreConnector(connectionRules)
