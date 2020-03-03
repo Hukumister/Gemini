@@ -1,34 +1,20 @@
-package com.haroncode.gemini.binder
+package com.haroncode.gemini.connector
 
-import com.haroncode.gemini.core.ConnectionRule
-import com.haroncode.gemini.core.StoreLifecycle
-import com.haroncode.gemini.core.StoreLifecycle.Event
-import io.reactivex.disposables.Disposable
+import com.haroncode.gemini.connector.StoreLifecycle.Event
 import io.reactivex.processors.FlowableProcessor
-import io.reactivex.processors.PublishProcessor
-import io.reactivex.subjects.PublishSubject
-import io.reactivex.subjects.Subject
-import java.util.concurrent.atomic.AtomicBoolean
-import java.util.concurrent.atomic.AtomicInteger
-import org.junit.Assert
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
-import org.junit.Before
-import org.junit.Test
-import org.reactivestreams.Subscriber
 
-class BaseConnectionBinderTest {
+class ConnectionBinderTest {
 
-    private lateinit var testConnectionBinder: BaseConnectionBinder
-    private lateinit var testStoreLifecycle: TestStoreLifecycle
+    private lateinit var testBaseStoreConnector: BaseStoreConnector
+//    private lateinit var testStoreLifecycle: TestStoreLifecycle
     private lateinit var testStoreLifecycleProcessor: FlowableProcessor<Event>
 
-    @Before
+   /* @Before
     fun setUp() {
         testStoreLifecycleProcessor = PublishProcessor.create()
         testStoreLifecycle = TestStoreLifecycle(testStoreLifecycleProcessor)
 
-        testConnectionBinder = BaseConnectionBinder(testStoreLifecycle)
+        testConnectionBinder = ConnectionBinder(testStoreLifecycle)
     }
 
     @Test
@@ -163,5 +149,5 @@ class BaseConnectionBinderTest {
                 isConnected.set(false)
             }
             .subscribe()
-    }
+    }*/
 }

@@ -13,7 +13,6 @@ import com.haroncode.gemini.common.TestAction.TranslatesTo3Effects
 import com.haroncode.gemini.common.TestAction.TranslatesToExceptionInReducer
 import com.haroncode.gemini.common.TestAction.Unfulfillable
 import com.haroncode.gemini.common.TestBootstrapper
-import com.haroncode.gemini.common.TestConnectionBinder
 import com.haroncode.gemini.common.TestEffect
 import com.haroncode.gemini.common.TestErrorHandler
 import com.haroncode.gemini.common.TestEventProducer
@@ -25,6 +24,8 @@ import com.haroncode.gemini.common.TestViewEvent
 import com.haroncode.gemini.common.onNextEvents
 import com.haroncode.gemini.connection.BaseConnectionRule
 import com.haroncode.gemini.connection.dsl.identityFlowableTransformer
+import com.haroncode.gemini.connector.BaseStoreConnector
+import com.haroncode.gemini.connector.StoreConnector
 import com.haroncode.gemini.store.BaseStore
 import io.reactivex.Flowable
 import io.reactivex.observers.TestObserver
@@ -52,7 +53,7 @@ class BaseStoreTest {
 
     private lateinit var testErrorHandler: TestErrorHandler<TestState>
 
-    private lateinit var testBinder: TestConnectionBinder
+    private lateinit var testConnector: StoreConnector
 
     @Before
     fun prepare() {
@@ -60,7 +61,6 @@ class BaseStoreTest {
         testActionsProcessor = PublishProcessor.create()
         testBootstrapperProcessor = PublishProcessor.create()
         testStatesObserver = TestObserver()
-        testBinder = TestConnectionBinder()
         testErrorHandler = TestErrorHandler()
 
         testStoreView = TestStoreView(testActionsProcessor, testStatesObserver)
@@ -85,10 +85,8 @@ class BaseStoreTest {
             transformer = identityFlowableTransformer()
         )
 
-        testBinder.bind(storeToViewConnectionRule)
-        testBinder.bind(viewToStoreConnectionRule)
-
-        testBinder.connectAll()
+        testConnector = BaseStoreConnector(listOf(storeToViewConnectionRule, viewToStoreConnectionRule))
+        testConnector.connect()
     }
 
     @Test
@@ -233,7 +231,7 @@ class BaseStoreTest {
 
         asyncWorkScheduler.advanceTimeBy(5, TimeUnit.MILLISECONDS)
 
-        testBinder.dispose()
+        testConnector.dispose()
         baseStore.dispose()
 
         asyncWorkScheduler.advanceTimeBy(10, TimeUnit.MILLISECONDS)
@@ -259,11 +257,11 @@ class BaseStoreTest {
 
         asyncWorkScheduler.advanceTimeBy(5, TimeUnit.MILLISECONDS)
 
-        testBinder.disconnectAll()
+        testConnector.disconnect()
 
         asyncWorkScheduler.advanceTimeBy(10, TimeUnit.MILLISECONDS)
 
-        testBinder.connectAll()
+        testConnector.connect()
 
         val stateAfterRebind = testStatesObserver.onNextEvents().last()
 
