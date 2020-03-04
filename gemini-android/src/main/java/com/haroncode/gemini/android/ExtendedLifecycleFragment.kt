@@ -13,7 +13,7 @@ open class ExtendedLifecycleFragment(
     @LayoutRes contentLayoutId: Int = 0
 ) : Fragment(contentLayoutId) {
 
-    private var instanceStateSaved: Boolean = false
+    private var instanceStateSaved = false
 
     private val extendedLifecycleObservers = mutableSetOf<ExtendedLifecycleObserver>()
 
