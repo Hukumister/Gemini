@@ -18,8 +18,7 @@ ext {
     timber = "com.jakewharton.timber:timber:$timberVersion"
 
     def lifecycleVersion = "2.2.0"
-    lifecycleViewModel = "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
-    lifecycleCommon = "androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion"
+	lifecycleCommon = "androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion"
 
     junit = 'junit:junit:4.12'
     mockito = 'com.nhaarm an:mockito-kotlin-kt1.1:1.6.0'
