@@ -6,6 +6,9 @@ import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 
+/**
+ * @author kdk96.
+ */
 open class ExtendedLifecycleFragment(
     @LayoutRes contentLayoutId: Int = 0
 ) : Fragment(contentLayoutId) {
@@ -50,7 +53,7 @@ open class ExtendedLifecycleFragment(
 
         val isFinishing = activity?.isFinishing == true || isRealRemoving
 
-        if (isFinishing) extendedLifecycleObservers.forEach(ExtendedLifecycleObserver::onFinish)
+        if (isFinishing) extendedLifecycleObservers.forEach { observer -> observer.onFinish(this) }
     }
 
     private val isRealRemoving: Boolean

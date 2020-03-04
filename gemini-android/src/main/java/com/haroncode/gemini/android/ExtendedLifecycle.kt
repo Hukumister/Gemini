@@ -3,6 +3,9 @@ package com.haroncode.gemini.android
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 
+/**
+ * @author kdk96.
+ */
 internal interface ExtendedLifecycleObserversHolder {
     fun add(observer: ExtendedLifecycleObserver)
     fun remove(observer: ExtendedLifecycleObserver)
