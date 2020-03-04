@@ -7,5 +7,5 @@ abstract class DelegateConnectionRuleFactory<T : LifecycleOwner> : ConnectionRul
 
     abstract val connectionRuleFactory: ConnectionRule.Factory<T>
 
-    override fun create(param: T) =connectionRuleFactory.create(param)
+    override fun create(param: T) = connectionRuleFactory.create(param)
 }
