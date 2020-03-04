@@ -8,20 +8,30 @@ import com.haroncode.gemini.core.Store
  * @author HaronCode.
  */
 inline fun <reified T : Any> connectionFactory(
-    crossinline factory: MutableList<ConnectionRule>.(param: T) -> Unit
+    crossinline factory: ConnectionRuleListBuilder.(param: T) -> Unit
 ): ConnectionRule.Factory<T> = object : ConnectionRule.Factory<T> {
 
     override fun create(param: T): Collection<ConnectionRule> {
-        val mutableList = mutableListOf<ConnectionRule>()
-        mutableList.factory(param)
-        return mutableList
+        val builder = ConnectionRuleListBuilder()
+        builder.factory(param)
+        return builder.build()
     }
 }
 
-inline fun MutableList<ConnectionRule>.connect(connectionRule: () -> ConnectionRule) = connectionRule
-    .invoke()
-    .let(::add)
+class ConnectionRuleListBuilder {
 
-inline fun MutableList<ConnectionRule>.autoDispose(storeFactory: () -> Store<*, *, *>) = storeFactory.invoke()
-    .let(::AutoStoreDisposeConnectionRule)
-    .let(::add)
+    private val mutableList = mutableListOf<ConnectionRule>()
+
+    fun connect(connectionRule: () -> ConnectionRule) {
+        connectionRule.invoke()
+            .let(mutableList::add)
+    }
+
+    fun autoDispose(storeFactory: () -> Store<*, *, *>) {
+        storeFactory.invoke()
+            .let(::AutoStoreDisposeConnectionRule)
+            .let(mutableList::add)
+    }
+
+    fun build() = mutableList.toList()
+}
