@@ -4,11 +4,11 @@ import com.haroncode.gemini.connection.ConnectionRule
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
+import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicInteger
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
-import java.util.concurrent.atomic.AtomicBoolean
-import java.util.concurrent.atomic.AtomicInteger
 
 class BaseStoreConnectorTest {
 
@@ -94,5 +94,4 @@ class BaseStoreConnectorTest {
             }
             .subscribe()
     }
-
 }
