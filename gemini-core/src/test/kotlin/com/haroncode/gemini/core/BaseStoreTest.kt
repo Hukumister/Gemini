@@ -23,7 +23,6 @@ import com.haroncode.gemini.common.TestStoreView
 import com.haroncode.gemini.common.TestViewEvent
 import com.haroncode.gemini.common.onNextEvents
 import com.haroncode.gemini.connection.BaseConnectionRule
-import com.haroncode.gemini.connection.dsl.identityFlowableTransformer
 import com.haroncode.gemini.connector.BaseStoreConnector
 import com.haroncode.gemini.connector.StoreConnector
 import com.haroncode.gemini.store.BaseStore
