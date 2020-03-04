@@ -10,5 +10,5 @@ interface LifecycleStrategy {
     fun handle(
         source: LifecycleOwner,
         lifecycleState: Lifecycle.Event
-    ): MaybeSource<StoreLifecycle.Event>
+    ): StoreLifecycle.Event?
 }
