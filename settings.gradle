@@ -1,5 +1,4 @@
 include ':gemini-core',
         'gemini-common',
         'gemini-android',
-        'gemini-dsl',
-        'gemini-viewmodel-binder'
+        'gemini-dsl'
