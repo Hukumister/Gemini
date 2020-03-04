@@ -5,7 +5,6 @@ import com.haroncode.gemini.android.lifecycle.StoreLifecycleEventObserver
 import com.haroncode.gemini.android.strategies.StartStopStrategy
 import com.haroncode.gemini.connection.ConnectionRule
 import com.haroncode.gemini.connector.BaseStoreConnector
-import com.haroncode.gemini.coordinator.Coordinator
 
 object AndroidStoreConnector {
 
@@ -24,8 +23,7 @@ object AndroidStoreConnector {
             val connectionRules = factory.create(view)
             val storeConnector = BaseStoreConnector(connectionRules)
 
-            val coordinator = Coordinator(storeConnector)
-            val storeLifecycle = StoreLifecycleEventObserver(coordinator, lifecycleStrategy)
+            val storeLifecycle = StoreLifecycleEventObserver(storeConnector, lifecycleStrategy)
             view.lifecycle.addObserver(storeLifecycle)
         }
     }
