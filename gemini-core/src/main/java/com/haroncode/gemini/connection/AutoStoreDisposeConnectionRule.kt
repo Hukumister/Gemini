@@ -5,7 +5,7 @@ import com.haroncode.gemini.core.Store
 /**
  * @author HaronCode.
  */
-class StoreAutoDisposeConnectionRule(
+class AutoStoreDisposeConnectionRule(
     private val store: Store<*, *, *>
 ) : ConnectionRule {
 
