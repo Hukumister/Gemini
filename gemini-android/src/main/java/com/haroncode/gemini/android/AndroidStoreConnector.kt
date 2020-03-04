@@ -1,12 +1,10 @@
 package com.haroncode.gemini.android
 
-import android.annotation.SuppressLint
 import androidx.lifecycle.LifecycleOwner
 import com.haroncode.gemini.android.lifecycle.StoreLifecycleEventObserver
 import com.haroncode.gemini.android.strategies.StartStopStrategy
 import com.haroncode.gemini.connection.ConnectionRule
 import com.haroncode.gemini.connector.BaseStoreConnector
-import com.haroncode.gemini.connector.Coordinator
 
 object AndroidStoreConnector {
 
@@ -21,13 +19,11 @@ object AndroidStoreConnector {
             return this
         }
 
-        @SuppressLint("CheckResult")
         fun connect(view: T) {
             val connectionRules = factory.create(view)
             val storeConnector = BaseStoreConnector(connectionRules)
-            val coordinator = Coordinator(storeConnector)
 
-            val storeLifecycle = StoreLifecycleEventObserver(coordinator, lifecycleStrategy)
+            val storeLifecycle = StoreLifecycleEventObserver(storeConnector, lifecycleStrategy)
             view.lifecycle.addObserver(storeLifecycle)
         }
     }

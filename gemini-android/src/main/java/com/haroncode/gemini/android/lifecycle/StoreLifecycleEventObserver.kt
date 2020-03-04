@@ -4,42 +4,38 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import com.haroncode.gemini.android.LifecycleStrategy
-import com.haroncode.gemini.connector.Coordinator
-import com.haroncode.gemini.connector.LifecycleEventSource
+import com.haroncode.gemini.connector.StoreConnector
 import com.haroncode.gemini.connector.StoreLifecycle
-import io.reactivex.observers.DisposableMaybeObserver
+import com.haroncode.gemini.connector.StoreLifecycle.Event
+import com.haroncode.gemini.coordinator.Coordinator
 import io.reactivex.processors.BehaviorProcessor
 import org.reactivestreams.Subscriber
 
 class StoreLifecycleEventObserver(
-    coordinator: Coordinator,
+    storeConnector: StoreConnector,
     private val lifecycleStrategy: LifecycleStrategy
 ) : LifecycleEventObserver {
 
     private val androidStoreLifecycle = AndroidStoreLifecycle()
 
     init {
-        val lifecycleEventSource = LifecycleEventSource(androidStoreLifecycle)
-        lifecycleEventSource.start(coordinator)
+        val coordinator = Coordinator(androidStoreLifecycle, storeConnector)
+        coordinator.start()
     }
 
-    override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) = lifecycleStrategy
-        .handle(source, event)
-        .subscribe(androidStoreLifecycle)
+    override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
+        lifecycleStrategy.handle(source, event)?.let(androidStoreLifecycle::postAction)
+    }
 
-    private class AndroidStoreLifecycle : StoreLifecycle, DisposableMaybeObserver<StoreLifecycle.Event>() {
+    private class AndroidStoreLifecycle : StoreLifecycle {
 
-        private val processor = BehaviorProcessor.create<StoreLifecycle.Event>()
+        private val processor = BehaviorProcessor.create<Event>()
 
-        override fun subscribe(subscriber: Subscriber<in StoreLifecycle.Event>) = processor
-            .startWith(StoreLifecycle.Event.START)
+        override fun subscribe(subscriber: Subscriber<in Event>) = processor
+            .startWith(Event.START)
             .distinctUntilChanged()
             .subscribe(subscriber)
 
-        override fun onSuccess(event: StoreLifecycle.Event) = processor.onNext(event)
-
-        override fun onComplete() = Unit
-
-        override fun onError(throwable: Throwable) = processor.onNext(StoreLifecycle.Event.COMPLETE)
+        fun postAction(event: Event) = processor.onNext(event)
     }
 }
