@@ -28,6 +28,7 @@ import com.haroncode.gemini.connector.BaseStoreConnector
 import com.haroncode.gemini.connector.StoreConnector
 import com.haroncode.gemini.store.BaseStore
 import io.reactivex.Flowable
+import io.reactivex.FlowableTransformer
 import io.reactivex.observers.TestObserver
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.TestScheduler
@@ -76,13 +77,13 @@ class BaseStoreTest {
         val storeToViewConnectionRule = BaseConnectionRule(
             consumer = testStoreView,
             publisher = baseStore,
-            transformer = identityFlowableTransformer()
+            transformer = FlowableTransformer { input -> input }
         )
 
         val viewToStoreConnectionRule = BaseConnectionRule(
             consumer = baseStore,
             publisher = testStoreView,
-            transformer = identityFlowableTransformer()
+            transformer = FlowableTransformer { input -> input }
         )
 
         testConnector = BaseStoreConnector(listOf(storeToViewConnectionRule, viewToStoreConnectionRule))
