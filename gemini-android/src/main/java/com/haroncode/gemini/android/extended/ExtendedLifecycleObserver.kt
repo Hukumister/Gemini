@@ -1,4 +1,4 @@
-package com.haroncode.gemini.android
+package com.haroncode.gemini.android.extended
 
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
@@ -7,5 +7,6 @@ import androidx.lifecycle.LifecycleOwner
  * @author kdk96.
  */
 interface ExtendedLifecycleObserver : DefaultLifecycleObserver {
-    fun onFinish(owner: LifecycleOwner) = Unit
+
+    fun onFinish(owner: LifecycleOwner)
 }

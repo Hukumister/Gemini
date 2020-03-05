@@ -1,4 +1,4 @@
-package com.haroncode.gemini.android
+package com.haroncode.gemini.android.extended
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver

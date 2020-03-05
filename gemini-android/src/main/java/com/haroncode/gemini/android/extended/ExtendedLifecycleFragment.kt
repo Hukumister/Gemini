@@ -1,4 +1,4 @@
-package com.haroncode.gemini.android
+package com.haroncode.gemini.android.extended
 
 import android.os.Bundle
 import androidx.annotation.CallSuper
@@ -19,7 +19,8 @@ open class ExtendedLifecycleFragment(
 
     private val extendedLifecycle = ExtendedLifecycle(
         lifecycle = super.getLifecycle(),
-        extendedLifecycleObserversHolder = object : ExtendedLifecycleObserversHolder {
+        extendedLifecycleObserversHolder = object :
+            ExtendedLifecycleObserversHolder {
             override fun add(observer: ExtendedLifecycleObserver) {
                 extendedLifecycleObservers.add(observer)
             }
