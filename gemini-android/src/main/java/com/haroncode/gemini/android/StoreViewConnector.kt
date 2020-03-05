@@ -6,7 +6,7 @@ import com.haroncode.gemini.android.strategies.StartStopStrategy
 import com.haroncode.gemini.connection.ConnectionRule
 import com.haroncode.gemini.connector.BaseStoreConnector
 
-object AndroidStoreConnector {
+object StoreViewConnector {
 
     fun <T : LifecycleOwner> withFactory(factory: ConnectionRule.Factory<T>) = ConnectionProcessor(factory)
 

@@ -1,9 +1,9 @@
 package com.haroncode.gemini.android.lifecycle
 
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import com.haroncode.gemini.android.LifecycleStrategy
+import com.haroncode.gemini.android.extended.AndroidLifecycleEvent
+import com.haroncode.gemini.android.extended.EventExtendedLifecycleObserver
 import com.haroncode.gemini.connector.StoreConnector
 import com.haroncode.gemini.connector.StoreLifecycle
 import com.haroncode.gemini.connector.StoreLifecycle.Event
@@ -14,7 +14,7 @@ import org.reactivestreams.Subscriber
 class StoreLifecycleEventObserver(
     storeConnector: StoreConnector,
     private val lifecycleStrategy: LifecycleStrategy
-) : LifecycleEventObserver {
+) : EventExtendedLifecycleObserver() {
 
     private val androidStoreLifecycle = AndroidStoreLifecycle()
 
@@ -23,7 +23,7 @@ class StoreLifecycleEventObserver(
         coordinator.start()
     }
 
-    override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
+    override fun onStateChanged(source: LifecycleOwner, event: AndroidLifecycleEvent) {
         lifecycleStrategy.handle(source, event)?.let(androidStoreLifecycle::postAction)
     }
 
