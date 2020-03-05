@@ -22,7 +22,7 @@ class ConnectionRuleListBuilder {
 
     private val mutableList = mutableListOf<ConnectionRule>()
 
-    fun connect(connectionRule: () -> ConnectionRule) {
+    fun connection(connectionRule: () -> ConnectionRule) {
         connectionRule.invoke()
             .let(mutableList::add)
     }
