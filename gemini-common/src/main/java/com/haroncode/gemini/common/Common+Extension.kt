@@ -1,4 +1,4 @@
-package com.haroncode.gemini.util
+package com.haroncode.gemini.common
 
 inline fun <F, S, R> combineNullable(
     first: F?,

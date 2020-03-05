@@ -1,4 +1,3 @@
 include ':gemini-core',
-    'gemini-android'
-
-
+        'gemini-common',
+        'gemini-android'
