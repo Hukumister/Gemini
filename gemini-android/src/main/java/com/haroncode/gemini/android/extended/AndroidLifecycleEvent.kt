@@ -34,5 +34,5 @@ enum class AndroidLifecycleEvent {
     /**
      * Constant for real destroy event (it means destroy not after rotation) of the {@link LifecycleOwner}.
      */
-    ON_REAL_REMOVING
+    ON_FINISH
 }

@@ -7,7 +7,7 @@ abstract class EventExtendedLifecycleObserver : ExtendedLifecycleObserver {
 
     abstract fun onStateChanged(source: LifecycleOwner, event: AndroidLifecycleEvent)
 
-    final override fun onFinish(owner: LifecycleOwner) = onStateChanged(owner, ON_REAL_REMOVING)
+    final override fun onFinish(owner: LifecycleOwner) = onStateChanged(owner, ON_FINISH)
 
     final override fun onCreate(owner: LifecycleOwner) = onStateChanged(owner, ON_CREATE)
 
