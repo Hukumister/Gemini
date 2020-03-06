@@ -4,6 +4,9 @@ package com.haroncode.gemini.dsl
 
 import com.haroncode.gemini.connection.BaseConnectionRule
 import com.haroncode.gemini.connection.EventListenerConnection
+import com.haroncode.gemini.connection.util.Mapper
+import com.haroncode.gemini.connection.util.Transformer
+import com.haroncode.gemini.connection.util.identityFlowableTransformer
 import com.haroncode.gemini.core.EventListener
 import com.haroncode.gemini.core.Store
 import io.reactivex.Flowable
@@ -11,20 +14,6 @@ import io.reactivex.FlowableTransformer
 import io.reactivex.Scheduler
 import io.reactivex.functions.Consumer
 import org.reactivestreams.Publisher
-
-typealias Transformer<In, Out> = (Flowable<In>) -> Flowable<Out>
-
-typealias Mapper<In, Out> = (In) -> Out
-
-private val IDENTITY_TRANSFORMER: Transformer<Any, Any> = { stream -> stream }
-
-private val IDENTITY_FLOWABLE_TRANSFORMER = FlowableTransformer<Any, Any> { stream -> stream }
-
-@Suppress("UNCHECKED_CAST")
-fun <T : Any> identityFlowableTransformer() = IDENTITY_FLOWABLE_TRANSFORMER as FlowableTransformer<T, T>
-
-@Suppress("UNCHECKED_CAST")
-fun <T : Any> identityTransformer() = IDENTITY_TRANSFORMER as Transformer<T, T>
 
 inline infix fun <T : Any> Publisher<T>.connectTo(consumer: Consumer<T>) = BaseConnectionRule(
     consumer = consumer,
