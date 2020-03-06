@@ -1,33 +1,13 @@
 package com.haroncode.gemini.core
 
-import com.haroncode.gemini.common.DELAYED_FULFILL_AMOUNT
-import com.haroncode.gemini.common.INITIAL_COUNTER
-import com.haroncode.gemini.common.INITIAL_LOADING
-import com.haroncode.gemini.common.TestAction
-import com.haroncode.gemini.common.TestAction.ActionForEvent
-import com.haroncode.gemini.common.TestAction.FulfillableAsync
-import com.haroncode.gemini.common.TestAction.FulfillableInstantly
-import com.haroncode.gemini.common.TestAction.LeadsToExceptionInMiddleware
-import com.haroncode.gemini.common.TestAction.MaybeFulfillable
-import com.haroncode.gemini.common.TestAction.TranslatesTo3Effects
-import com.haroncode.gemini.common.TestAction.TranslatesToExceptionInReducer
-import com.haroncode.gemini.common.TestAction.Unfulfillable
-import com.haroncode.gemini.common.TestBootstrapper
-import com.haroncode.gemini.common.TestEffect
-import com.haroncode.gemini.common.TestErrorHandler
-import com.haroncode.gemini.common.TestEventProducer
-import com.haroncode.gemini.common.TestMiddleware
-import com.haroncode.gemini.common.TestReducer
-import com.haroncode.gemini.common.TestState
-import com.haroncode.gemini.common.TestStoreView
-import com.haroncode.gemini.common.TestViewEvent
-import com.haroncode.gemini.common.onNextEvents
+import com.haroncode.gemini.common.*
+import com.haroncode.gemini.common.TestAction.*
 import com.haroncode.gemini.connection.BaseConnectionRule
+import com.haroncode.gemini.connection.util.identityFlowableTransformer
 import com.haroncode.gemini.connector.BaseStoreConnector
 import com.haroncode.gemini.connector.StoreConnector
 import com.haroncode.gemini.store.BaseStore
 import io.reactivex.Flowable
-import io.reactivex.FlowableTransformer
 import io.reactivex.observers.TestObserver
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.TestScheduler
@@ -76,13 +56,13 @@ class BaseStoreTest {
         val storeToViewConnectionRule = BaseConnectionRule(
             consumer = testStoreView,
             publisher = baseStore,
-            transformer = FlowableTransformer { input -> input }
+            transformer = identityFlowableTransformer()
         )
 
         val viewToStoreConnectionRule = BaseConnectionRule(
             consumer = baseStore,
             publisher = testStoreView,
-            transformer = FlowableTransformer { input -> input }
+            transformer = identityFlowableTransformer()
         )
 
         testConnector = BaseStoreConnector(listOf(storeToViewConnectionRule, viewToStoreConnectionRule))
