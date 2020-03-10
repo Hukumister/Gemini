@@ -24,18 +24,18 @@ inline infix fun <T : Any> Publisher<T>.connectTo(consumer: Consumer<T>) = BaseC
 inline infix fun <T : Any, R : Any> Publisher<T>.connectTo(consumer: Consumer<R>) = this to consumer
 
 inline infix fun <Out : Any, In : Any> BaseConnectionRule<Out, In>.with(
-    noinline transformer: Transformer<In, In>
+    crossinline transformer: Transformer<In, In>
 ): BaseConnectionRule<Out, In> = BaseConnectionRule(
     consumer = this.consumer,
     publisher = this.publisher,
     transformer = FlowableTransformer { stream ->
         Flowable.fromPublisher(this.transformer.apply(stream))
-            .compose(transformer)
+            .compose { input -> transformer.invoke(input) }
     }
 )
 
 inline infix fun <Out : Any, In : Any> Pair<Publisher<Out>, Consumer<In>>.with(
-    noinline transformer: Transformer<Out, In>
+    crossinline transformer: Transformer<Out, In>
 ) = BaseConnectionRule(
     consumer = this.second,
     publisher = this.first,

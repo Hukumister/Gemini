@@ -20,18 +20,18 @@ inline fun <reified T : Any> connectionFactory(
 
 class ConnectionRuleListBuilder {
 
-    private val mutableList = mutableListOf<ConnectionRule>()
+    private val connectionRules = mutableListOf<ConnectionRule>()
 
-    fun connection(connectionRule: () -> ConnectionRule) {
+    fun rule(connectionRule: () -> ConnectionRule) {
         connectionRule.invoke()
-            .let(mutableList::add)
+            .let(connectionRules::add)
     }
 
-    fun autoDispose(storeFactory: () -> Store<*, *, *>) {
-        storeFactory.invoke()
+    fun autoDispose(storeProvider: () -> Store<*, *, *>) {
+        storeProvider.invoke()
             .let(::AutoStoreDisposeConnectionRule)
-            .let(mutableList::add)
+            .let(connectionRules::add)
     }
 
-    fun build() = mutableList.toList()
+    fun build() = connectionRules.toList()
 }
