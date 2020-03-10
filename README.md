@@ -24,7 +24,7 @@ Add the dependencies:
 ```groovy
 implementation "com.haroncode.gemini:gemini-core:${latest-version}"
 ```
-- Android binder:
+- Android helper classes for connection:
 ```groovy
 implementation "com.haroncode.gemini:gemini-android:${latest-version}"
 ```
