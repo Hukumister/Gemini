@@ -1,6 +1,6 @@
 package com.haroncode.gemini.connection
 
-import com.haroncode.gemini.connection.dsl.identityFlowableTransformer
+import com.haroncode.gemini.connection.util.identityFlowableTransformer
 import com.haroncode.gemini.core.EventListener
 import io.reactivex.functions.Consumer
 import org.reactivestreams.Publisher
