@@ -4,8 +4,6 @@ package com.haroncode.gemini.dsl
 
 import com.haroncode.gemini.connection.BaseConnectionRule
 import com.haroncode.gemini.connection.EventListenerConnection
-import com.haroncode.gemini.connection.util.Mapper
-import com.haroncode.gemini.connection.util.Transformer
 import com.haroncode.gemini.connection.util.identityFlowableTransformer
 import com.haroncode.gemini.core.EventListener
 import com.haroncode.gemini.core.Store
