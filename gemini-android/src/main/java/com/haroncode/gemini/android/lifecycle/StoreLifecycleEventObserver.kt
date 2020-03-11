@@ -1,6 +1,7 @@
 package com.haroncode.gemini.android.lifecycle
 
 import androidx.lifecycle.LifecycleOwner
+import androidx.savedstate.SavedStateRegistryOwner
 import com.haroncode.gemini.android.LifecycleStrategy
 import com.haroncode.gemini.android.extended.AndroidLifecycleEvent
 import com.haroncode.gemini.android.extended.EventExtendedLifecycleObserver
@@ -12,9 +13,10 @@ import io.reactivex.processors.BehaviorProcessor
 import org.reactivestreams.Subscriber
 
 class StoreLifecycleEventObserver(
+    savedStateRegistryOwner: SavedStateRegistryOwner,
     storeConnector: StoreConnector,
     private val lifecycleStrategy: LifecycleStrategy
-) : EventExtendedLifecycleObserver() {
+) : EventExtendedLifecycleObserver(savedStateRegistryOwner) {
 
     private val androidStoreLifecycle = AndroidStoreLifecycle()
 
