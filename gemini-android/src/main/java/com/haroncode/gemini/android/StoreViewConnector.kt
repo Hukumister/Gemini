@@ -1,6 +1,5 @@
 package com.haroncode.gemini.android
 
-import androidx.lifecycle.LifecycleOwner
 import androidx.savedstate.SavedStateRegistryOwner
 import com.haroncode.gemini.android.lifecycle.StoreLifecycleEventObserver
 import com.haroncode.gemini.android.strategies.StartStopStrategy

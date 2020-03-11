@@ -12,8 +12,6 @@ import androidx.savedstate.SavedStateRegistryOwner
 /**
  * @author kdk96.
  */
-private const val KEY = "ExtendedLifecycleObserver"
-
 abstract class ExtendedLifecycleObserver(
     private val savedStateRegistryOwner: SavedStateRegistryOwner
 ) : DefaultLifecycleObserver, SavedStateRegistry.SavedStateProvider {
@@ -73,4 +71,8 @@ abstract class ExtendedLifecycleObserver(
             }
             return isAnyParentRemoving
         }
+
+    companion object {
+        private const val KEY = "ExtendedLifecycleObserver"
+    }
 }
