@@ -23,7 +23,7 @@ object StoreViewConnector {
             val connectionRules = factory.create(view)
             val storeConnector = BaseStoreConnector(connectionRules)
 
-            val storeLifecycle = StoreLifecycleEventObserver(view, storeConnector, lifecycleStrategy)
+            val storeLifecycle = StoreLifecycleEventObserver(storeConnector, lifecycleStrategy)
             view.lifecycle.addObserver(storeLifecycle)
         }
     }

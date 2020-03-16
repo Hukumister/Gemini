@@ -1,12 +1,11 @@
 package com.haroncode.gemini.android.extended
 
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import androidx.savedstate.SavedStateRegistryOwner
+import androidx.lifecycle.OnLifecycleEvent
 import com.haroncode.gemini.android.extended.AndroidLifecycleEvent.*
 
-abstract class EventExtendedLifecycleObserver(
-    savedStateRegistryOwner: SavedStateRegistryOwner
-) : ExtendedLifecycleObserver(savedStateRegistryOwner) {
+abstract class EventExtendedLifecycleObserver : ExtendedLifecycleObserver() {
 
     abstract fun onStateChanged(source: LifecycleOwner, event: AndroidLifecycleEvent)
 
@@ -22,14 +21,16 @@ abstract class EventExtendedLifecycleObserver(
         onStateChanged(owner, ON_RESUME)
     }
 
-    final override fun onPause(owner: LifecycleOwner) = onStateChanged(owner, ON_PAUSE)
+    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+    protected fun onPause(owner: LifecycleOwner) = onStateChanged(owner, ON_PAUSE)
 
     final override fun onStart(owner: LifecycleOwner) {
         super.onStart(owner)
         onStateChanged(owner, ON_START)
     }
 
-    final override fun onStop(owner: LifecycleOwner) = onStateChanged(owner, ON_STOP)
+    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
+    protected fun onStop(owner: LifecycleOwner) = onStateChanged(owner, ON_STOP)
 
     final override fun onDestroy(owner: LifecycleOwner) {
         super.onDestroy(owner)

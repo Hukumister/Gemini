@@ -26,8 +26,6 @@ android {
 
 dependencies {
     compileOnly rootProject.ext.appCompat
-    compileOnly rootProject.ext.lifecycleCommon
-    compileOnly rootProject.ext.savedstate
     implementation rootProject.ext.kotlinStdlib
     /**
      * RxJava
