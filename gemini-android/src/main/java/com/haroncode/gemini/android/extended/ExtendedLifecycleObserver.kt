@@ -18,7 +18,7 @@ abstract class ExtendedLifecycleObserver : LifecycleObserver, SavedStateRegistry
 
     private var instanceStateSaved = false
 
-    abstract fun onFinish(owner: LifecycleOwner)
+    protected abstract fun onFinish(owner: LifecycleOwner)
 
     @CallSuper
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)

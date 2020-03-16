@@ -7,7 +7,7 @@ import com.haroncode.gemini.android.extended.AndroidLifecycleEvent.*
 
 abstract class EventExtendedLifecycleObserver : ExtendedLifecycleObserver() {
 
-    abstract fun onStateChanged(source: LifecycleOwner, event: AndroidLifecycleEvent)
+    protected abstract fun onStateChanged(source: LifecycleOwner, event: AndroidLifecycleEvent)
 
     final override fun onFinish(owner: LifecycleOwner) = onStateChanged(owner, ON_FINISH)
 
