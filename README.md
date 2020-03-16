@@ -28,7 +28,10 @@ implementation "com.haroncode.gemini:gemini-core:${latest-version}"
 ```groovy
 implementation "com.haroncode.gemini:gemini-android:${latest-version}"
 ```
-
+- Kotlin dsl to create connection rules:
+```groovy
+implementation "com.haroncode.gemini:gemini-dsl:${latest-version}"
+```
 ## Participants
 + idea, code and documentation - Zaltsman Nikita (@HaronCode)
 + review, code, writing unit tests - Kinayatov Dias (@kdk96)
