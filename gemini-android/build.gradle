@@ -44,28 +44,60 @@ dependencies {
     implementation project(':gemini-common')
 }
 
-/**
- Properties properties = new Properties()
- properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+/*
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
 
  version = libraryVersion // Library version
 
- bintray {// User and ApiKey stored in local.properties
- user = properties.getProperty("bintrayUser")
- key = properties.getProperty("bintrayApiKey")
- configurations = ['archives']
+bintray {// User and ApiKey stored in local.properties
+    user = properties.getProperty("bintrayUser")
+    key = properties.getProperty("bintrayApiKey")
+    configurations = ['archives']
 
- // Package info for Bintray
- pkg {name = "gemini-android"
- repo = bintrayRepo
- licenses = allLicenses
- vcsUrl = gitUrl
- publish = true
- version {name = libraryVersion
- released = new Date()}}}group = publishedGroupId // Maven Group ID for the artifact
+    // Package info for Bintray
+    pkg {
+        name = "gemini-android"
+        repo = bintrayRepo
+        licenses = allLicenses
+        vcsUrl = gitUrl
+        publish = true
+        version {
+            name = libraryVersion
+            released = new Date()
+        }
+    }
+}
 
- install {repositories.mavenInstaller {// This generates POM.xml with proper parameters
- pom.project {packaging 'aar'
- groupId publishedGroupId
- artifactId "gemini-android"}}}bintrayUpload.dependsOn install
- */
+group = publishedGroupId // Maven Group ID for the artifact
+
+install {
+    repositories.mavenInstaller {// This generates POM.xml with proper parameters
+        pom.project {
+            packaging 'aar'
+            groupId publishedGroupId
+            artifactId "gemini-android"
+        }
+    }
+}
+bintrayUpload.dependsOn install
+
+task androidJavadocs(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+}
+
+task androidJavadocsJar(type: Jar) {
+    archiveClassifier = 'javadoc'
+    from androidJavadocs.destinationDir
+}
+
+task androidSourcesJar(type: Jar) {
+    archiveClassifier = 'sources'
+    from android.sourceSets.main.java.srcDirs
+}
+
+artifacts {
+    archives androidJavadocsJar
+    archives androidSourcesJar
+}*/
