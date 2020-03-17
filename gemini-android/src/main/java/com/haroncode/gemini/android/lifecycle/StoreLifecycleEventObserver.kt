@@ -32,7 +32,6 @@ class StoreLifecycleEventObserver(
         private val processor = BehaviorProcessor.create<Event>()
 
         override fun subscribe(subscriber: Subscriber<in Event>) = processor
-            .startWith(Event.START)
             .distinctUntilChanged()
             .subscribe(subscriber)
 
