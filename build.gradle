@@ -40,9 +40,5 @@ subprojects { project ->
 
 ext {
     // This params is for the library uploading to the Bintray
-    bintrayRepo = 'maven'
-    publishedGroupId = 'com.haroncode.gemini'
-    libraryVersion = '0.0.9'
-    gitUrl = 'https://github.com/HaronCode/Gemini'
-    allLicenses = ['MIT']
+    libraryVersion = '1.0.0'
 }

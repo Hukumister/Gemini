@@ -1,8 +1,7 @@
 apply plugin: 'java-library'
 apply plugin: 'kotlin'
-apply plugin: 'com.jfrog.bintray'
-apply plugin: 'com.github.dcendents.android-maven'
 apply from: "$project.rootDir/сodequality/ktlint.gradle"
+apply plugin: GeminiPublishingPlugin
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
@@ -21,55 +20,7 @@ dependencies {
     implementation rootProject.ext.junit
 }
 
-/*
-Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
-
-version = libraryVersion // Library version
-
-bintray {// User and ApiKey stored in local.properties
-    user = properties.getProperty("bintrayUser")
-    key = properties.getProperty("bintrayApiKey")
-
-    configurations = ['archives']
-    // Package info for Bintray
-    pkg {
-        name = "gemini-common"
-        repo = bintrayRepo
-        licenses = allLicenses
-        vcsUrl = gitUrl
-        publish = true
-        version {
-            name = libraryVersion
-            released = new Date()
-        }
-    }
+GeminiPublishing {
+    artifactId 'gemini-common'
+    version rootProject.ext.libraryVersion
 }
-group = publishedGroupId // Maven Group ID for the artifact
-
-install {
-    repositories.mavenInstaller {// This generates POM.xml with proper parameters
-        pom.project {
-            packaging 'jar'
-            groupId publishedGroupId
-            artifactId "gemini-common"
-        }
-    }
-}
-bintrayUpload.dependsOn install
-
-// Tasks for sources and javadocs jars
-task sourcesJar(type: Jar) {
-    from sourceSets.main.java.srcDirs
-    archiveClassifier = 'sources'
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    archiveClassifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-artifacts {
-    archives javadocJar
-    archives sourcesJar
-}*/
