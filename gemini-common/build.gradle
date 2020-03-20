@@ -1,8 +1,7 @@
 apply plugin: 'java-library'
 apply plugin: 'kotlin'
-apply plugin: 'com.jfrog.bintray'
-apply plugin: 'com.github.dcendents.android-maven'
 apply from: "$project.rootDir/сodequality/ktlint.gradle"
+apply plugin: GeminiPublishingPlugin
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
@@ -19,4 +18,9 @@ dependencies {
      * Test
      */
     implementation rootProject.ext.junit
+}
+
+GeminiPublishing {
+    artifactId 'gemini-common'
+    version rootProject.ext.libraryVersion
 }
