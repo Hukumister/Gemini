@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">mvi_presentation</string>
+
+    <string name="fragment_counter_amount_format" formatted="true">Количество кликов %1$s</string>
+    <string name="fragment_counter_increase_button">Увеличичить</string>
+</resources>
