@@ -4,35 +4,27 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import com.haroncode.gemini.sample.base.BaseFragment
 import com.haroncode.gemini.sample.di.DI
 import com.haroncode.gemini.sample.util.setLaunchScreen
-import javax.inject.Inject
 import ru.terrakok.cicerone.Navigator
 import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.android.support.SupportAppNavigator
 import ru.terrakok.cicerone.commands.Command
 import toothpick.Toothpick
+import javax.inject.Inject
 
 class AppActivity : AppCompatActivity() {
 
-    private val currentFragment: BaseFragment?
-        get() = supportFragmentManager.findFragmentById(R.id.container) as? BaseFragment
-
     private val navigator: Navigator = object : SupportAppNavigator(this, R.id.container) {
         override fun setupFragmentTransaction(
-            command: Command?,
+            command: Command,
             currentFragment: Fragment?,
             nextFragment: Fragment?,
             fragmentTransaction: FragmentTransaction
         ) {
-            // fix incorrect order lifecycle callback of MainFlowFragment
             fragmentTransaction.setReorderingAllowed(true)
         }
     }
-
-    private val componentName
-        get() = javaClass.name
 
     @Inject
     lateinit var navigatorHolder: NavigatorHolder
@@ -43,7 +35,7 @@ class AppActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_container)
         if (supportFragmentManager.fragments.isEmpty()) {
-            navigator.setLaunchScreen(Screens.Counter)
+            navigator.setLaunchScreen(Screens.Main)
         }
     }
 
@@ -55,10 +47,6 @@ class AppActivity : AppCompatActivity() {
     override fun onPause() {
         navigatorHolder.removeNavigator()
         super.onPause()
-    }
-
-    override fun onBackPressed() {
-        currentFragment?.onBackPressed() ?: super.onBackPressed()
     }
 
     override fun onDestroy() {
