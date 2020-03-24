@@ -3,6 +3,9 @@ apply plugin: 'kotlin'
 apply from: "$project.rootDir/сodequality/ktlint.gradle"
 apply plugin: GeminiPublishingPlugin
 
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
 dependencies {
 
     implementation rootProject.ext.kotlinStdlib
@@ -15,13 +18,9 @@ dependencies {
      * Test
      */
     implementation rootProject.ext.junit
-    /**
-     * Project modules
-     */
-    implementation project(':gemini-common')
 }
 
 GeminiPublishing {
-    artifactId 'gemini-core'
+    artifactId 'gemini-common'
     version rootProject.ext.libraryVersion
 }

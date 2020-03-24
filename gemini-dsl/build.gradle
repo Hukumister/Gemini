@@ -1,7 +1,9 @@
 apply plugin: 'java-library'
 apply plugin: 'kotlin'
-apply from: "$project.rootDir/сodequality/ktlint.gradle"
 apply plugin: GeminiPublishingPlugin
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 dependencies {
 
@@ -18,10 +20,10 @@ dependencies {
     /**
      * Project modules
      */
-    implementation project(':gemini-common')
+    compileOnly project(':gemini-core')
 }
 
 GeminiPublishing {
-    artifactId 'gemini-core'
+    artifactId 'gemini-dsl'
     version rootProject.ext.libraryVersion
 }
