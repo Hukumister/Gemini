@@ -3,10 +3,10 @@
 package com.haroncode.gemini.dsl
 
 import com.haroncode.gemini.connection.BaseConnectionRule
-import com.haroncode.gemini.connection.EventListenerConnection
+import com.haroncode.gemini.connection.StoreEventListenerConnectionRule
 import com.haroncode.gemini.connection.util.identityFlowableTransformer
-import com.haroncode.gemini.core.EventListener
 import com.haroncode.gemini.core.Store
+import com.haroncode.gemini.core.StoreEventListener
 import io.reactivex.Flowable
 import io.reactivex.FlowableTransformer
 import io.reactivex.Scheduler
@@ -60,8 +60,8 @@ inline infix fun <T : Any, R : Any> BaseConnectionRule<T, R>.observeOn(
 )
 
 inline infix fun <Event : Any> Store<*, *, Event>.eventsTo(
-    eventListener: EventListener<Event>
-) = EventListenerConnection(
+    eventListener: StoreEventListener<Event>
+) = StoreEventListenerConnectionRule(
     eventPublisher = eventSource,
     eventListener = eventListener
 )

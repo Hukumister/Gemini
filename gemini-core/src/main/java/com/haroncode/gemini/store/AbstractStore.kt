@@ -94,7 +94,7 @@ abstract class AbstractStore<Action : Any, State : Any, Event : Any, Effect : An
         effect: Effect
     ): Flowable<Event> = eventProducerWrapper?.invoke(state, effect)
         ?.let { event -> Flowable.just(event) }
-        ?: Flowable.empty<Event>()
+        ?: Flowable.empty()
 
     private class ReducerWrapper<State, Effect>(
         private val reducer: Reducer<State, Effect>,
