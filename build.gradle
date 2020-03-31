@@ -40,5 +40,5 @@ subprojects { project ->
 
 ext {
     // This params is for the library uploading to the Bintray
-    libraryVersion = '1.0.0'
+    libraryVersion = '1.0.1'
 }
