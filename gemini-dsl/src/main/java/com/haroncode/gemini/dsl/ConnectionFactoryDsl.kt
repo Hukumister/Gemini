@@ -1,6 +1,6 @@
 package com.haroncode.gemini.dsl
 
-import com.haroncode.gemini.connection.AutoStoreDisposeConnectionRule
+import com.haroncode.gemini.connection.AutoDisposeStoreConnectionRule
 import com.haroncode.gemini.connection.ConnectionRule
 import com.haroncode.gemini.core.Store
 
@@ -29,7 +29,7 @@ class ConnectionRuleListBuilder {
 
     fun autoDispose(storeProvider: () -> Store<*, *, *>) {
         storeProvider.invoke()
-            .let(::AutoStoreDisposeConnectionRule)
+            .let(::AutoDisposeStoreConnectionRule)
             .let(connectionRules::add)
     }
 

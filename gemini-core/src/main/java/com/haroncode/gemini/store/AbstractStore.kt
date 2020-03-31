@@ -5,6 +5,8 @@ import com.haroncode.gemini.core.Store
 import com.haroncode.gemini.core.elements.*
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
+import io.reactivex.internal.disposables.DisposableContainer
 import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.rxkotlin.Flowables
@@ -23,7 +25,7 @@ abstract class AbstractStore<Action : Any, State : Any, Event : Any, Effect : An
     bootstrapper: Bootstrapper<Action>? = null,
     eventProducer: EventProducer<State, Effect, Event>? = null,
     errorHandler: ErrorHandler<State>? = null
-) : Store<Action, State, Event> {
+) : Store<Action, State, Event>, DisposableContainer {
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -89,12 +91,18 @@ abstract class AbstractStore<Action : Any, State : Any, Event : Any, Effect : An
 
     override fun dispose() = compositeDisposable.dispose()
 
+    override fun add(disposable: Disposable) = compositeDisposable.add(disposable)
+
+    override fun remove(disposable: Disposable) = compositeDisposable.remove(disposable)
+
+    override fun delete(disposable: Disposable) = compositeDisposable.delete(disposable)
+
     private fun produceEventFlowable(
         state: State,
         effect: Effect
     ): Flowable<Event> = eventProducerWrapper?.invoke(state, effect)
         ?.let { event -> Flowable.just(event) }
-        ?: Flowable.empty<Event>()
+        ?: Flowable.empty()
 
     private class ReducerWrapper<State, Effect>(
         private val reducer: Reducer<State, Effect>,

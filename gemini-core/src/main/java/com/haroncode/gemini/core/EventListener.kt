@@ -3,7 +3,8 @@ package com.haroncode.gemini.core
 /**
  * @author HaronCode.
  */
-interface EventListener<Event : Any> {
-
-    fun onEvent(event: Event)
-}
+@Deprecated(
+    message = "Use StoreEventListener instead",
+    replaceWith = ReplaceWith(expression = "StoreEventListener<>")
+)
+typealias EventListener<Event> = StoreEventListener<Event>
