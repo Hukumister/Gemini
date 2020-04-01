@@ -33,6 +33,7 @@ implementation "com.haroncode.gemini:gemini-android:${latest-version}"
 implementation "com.haroncode.gemini:gemini-dsl:${latest-version}"
 ```
 Store working scheme
+
 <img width="600 px" src="/doc/gemini_store_scheme.svg"/>
 
 ## Participants
