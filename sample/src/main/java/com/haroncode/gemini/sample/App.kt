@@ -3,13 +3,11 @@ package com.haroncode.gemini.sample
 import android.app.Application
 import com.haroncode.gemini.sample.di.AppModule
 import com.haroncode.gemini.sample.di.DI
-import java.util.*
+import java.util.UUID
 import timber.log.Timber
 import timber.log.Timber.DebugTree
-import toothpick.Toothpick
 import toothpick.configuration.Configuration
-import toothpick.registries.FactoryRegistryLocator
-import toothpick.registries.MemberInjectorRegistryLocator
+import toothpick.ktp.KTP
 
 class App : Application() {
 
@@ -26,6 +24,14 @@ class App : Application() {
         appCode = UUID.randomUUID().toString()
     }
 
+    private fun initToothpick() {
+        if (BuildConfig.DEBUG) {
+            KTP.setConfiguration(Configuration.forDevelopment().preventMultipleRootScopes())
+        } else {
+            KTP.setConfiguration(Configuration.forProduction())
+        }
+    }
+
     private fun initTimber() {
         if (BuildConfig.DEBUG) {
             Timber.plant(DebugTree())
@@ -33,20 +39,8 @@ class App : Application() {
     }
 
     private fun initAppScope() {
-        val openScope = Toothpick.openScope(DI.APP_SCOPE)
+        val openScope = KTP.openScope(DI.APP_SCOPE)
         openScope.installModules(AppModule(this))
-        Toothpick.inject(this, openScope)
-    }
-
-    private fun initToothpick() {
-        if (BuildConfig.DEBUG) {
-            Toothpick.setConfiguration(
-                Configuration.forDevelopment().preventMultipleRootScopes()
-            )
-        } else {
-            Toothpick.setConfiguration(Configuration.forProduction().disableReflection())
-            FactoryRegistryLocator.setRootRegistry(com.haroncode.gemini.FactoryRegistry())
-            MemberInjectorRegistryLocator.setRootRegistry(com.haroncode.gemini.MemberInjectorRegistry())
-        }
+        openScope.inject(this)
     }
 }

@@ -7,8 +7,8 @@ import com.haroncode.gemini.sample.domain.system.SchedulersProvider
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
-import ru.terrakok.cicerone.Router
 import javax.inject.Inject
+import ru.terrakok.cicerone.Router
 
 @PerFragment
 class MainStoreNavigationDelegate @Inject constructor(
@@ -29,6 +29,7 @@ class MainStoreNavigationDelegate @Inject constructor(
     private fun onEvent(event: MainStore.Action) {
         when (event) {
             MainStore.Action.COUNTER -> router.navigateTo(Screens.Counter)
+            MainStore.Action.AUTH -> router.navigateTo(Screens.Auth)
         }
     }
 

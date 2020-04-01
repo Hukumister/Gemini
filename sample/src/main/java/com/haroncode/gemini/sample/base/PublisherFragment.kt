@@ -9,7 +9,7 @@ abstract class PublisherFragment<Action : Any, ViewState : Any> @JvmOverloads co
     @LayoutRes layoutRes: Int = 0
 ) : BaseFragment(layoutRes), StoreView<Action, ViewState> {
 
-    private val actionProcessor = PublishProcessor.create<Action>()
+    protected val actionProcessor = PublishProcessor.create<Action>()
 
     fun postAction(action: Action) = actionProcessor.onNext(action)
 

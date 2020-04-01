@@ -12,8 +12,8 @@ import com.haroncode.gemini.sample.presentation.onlyaction.AuthStore.*
 import com.haroncode.gemini.sample.presentation.onlyaction.AuthStore.Action.AuthResult
 import com.haroncode.gemini.sample.util.asFlowable
 import com.haroncode.gemini.store.OnlyActionStore
-import org.reactivestreams.Publisher
 import javax.inject.Inject
+import org.reactivestreams.Publisher
 
 @PerFragment
 class AuthStore @Inject constructor(
@@ -28,7 +28,7 @@ class AuthStore @Inject constructor(
 
     sealed class Action {
 
-        data class ChangeLogin(val login: String) : Action()
+        data class ChangeEmail(val login: String) : Action()
         data class ChangePassword(val password: String) : Action()
 
         object LoginClick : Action()
@@ -36,12 +36,12 @@ class AuthStore @Inject constructor(
     }
 
     data class State(
-        val login: String = "",
+        val email: String = "",
         val password: String = "",
         val isLoading: Boolean = false,
         val isButtonLoginEnable: Boolean = false,
-        val loginErrorHint: String = "",
-        val passwordErrorHint: String = ""
+        val emailErrorHint: String? = null,
+        val passwordErrorHint: String? = null
     )
 
     sealed class Event {
@@ -59,32 +59,23 @@ class AuthStore @Inject constructor(
                 else -> null
             }
         }
-
     }
 
     class ReducerImpl : Reducer<State, Action> {
 
         override fun invoke(state: State, action: Action): State = when (action) {
-            is Action.ChangeLogin -> {
-                val loginErrorHint = if (action.login.isEmpty()) {
-                    "Must be fill"
-                } else {
-                    ""
-                }
-                val isButtonLoginEnable = state.passwordErrorHint.isEmpty() && loginErrorHint.isEmpty()
+            is Action.ChangeEmail -> {
+                val emailErrorHint = emptyHint(action.login)
+                val isButtonLoginEnable = state.passwordErrorHint.isNullOrEmpty() && emailErrorHint.isEmpty()
                 state.copy(
-                    login = action.login,
-                    loginErrorHint = loginErrorHint,
+                    email = action.login,
+                    emailErrorHint = emailErrorHint,
                     isButtonLoginEnable = isButtonLoginEnable
                 )
             }
             is Action.ChangePassword -> {
-                val passwordErrorHint = if (action.password.isEmpty()) {
-                    "Must be fill"
-                } else {
-                    ""
-                }
-                val isButtonLoginEnable = passwordErrorHint.isEmpty() && state.loginErrorHint.isEmpty()
+                val passwordErrorHint = emptyHint(action.password)
+                val isButtonLoginEnable = state.emailErrorHint.isNullOrEmpty() && passwordErrorHint.isEmpty()
                 state.copy(
                     password = action.password,
                     passwordErrorHint = passwordErrorHint,
@@ -95,6 +86,11 @@ class AuthStore @Inject constructor(
             else -> state
         }
 
+        private fun emptyHint(value: String) = if (value.isEmpty()) {
+            "Must be fill"
+        } else {
+            ""
+        }
     }
 
     class MiddlewareImpl(
@@ -103,11 +99,10 @@ class AuthStore @Inject constructor(
     ) : Middleware<Action, State, Action> {
 
         override fun invoke(action: Action, state: State): Publisher<Action> = when (action) {
-            is Action.LoginClick -> authRepository.auth(state.login, state.password)
+            is Action.LoginClick -> authRepository.auth(state.email, state.password)
                 .observeOn(schedulersProvider.computation())
                 .map(::AuthResult)
             else -> action.asFlowable()
         }
     }
-
 }

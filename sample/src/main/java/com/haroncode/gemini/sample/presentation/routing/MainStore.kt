@@ -15,6 +15,7 @@ class MainStore @Inject constructor() : OnlyActionStore<Action, Unit, Action>(
 ) {
 
     enum class Action {
-        COUNTER
+        COUNTER,
+        AUTH,
     }
 }
