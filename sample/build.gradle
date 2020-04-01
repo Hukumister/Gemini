@@ -63,8 +63,9 @@ dependencies {
     /**
      * Di
      */
-    implementation 'com.github.stephanenicolas.toothpick:toothpick-runtime:1.0.6'
-    kapt 'com.github.stephanenicolas.toothpick:toothpick-compiler:1.0.6'
+    def toothpick_version = "3.1.0"
+    implementation "com.github.stephanenicolas.toothpick:ktp:$toothpick_version"
+    kapt "com.github.stephanenicolas.toothpick:toothpick-compiler:$toothpick_version"
 
     /**
      * Rx binding

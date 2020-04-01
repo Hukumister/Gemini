@@ -20,5 +20,4 @@ class AuthRepositoryImpl @Inject constructor(
     override fun auth(login: String, password: String): Flowable<Resource<AuthResponse>> {
         return api.auth(AuthRequest(login, password)).asResource()
     }
-
 }

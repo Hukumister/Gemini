@@ -9,7 +9,7 @@ import com.haroncode.gemini.sample.di.scope.PerFragment
 import com.haroncode.gemini.sample.util.objectScopeName
 import timber.log.Timber
 import toothpick.Scope
-import toothpick.Toothpick
+import toothpick.ktp.KTP
 
 abstract class BaseFragment constructor(
     @LayoutRes private val layoutRes: Int = 0
@@ -36,17 +36,17 @@ abstract class BaseFragment constructor(
 
         val scopeIsNotInit = isNewInAppProcess || scopeWasClosed
         fragmentScopeName = savedInstanceState?.getString(STATE_SCOPE_NAME) ?: objectScopeName()
-        scope = Toothpick.openScopes(parentScopeName, fragmentScopeName)
-            .apply {
-                if (scopeIsNotInit) {
-                    Timber.d("Init new UI scope: $fragmentScopeName")
-                    scopeModuleInstaller(this)
-                } else {
-                    Timber.d("Get exist UI scope: $fragmentScopeName")
-                }
-            }
-        scope.bindScopeAnnotation(PerFragment::class.java)
-        Toothpick.inject(this, scope)
+
+        if (KTP.isScopeOpen(fragmentScopeName)) {
+            Timber.d("Get exist UI scope: $fragmentScopeName")
+            scope = KTP.openScope(fragmentScopeName)
+        } else {
+            Timber.d("Init new UI scope: $fragmentScopeName")
+            scope = KTP.openScopes(parentScopeName, fragmentScopeName)
+            scopeModuleInstaller.invoke(scope)
+        }
+        scope.supportScopeAnnotation(PerFragment::class.java)
+        scope.inject(this)
 
         super.onCreate(savedInstanceState)
     }
@@ -69,14 +69,14 @@ abstract class BaseFragment constructor(
         if (needCloseScope()) {
             // destroy this fragment with scope
             Timber.d("Destroy UI scope: $fragmentScopeName")
-            Toothpick.closeScope(scope.name)
+            KTP.closeScope(scope.name)
         }
     }
 
     // This is android, baby!
     private fun isRealRemoving(): Boolean =
         (isRemoving && !instanceStateSaved) || // because isRemoving == true for fragment in backstack on screen rotation
-                ((parentFragment as? BaseFragment)?.isRealRemoving() ?: false)
+            ((parentFragment as? BaseFragment)?.isRealRemoving() ?: false)
 
     // It will be valid only for 'onDestroy()' method
     private fun needCloseScope(): Boolean =

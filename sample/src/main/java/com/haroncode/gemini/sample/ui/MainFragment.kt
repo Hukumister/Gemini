@@ -27,6 +27,7 @@ class MainFragment : PublisherFragment<MainStore.Action, Unit>(R.layout.fragment
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentMainBinding.bind(view)
         binding.counterBtn.setOnClickListener { postAction(MainStore.Action.COUNTER) }
+        binding.authBtn.setOnClickListener { postAction(MainStore.Action.AUTH) }
     }
 
     override fun onDestroyView() {
