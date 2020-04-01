@@ -34,9 +34,9 @@ implementation "com.haroncode.gemini:gemini-dsl:${latest-version}"
 ```
 
 ## Store working scheme
-
-<img src="/doc/gemini_store_scheme.svg"/>
-
+<p align="center">
+<img width="500 px" src="/doc/gemini_store_scheme.svg"/>
+</p>
 ## Participants
 + idea, code and documentation - Zaltsman Nikita (@HaronCode)
 + review, code, writing unit tests - Kinayatov Dias (@kdk96)
