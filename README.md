@@ -32,7 +32,7 @@ implementation "com.haroncode.gemini:gemini-android:${latest-version}"
 implementation "com.haroncode.gemini:gemini-dsl:${latest-version}"
 ```
 ## Getting start
-Now we're working for documentation and sample, but if you need sample right now you can find it here https://github.com/HaronCode/WordLearn
+Now we're working for documentation and sample, but if you need sample right now you can find usage of library here https://github.com/HaronCode/WordLearn
 
 ## Store working scheme
 
