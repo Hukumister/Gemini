@@ -5,7 +5,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.view.isVisible
 import com.haroncode.gemini.android.StoreViewConnector
-import com.haroncode.gemini.core.EventListener
+import com.haroncode.gemini.core.StoreEventListener
 import com.haroncode.gemini.sample.R
 import com.haroncode.gemini.sample.base.PublisherFragment
 import com.haroncode.gemini.sample.databinding.FragmentAuthBinding
@@ -19,7 +19,7 @@ import io.reactivex.BackpressureStrategy
 import javax.inject.Inject
 
 class AuthFragment : PublisherFragment<Action, State>(R.layout.fragment_auth),
-    EventListener<AuthStore.Event> {
+    StoreEventListener<AuthStore.Event> {
 
     @Inject
     lateinit var factory: AuthConnectionFactory
@@ -30,13 +30,14 @@ class AuthFragment : PublisherFragment<Action, State>(R.layout.fragment_auth),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
         StoreViewConnector.withFactory(factory)
             .connect(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        _binding = FragmentAuthBinding.bind(view)
         binding.loginButton.setOnClickListener { postAction(LoginClick) }
     }
 

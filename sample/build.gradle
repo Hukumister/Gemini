@@ -7,7 +7,7 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
     defaultConfig {
-        applicationId "com.dnomads.mvi.presentation"
+        applicationId "com.haroncode.gemini.sample"
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
@@ -30,6 +30,9 @@ android {
 
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8
+    }
+    lintOptions {
+        abortOnError false
     }
     buildTypes {
         release {
@@ -64,6 +67,7 @@ dependencies {
      * Di
      */
     def toothpick_version = "3.1.0"
+    implementation "javax.inject:javax.inject:1"
     implementation "com.github.stephanenicolas.toothpick:ktp:$toothpick_version"
     kapt "com.github.stephanenicolas.toothpick:toothpick-compiler:$toothpick_version"
 
@@ -88,5 +92,4 @@ dependencies {
      */
     implementation project(':gemini-core')
     implementation project(':gemini-android')
-    implementation project(':gemini-dsl')
 }
