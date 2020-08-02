@@ -16,6 +16,7 @@ class CounterStore @Inject constructor() : JustReducerStore<Action, State, Nothi
 
     sealed class Action {
         object Increment : Action()
+        object Decrement : Action()
     }
 
     data class State(
@@ -26,6 +27,7 @@ class CounterStore @Inject constructor() : JustReducerStore<Action, State, Nothi
 
         override fun invoke(state: State, action: Action) = when (action) {
             is Action.Increment -> state.copy(count = state.count + 1)
+            is Action.Decrement -> state.copy(count = state.count - 1)
         }
     }
 }

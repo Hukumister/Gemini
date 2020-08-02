@@ -10,7 +10,7 @@ import com.haroncode.gemini.sample.ui.MainFragment
 import javax.inject.Inject
 
 class MainConnectionFactory @Inject constructor(
-    private val store: MainStoreNavigationDelegate,
+    private val store: MainStore,
     private val schedulersProvider: SchedulersProvider
 ) : DelegateConnectionRuleFactory<MainFragment>() {
 
