@@ -30,7 +30,6 @@ class AuthFragment : PublisherFragment<Action, State>(R.layout.fragment_auth),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
         StoreViewConnector.withFactory(factory)
             .connect(this)
     }

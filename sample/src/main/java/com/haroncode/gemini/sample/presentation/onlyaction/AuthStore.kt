@@ -30,7 +30,6 @@ class AuthStore @Inject constructor(
 
         data class ChangeEmail(val login: String) : Action()
         data class ChangePassword(val password: String) : Action()
-
         object LoginClick : Action()
         data class AuthResult(val resource: Resource<AuthResponse>) : Action()
     }
