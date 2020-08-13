@@ -18,10 +18,10 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: Your awesome title
+title: Gemini
 email: zaltsman.nikita@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
-  It'll be description here!
+  Краткое руководство
 markdown: kramdown
 baseurl: "/Gemini" # the subpath of your site, e.g. /blog
 url: "https://haroncode.github.io/Gemini/" # the base hostname & protocol for your site, e.g. http://example.com
