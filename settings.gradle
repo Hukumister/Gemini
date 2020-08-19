@@ -1,2 +1,3 @@
 include ':gemini-core',
-        ':gemini-core-test'
+        ':gemini-core-test',
+        ':gemini-connector'
