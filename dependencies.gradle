@@ -1,4 +1,11 @@
 ext {
+    kotlinTestJunit = "org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion"
+
+    coroutinesVersion = '1.3.9'
+
+    coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+    coroutinesTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
+
     minSdkVersion = 19
     targetSdkVersion = 29
     compileSdkVersion = 29
@@ -7,18 +14,6 @@ ext {
     def appCompatVersion = "1.1.0"
     appCompat = "androidx.appcompat:appcompat:$appCompatVersion"
 
-    def rxJavaVersion = "2.2.18"
-    def rxAndroidVersion = "2.1.1"
-    def rxKotlinVersion = "2.4.0"
-    rxJava = "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
-    rxAndroid = "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
-    rxKotlin = "io.reactivex.rxjava2:rxkotlin:$rxKotlinVersion"
-
     def timberVersion = "4.6.0"
     timber = "com.jakewharton.timber:timber:$timberVersion"
-
-    junit = 'junit:junit:4.13'
-    mockito = 'com.nhaarm an:mockito-kotlin-kt1.1:1.6.0'
-
-    kotlinStdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
 }

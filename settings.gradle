@@ -1,4 +1,2 @@
 include ':gemini-core',
-        'gemini-common',
-        'gemini-android',
-        ':sample'
+        ':gemini-core-test'

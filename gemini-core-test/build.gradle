@@ -4,12 +4,18 @@ apply from: "$project.rootDir/сodequality/ktlint.gradle"
 
 kotlin {
     jvm()
-    ios()
 
     sourceSets {
         commonMain {
             dependencies {
                 implementation rootProject.ext.coroutines
+                implementation project(":gemini-core")
+            }
+        }
+        jvmTest {
+            dependencies {
+                implementation rootProject.ext.kotlinTestJunit
+                implementation rootProject.ext.coroutinesTest
             }
         }
     }
