@@ -1,4 +1,4 @@
-package com.haroncode.gemini.android.extended
+package com.haroncode.gemini.android.lifecycle
 
 import android.os.Bundle
 import androidx.annotation.CallSuper
@@ -12,13 +12,13 @@ import androidx.savedstate.SavedStateRegistry
 import androidx.savedstate.SavedStateRegistryOwner
 
 /**
- * @author kdk96.
+ * @author kdk96
  */
 abstract class ExtendedLifecycleObserver : LifecycleObserver, SavedStateRegistry.SavedStateProvider {
 
     private var instanceStateSaved = false
 
-    protected abstract fun onFinish(owner: LifecycleOwner)
+    protected open fun onFinish(owner: LifecycleOwner) = Unit
 
     @CallSuper
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)

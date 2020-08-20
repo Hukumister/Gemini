@@ -7,13 +7,13 @@ ext {
     coroutinesTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
 
     minSdkVersion = 19
-    targetSdkVersion = 29
-    compileSdkVersion = 29
-    buildToolsVersion = '29.0.0'
+    targetSdkVersion = 30
+    compileSdkVersion = 30
+    buildToolsVersion = '30.0.2'
 
-    def appCompatVersion = "1.1.0"
+    appCompatVersion = '1.2.0'
     appCompat = "androidx.appcompat:appcompat:$appCompatVersion"
 
-    def timberVersion = "4.6.0"
-    timber = "com.jakewharton.timber:timber:$timberVersion"
+    lifecycleVersion = '2.2.0'
+    lifecycleKtx = "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
 }
