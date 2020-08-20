@@ -1,50 +1,27 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply from: "$project.rootDir/сodequality/ktlint.gradle"
-apply plugin: GeminiPublishingPlugin
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "${version}"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
     }
 }
 
 dependencies {
-    compileOnly rootProject.ext.appCompat
-    implementation rootProject.ext.kotlinStdlib
-    /**
-     * RxJava
-     */
-    implementation rootProject.ext.rxJava
-    implementation rootProject.ext.rxKotlin
-    implementation rootProject.ext.rxAndroid
-    /**
-     * Test
-     */
-    testImplementation rootProject.ext.junit
-    /**
-     * Project modules
-     */
-    implementation project(':gemini-core')
-    implementation project(':gemini-common')
-}
-
-
-GeminiPublishing {
-    artifactId 'gemini-android'
-    version rootProject.ext.libraryVersion
+    implementation rootProject.ext.coroutines
+    implementation rootProject.ext.appCompat
+    implementation rootProject.ext.lifecycleKtx
+    api project(':gemini-connector')
 }
