@@ -67,7 +67,7 @@ abstract class BaseFragment constructor(
     // This is android, baby!
     private fun isRealRemoving(): Boolean =
         (isRemoving && !instanceStateSaved) || // because isRemoving == true for fragment in backstack on screen rotation
-                ((parentFragment as? BaseFragment)?.isRealRemoving() ?: false)
+            ((parentFragment as? BaseFragment)?.isRealRemoving() ?: false)
 
     // It will be valid only for 'onDestroy()' method
     private fun needCloseScope(): Boolean =

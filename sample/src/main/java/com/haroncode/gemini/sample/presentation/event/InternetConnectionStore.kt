@@ -1,15 +1,16 @@
 package com.haroncode.gemini.sample.presentation.event
 
-import com.haroncode.gemini.core.elements.Bootstrapper
-import com.haroncode.gemini.core.elements.EventProducer
+import com.haroncode.gemini.element.Bootstrapper
+import com.haroncode.gemini.element.EventProducer
 import com.haroncode.gemini.sample.domain.repository.ConnectivityRepository
 import com.haroncode.gemini.sample.presentation.event.InternetConnectionStore.Action
 import com.haroncode.gemini.sample.presentation.event.InternetConnectionStore.Action.ChangeStatus
 import com.haroncode.gemini.sample.presentation.event.InternetConnectionStore.Event
 import com.haroncode.gemini.store.OnlyActionStore
-import io.reactivex.Flowable
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
-import org.reactivestreams.Publisher
 
 class InternetConnectionStore @Inject constructor(
     connectivityRepository: ConnectivityRepository
@@ -18,7 +19,7 @@ class InternetConnectionStore @Inject constructor(
     bootstrapper = BootstrapperImpl(connectivityRepository),
     eventProducer = EventProducerImpl(),
     reducer = { _, _ -> Unit },
-    middleware = { action, _ -> Flowable.just(action) }
+    middleware = { action, _ -> flowOf(action) }
 ) {
 
     sealed class Action {
@@ -40,7 +41,7 @@ class InternetConnectionStore @Inject constructor(
         private val connectivityRepository: ConnectivityRepository
     ) : Bootstrapper<Action> {
 
-        override fun invoke(): Publisher<Action> = connectivityRepository.observeConnectionState()
-            .map(::ChangeStatus)
+        override fun invoke(): Flow<Action> = connectivityRepository.observeConnectionState()
+            .map { ChangeStatus(it) }
     }
 }

@@ -1,25 +1,25 @@
 package com.haroncode.gemini.sample.presentation.onlyaction
 
-import com.haroncode.gemini.android.connection.DelegateConnectionRuleFactory
-import com.haroncode.gemini.connection.ConnectionRule
-import com.haroncode.gemini.dsl.connectTo
-import com.haroncode.gemini.dsl.connectionFactory
-import com.haroncode.gemini.dsl.eventsTo
-import com.haroncode.gemini.dsl.observeOn
-import com.haroncode.gemini.sample.domain.system.SchedulersProvider
+import com.haroncode.gemini.android.connector.DelegateConnectionRulesFactory
+import com.haroncode.gemini.android.connector.dsl.connectTo
+import com.haroncode.gemini.android.connector.dsl.connectionRulesFactory
+import com.haroncode.gemini.android.connector.dsl.eventTo
+import com.haroncode.gemini.android.connector.dsl.stateTo
+import com.haroncode.gemini.android.connector.dsl.transform
+import com.haroncode.gemini.connector.ConnectionRulesFactory
+import com.haroncode.gemini.connector.identityTransformer
 import com.haroncode.gemini.sample.ui.AuthFragment
 import javax.inject.Inject
 
 class AuthConnectionFactory @Inject constructor(
-    private val store: AuthStore,
-    private val schedulersProvider: SchedulersProvider
-) : DelegateConnectionRuleFactory<AuthFragment>() {
+    private val store: AuthStore
+) : DelegateConnectionRulesFactory<AuthFragment>() {
 
-    override val connectionRuleFactory: ConnectionRule.Factory<AuthFragment> = connectionFactory { view ->
-        rule { view connectTo store }
-        rule { store connectTo view observeOn schedulersProvider.ui() }
+    override val connectionRulesFactory: ConnectionRulesFactory<AuthFragment> = connectionRulesFactory { view ->
+        rule { view.actionFlow connectTo store transform identityTransformer() }
+        rule { store stateTo view }
 
-        rule { store eventsTo view observeOn schedulersProvider.ui() }
-        autoDispose { store } // magic is here )))
+        rule { store eventTo view }
+        autoCancel { store } // magic is here )))
     }
 }

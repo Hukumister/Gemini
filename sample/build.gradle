@@ -78,6 +78,8 @@ dependencies {
     implementation "com.jakewharton.rxbinding3:rxbinding:$rxbinding_version"
     implementation "com.jakewharton.rxbinding3:rxbinding-recyclerview:$rxbinding_version"
     implementation "com.jakewharton.rxbinding3:rxbinding-appcompat:$rxbinding_version"
+
+    implementation rootProject.ext.coroutines
     /**
      * Timber
      */

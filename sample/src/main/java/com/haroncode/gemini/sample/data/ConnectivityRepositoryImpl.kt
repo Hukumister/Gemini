@@ -7,8 +7,9 @@ import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import androidx.core.content.getSystemService
 import com.haroncode.gemini.sample.domain.repository.ConnectivityRepository
-import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import javax.inject.Inject
 
 class ConnectivityRepositoryImpl @Inject constructor(
@@ -17,23 +18,23 @@ class ConnectivityRepositoryImpl @Inject constructor(
 
     private val connectivityManager = context.getSystemService<ConnectivityManager>()!!
 
-    override fun observeConnectionState(): Flowable<Boolean> = Flowable.create(
-        { emitter ->
-            val networkRequest = NetworkRequest.Builder()
-                .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
-                .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
-                .build()
+    override fun observeConnectionState(): Flow<Boolean> = callbackFlow {
+        val networkRequest = NetworkRequest.Builder()
+            .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
+            .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+            .build()
 
-            val callback = object : ConnectivityManager.NetworkCallback() {
-                override fun onAvailable(network: Network) = emitter.onNext(true)
-                override fun onLost(network: Network) = emitter.onNext(false)
+        val callback = object : ConnectivityManager.NetworkCallback() {
+            override fun onAvailable(network: Network) {
+                offer(true)
             }
 
-            connectivityManager.registerNetworkCallback(networkRequest, callback)
-            emitter.setCancellable {
-                connectivityManager.unregisterNetworkCallback(callback)
+            override fun onLost(network: Network) {
+                offer(false)
             }
-        },
-        BackpressureStrategy.LATEST
-    )
+        }
+
+        connectivityManager.registerNetworkCallback(networkRequest, callback)
+        awaitClose { connectivityManager.unregisterNetworkCallback(callback) }
+    }
 }

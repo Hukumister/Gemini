@@ -1,29 +1,29 @@
 package com.haroncode.gemini.sample.presentation.onlyaction
 
-import com.haroncode.gemini.core.elements.EventProducer
-import com.haroncode.gemini.core.elements.Middleware
-import com.haroncode.gemini.core.elements.Reducer
+import com.haroncode.gemini.element.EventProducer
+import com.haroncode.gemini.element.Middleware
+import com.haroncode.gemini.element.Reducer
 import com.haroncode.gemini.sample.di.scope.PerFragment
 import com.haroncode.gemini.sample.domain.model.Resource
 import com.haroncode.gemini.sample.domain.model.auth.AuthResponse
 import com.haroncode.gemini.sample.domain.repository.AuthRepository
-import com.haroncode.gemini.sample.domain.system.SchedulersProvider
-import com.haroncode.gemini.sample.presentation.onlyaction.AuthStore.*
 import com.haroncode.gemini.sample.presentation.onlyaction.AuthStore.Action.AuthResult
-import com.haroncode.gemini.sample.util.asFlowable
 import com.haroncode.gemini.store.OnlyActionStore
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
-import org.reactivestreams.Publisher
 
 @PerFragment
 class AuthStore @Inject constructor(
-    authRepository: AuthRepository,
-    schedulersProvider: SchedulersProvider
-) : OnlyActionStore<Action, State, Event>(
+    authRepository: AuthRepository
+) : OnlyActionStore<AuthStore.Action, AuthStore.State, AuthStore.Event>(
     initialState = State(),
     reducer = ReducerImpl(),
     eventProducer = EventProducerImpl(),
-    middleware = MiddlewareImpl(authRepository, schedulersProvider)
+    middleware = MiddlewareImpl(authRepository),
+    coroutineDispatcher = Dispatchers.Main,
 ) {
 
     sealed class Action {
@@ -94,14 +94,14 @@ class AuthStore @Inject constructor(
 
     class MiddlewareImpl(
         private val authRepository: AuthRepository,
-        private val schedulersProvider: SchedulersProvider
     ) : Middleware<Action, State, Action> {
 
-        override fun invoke(action: Action, state: State): Publisher<Action> = when (action) {
-            is Action.LoginClick -> authRepository.auth(state.email, state.password)
-                .observeOn(schedulersProvider.computation())
-                .map(::AuthResult)
-            else -> action.asFlowable()
+        override fun invoke(action: Action, state: State): Flow<Action> = when (action) {
+            is Action.LoginClick ->
+                authRepository
+                    .auth(state.email, state.password)
+                    .map { AuthResult(it) }
+            else -> flowOf(action)
         }
     }
 }
