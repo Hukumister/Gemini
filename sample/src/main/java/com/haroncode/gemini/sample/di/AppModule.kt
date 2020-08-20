@@ -1,12 +1,8 @@
 package com.haroncode.gemini.sample.di
 
 import android.content.Context
-import android.os.Handler
-import android.os.Looper
 import com.haroncode.gemini.sample.data.ConnectivityRepositoryImpl
 import com.haroncode.gemini.sample.domain.repository.ConnectivityRepository
-import com.haroncode.gemini.sample.domain.system.AppSchedulers
-import com.haroncode.gemini.sample.domain.system.SchedulersProvider
 import ru.terrakok.cicerone.Cicerone
 import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.Router
@@ -22,8 +18,6 @@ class AppModule(context: Context) : Module() {
 
         // Global
         bind(Context::class.java).toInstance(context)
-
-        bind(SchedulersProvider::class.java).toInstance(AppSchedulers())
         bind(ConnectivityRepository::class.java).to(ConnectivityRepositoryImpl::class.java).singleton()
     }
 }

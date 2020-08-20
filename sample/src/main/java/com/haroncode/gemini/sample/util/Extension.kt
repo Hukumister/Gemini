@@ -3,10 +3,6 @@
 package com.haroncode.gemini.sample.util
 
 import com.haroncode.gemini.sample.domain.model.Resource
-import io.reactivex.annotations.BackpressureKind
-import io.reactivex.annotations.BackpressureSupport
-import io.reactivex.annotations.CheckReturnValue
-import io.reactivex.annotations.SchedulerSupport
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
@@ -31,9 +27,6 @@ fun Navigator.setLaunchScreen(screen: SupportAppScreen) {
  * Wrap T to Product<T>
  * Flowable<T> -> Flowable<Product<T>>
  */
-@CheckReturnValue
-@BackpressureSupport(BackpressureKind.UNBOUNDED_IN)
-@SchedulerSupport(SchedulerSupport.NONE)
 inline fun <T> Flow<T>.asResource(): Flow<Resource<T>> = map<T, Resource<T>> { data -> Resource.Data(data) }
     .catch { throwable -> emit(Resource.Error(throwable)) }
     .onStart { emit(Resource.Loading) }
