@@ -27,7 +27,7 @@ class CounterStore @Inject constructor() : ReducerStore<Action, State, Nothing>(
 
     class ReducerImpl : Reducer<State, Action> {
 
-        override fun invoke(state: State, action: Action) = when (action) {
+        override fun reduce(state: State, effect: Action) = when (effect) {
             is Action.Increment -> state.copy(count = state.count + 1)
             is Action.Decrement -> state.copy(count = state.count - 1)
         }

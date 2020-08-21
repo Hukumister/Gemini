@@ -19,7 +19,7 @@ abstract class PublisherFragment<Action : Any, ViewState : Any> @JvmOverloads co
 
     override val actionFlow: Flow<Action> = broadcastChannel.asFlow()
 
-    override fun invoke(viewState: ViewState) {
-        onViewStateChanged(viewState)
+    override fun accept(value: ViewState) {
+        onViewStateChanged(value)
     }
 }

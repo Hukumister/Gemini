@@ -32,8 +32,8 @@ class InternetConnectionStore @Inject constructor(
 
     class EventProducerImpl : EventProducer<Unit, Action, Event> {
 
-        override fun invoke(state: Unit, action: Action): Event? = when (action) {
-            is ChangeStatus -> Event.Status(action.hasConnection)
+        override fun produce(state: Unit, effect: Action): Event? = when (effect) {
+            is ChangeStatus -> Event.Status(effect.hasConnection)
         }
     }
 
@@ -41,7 +41,7 @@ class InternetConnectionStore @Inject constructor(
         private val connectivityRepository: ConnectivityRepository
     ) : Bootstrapper<Action> {
 
-        override fun invoke(): Flow<Action> = connectivityRepository.observeConnectionState()
+        override fun bootstrap(): Flow<Action> = connectivityRepository.observeConnectionState()
             .map { ChangeStatus(it) }
     }
 }

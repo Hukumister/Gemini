@@ -51,10 +51,10 @@ class AuthStore @Inject constructor(
 
     class EventProducerImpl : EventProducer<State, Action, Event> {
 
-        override fun invoke(state: State, action: Action): Event? {
+        override fun produce(state: State, effect: Action): Event? {
             return when {
-                action is AuthResult && action.resource is Resource.Error -> Event.Fail(action.resource.throwable)
-                action is AuthResult && action.resource is Resource.Data -> Event.Success
+                effect is AuthResult && effect.resource is Resource.Error -> Event.Fail(effect.resource.throwable)
+                effect is AuthResult && effect.resource is Resource.Data -> Event.Success
                 else -> null
             }
         }
@@ -62,26 +62,26 @@ class AuthStore @Inject constructor(
 
     class ReducerImpl : Reducer<State, Action> {
 
-        override fun invoke(state: State, action: Action): State = when (action) {
+        override fun reduce(state: State, effect: Action): State = when (effect) {
             is Action.ChangeEmail -> {
-                val emailErrorHint = emptyHint(action.login)
+                val emailErrorHint = emptyHint(effect.login)
                 val isButtonLoginEnable = state.passwordErrorHint.isNullOrEmpty() && emailErrorHint.isEmpty()
                 state.copy(
-                    email = action.login,
+                    email = effect.login,
                     emailErrorHint = emailErrorHint,
                     isButtonLoginEnable = isButtonLoginEnable
                 )
             }
             is Action.ChangePassword -> {
-                val passwordErrorHint = emptyHint(action.password)
+                val passwordErrorHint = emptyHint(effect.password)
                 val isButtonLoginEnable = state.emailErrorHint.isNullOrEmpty() && passwordErrorHint.isEmpty()
                 state.copy(
-                    password = action.password,
+                    password = effect.password,
                     passwordErrorHint = passwordErrorHint,
                     isButtonLoginEnable = isButtonLoginEnable
                 )
             }
-            is AuthResult -> state.copy(isLoading = action.resource is Resource.Loading)
+            is AuthResult -> state.copy(isLoading = effect.resource is Resource.Loading)
             else -> state
         }
 
@@ -96,7 +96,7 @@ class AuthStore @Inject constructor(
         private val authRepository: AuthRepository,
     ) : Middleware<Action, State, Action> {
 
-        override fun invoke(action: Action, state: State): Flow<Action> = when (action) {
+        override fun execute(action: Action, state: State): Flow<Action> = when (action) {
             is Action.LoginClick ->
                 authRepository
                     .auth(state.email, state.password)
