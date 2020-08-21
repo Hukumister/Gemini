@@ -4,4 +4,7 @@ package com.haroncode.gemini.element
  * @author HaronCode
  * @author kdk96
  */
-typealias ErrorHandler<State> = (State, Throwable) -> Unit
+fun interface ErrorHandler<State> {
+
+    fun handle(state: State, error: Throwable)
+}

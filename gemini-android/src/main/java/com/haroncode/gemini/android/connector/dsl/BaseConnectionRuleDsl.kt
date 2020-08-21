@@ -7,7 +7,7 @@ import com.haroncode.gemini.connector.BaseConnectionRule
 import com.haroncode.gemini.connector.Transformer
 import com.haroncode.gemini.connector.identityTransformer
 import com.haroncode.gemini.element.Store
-import com.haroncode.gemini.util.Consumer
+import com.haroncode.gemini.reactive.Consumer
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -16,11 +16,11 @@ import kotlinx.coroutines.flow.map
  * @author kdk96
  */
 inline infix fun <T : Any, R : Any> Flow<T>.connectTo(
-    noinline consumer: Consumer<R>
+    consumer: Consumer<R>
 ): Pair<Flow<T>, Consumer<R>> = this to consumer
 
 inline infix fun <State : Any> Store<*, State, *>.stateTo(
-    noinline consumer: Consumer<State>
+    consumer: Consumer<State>
 ): BaseConnectionRule<State, State> = BaseConnectionRule(
     consumer = consumer,
     flow = stateFlow,

@@ -6,4 +6,7 @@ import kotlinx.coroutines.flow.Flow
  * @author HaronCode
  * @author kdk96
  */
-typealias Bootstrapper<Action> = () -> Flow<Action>
+fun interface Bootstrapper<Action> {
+
+    fun bootstrap(): Flow<Action>
+}
