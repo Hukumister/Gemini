@@ -1,6 +1,6 @@
 package com.haroncode.gemini.element
 
-import com.haroncode.gemini.reactive.Consumer
+import com.haroncode.gemini.functional.Consumer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 
