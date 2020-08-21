@@ -12,5 +12,5 @@ open class BaseConnectionRule<Out : Any, In : Any>(
 
     override suspend fun connect() = flow
         .let(transformer)
-        .collect { consumer.invoke(it) }
+        .collect { consumer.accept(it) }
 }

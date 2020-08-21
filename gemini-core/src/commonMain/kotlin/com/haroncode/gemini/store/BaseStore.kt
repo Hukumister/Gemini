@@ -1,30 +1,11 @@
 package com.haroncode.gemini.store
 
-import com.haroncode.gemini.element.Bootstrapper
-import com.haroncode.gemini.element.ErrorHandler
-import com.haroncode.gemini.element.EventProducer
-import com.haroncode.gemini.element.Middleware
-import com.haroncode.gemini.element.Reducer
-import com.haroncode.gemini.element.Store
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
+import com.haroncode.gemini.element.*
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.flatMapMerge
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.zip
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.*
 
 /**
  * @author HaronCode
@@ -76,13 +57,13 @@ open class BaseStore<Action : Any, State : Any, Event : Any, Effect : Any>(
         val effectFlow = effectChannel.asFlow()
 
         stateFlow.zip(effectFlow) { state, effect ->
-            reducerWrapper.invoke(state, effect)
+            reducerWrapper.reduce(state, effect)
         }
             .onEach(stateChannel::send)
             .launchIn(coroutineScope)
 
         actionChannel.asFlow()
-            .flatMapMerge { action -> middlewareWrapper.invoke(action, stateChannel.value) }
+            .flatMapMerge { action -> middlewareWrapper.execute(action, stateChannel.value) }
             .onEach(effectChannel::send)
             .launchIn(coroutineScope)
 
@@ -91,7 +72,7 @@ open class BaseStore<Action : Any, State : Any, Event : Any, Effect : Any>(
                 .drop(1)
                 .zip(effectFlow) { state, effect -> state to effect }
                 .flatMapMerge { (state, effect) ->
-                    eventProducerWrapper(state, effect)
+                    eventProducerWrapper.produce(state, effect)
                         ?.let(::flowOf)
                         ?: emptyFlow()
                 }
@@ -99,14 +80,14 @@ open class BaseStore<Action : Any, State : Any, Event : Any, Effect : Any>(
                 .launchIn(coroutineScope)
         }
 
-        bootstrapperWrapper?.invoke()
-            ?.onEach { action -> invoke(action) }
+        bootstrapperWrapper?.bootstrap()
+            ?.onEach { action -> accept(action) }
             ?.launchIn(coroutineScope)
     }
 
-    override fun invoke(action: Action) {
+    override fun accept(input: Action) {
         coroutineScope.launch {
-            actionChannel.send(action)
+            actionChannel.send(input)
         }
     }
 
@@ -115,10 +96,10 @@ open class BaseStore<Action : Any, State : Any, Event : Any, Effect : Any>(
         private val errorHandler: ErrorHandler<State>
     ) : Reducer<State, Effect> {
 
-        override fun invoke(state: State, effect: Effect): State = try {
-            reducer.invoke(state, effect)
+        override fun reduce(state: State, effect: Effect): State = try {
+            reducer.reduce(state, effect)
         } catch (exception: Exception) {
-            errorHandler.invoke(state, exception)
+            errorHandler.handle(state, exception)
             state
         }
     }
@@ -128,12 +109,11 @@ open class BaseStore<Action : Any, State : Any, Event : Any, Effect : Any>(
         private val errorHandler: ErrorHandler<State>
     ) : Middleware<Action, State, Effect> {
 
-        override fun invoke(action: Action, state: State): Flow<Effect> =
-            middleware.invoke(action, state)
-                .catch { throwable ->
-                    errorHandler.invoke(state, throwable)
-                    emitAll(emptyFlow())
-                }
+        override fun execute(action: Action, state: State): Flow<Effect> = middleware.execute(action, state)
+            .catch { throwable ->
+                errorHandler.handle(state, throwable)
+                emitAll(emptyFlow())
+            }
     }
 
     private class BootstrapperWrapper<Action, State>(
@@ -142,12 +122,11 @@ open class BaseStore<Action : Any, State : Any, Event : Any, Effect : Any>(
         private val state: State
     ) : Bootstrapper<Action> {
 
-        override fun invoke(): Flow<Action> =
-            bootstrapper.invoke()
-                .catch { throwable ->
-                    errorHandler.invoke(state, throwable)
-                    emitAll(emptyFlow())
-                }
+        override fun bootstrap(): Flow<Action> = bootstrapper.bootstrap()
+            .catch { throwable ->
+                errorHandler.handle(state, throwable)
+                emitAll(emptyFlow())
+            }
     }
 
     private class EventProducerWrapper<State, Effect, Event>(
@@ -155,10 +134,10 @@ open class BaseStore<Action : Any, State : Any, Event : Any, Effect : Any>(
         private val errorHandler: ErrorHandler<State>
     ) : EventProducer<State, Effect, Event> {
 
-        override fun invoke(state: State, effect: Effect): Event? = try {
-            eventProducer.invoke(state, effect)
+        override fun produce(state: State, effect: Effect): Event? = try {
+            eventProducer.produce(state, effect)
         } catch (exception: Exception) {
-            errorHandler.invoke(state, exception)
+            errorHandler.handle(state, exception)
             null
         }
     }
