@@ -7,7 +7,7 @@ import com.haroncode.gemini.connector.BaseConnectionRule
 import com.haroncode.gemini.connector.Transformer
 import com.haroncode.gemini.connector.identityTransformer
 import com.haroncode.gemini.element.Store
-import com.haroncode.gemini.reactive.Consumer
+import com.haroncode.gemini.functional.Consumer
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

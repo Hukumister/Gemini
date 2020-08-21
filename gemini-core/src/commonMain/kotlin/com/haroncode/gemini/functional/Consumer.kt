@@ -1,4 +1,4 @@
-package com.haroncode.gemini.reactive
+package com.haroncode.gemini.functional
 
 /**
  * @author HaronCode
@@ -6,5 +6,5 @@ package com.haroncode.gemini.reactive
  */
 fun interface Consumer<T> {
 
-    fun accept(input: T)
+    fun accept(value: T)
 }

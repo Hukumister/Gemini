@@ -104,9 +104,9 @@ open class BaseStore<Action : Any, State : Any, Event : Any, Effect : Any>(
             ?.launchIn(coroutineScope)
     }
 
-    override fun accept(input: Action) {
+    override fun accept(value: Action) {
         coroutineScope.launch {
-            actionChannel.send(input)
+            actionChannel.send(value)
         }
     }
 
