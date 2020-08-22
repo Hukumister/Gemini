@@ -7,6 +7,6 @@ import kotlinx.coroutines.flow.Flow
  * @author HaronCode
  * @author kdk96
  */
-interface StoreView<State : Any, Action : Any> : Consumer<State> {
+interface StoreView<Action : Any, State : Any> : Consumer<State> {
     val actionFlow: Flow<Action>
 }
