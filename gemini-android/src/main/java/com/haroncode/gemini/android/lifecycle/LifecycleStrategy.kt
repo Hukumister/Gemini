@@ -1,7 +1,7 @@
 package com.haroncode.gemini.android.lifecycle
 
 import androidx.lifecycle.LifecycleOwner
-import com.haroncode.gemini.connector.AbstractConnectionRule
+import com.haroncode.gemini.connector.BaseConnectionRule
 
 /**
  * @author HaronCode
@@ -11,6 +11,6 @@ interface LifecycleStrategy {
 
     fun connect(
         lifecycleOwner: LifecycleOwner,
-        rules: Collection<AbstractConnectionRule>
+        rules: Collection<BaseConnectionRule<*, *>>
     )
 }
