@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.asFlow
 
 abstract class PublisherFragment<Action : Any, ViewState : Any> @JvmOverloads constructor(
     @LayoutRes layoutRes: Int = 0
-) : BaseFragment(layoutRes), StoreView<ViewState, Action> {
+) : BaseFragment(layoutRes), StoreView<Action, ViewState> {
 
     protected val broadcastChannel = BroadcastChannel<Action>(Channel.BUFFERED)
 
