@@ -1,10 +1,13 @@
 package com.haroncode.gemini.android.connector
 
 import androidx.lifecycle.LifecycleOwner
+import com.haroncode.gemini.StoreView
 import com.haroncode.gemini.connector.AutoCancelStoreRule
 import com.haroncode.gemini.connector.BaseConnectionRule
 import com.haroncode.gemini.connector.ConnectionRule
 import com.haroncode.gemini.connector.ConnectionRulesFactory
+import com.haroncode.gemini.connector.bindActionTo
+import com.haroncode.gemini.connector.bindStateTo
 import com.haroncode.gemini.element.Store
 
 /**
@@ -29,6 +32,14 @@ inline fun <reified T : Any> connectionRulesFactory(
 class ConnectionRuleListBuilder {
 
     private val connectionRules = mutableListOf<ConnectionRule>()
+
+    fun <Action : Any, State : Any> baseRule(
+        storeViewProvider: () -> Pair<Store<Action, State, *>, StoreView<Action, State>>
+    ) {
+        val (store, storeView) = storeViewProvider.invoke()
+        connectionRules += store bindStateTo storeView
+        connectionRules += storeView bindActionTo store
+    }
 
     fun rule(connectionRule: () -> BaseConnectionRule<*, *>) {
         connectionRule.invoke()
