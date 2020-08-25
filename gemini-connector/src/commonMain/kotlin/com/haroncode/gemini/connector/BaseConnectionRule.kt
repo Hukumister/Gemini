@@ -37,7 +37,7 @@ open class BaseConnectionRule<Out : Any, In : Any>(
 /**
  *
  */
-infix fun <T : Any> Flow<T>.connectWith(
+infix fun <T : Any> Flow<T>.connectTo(
     consumer: Consumer<T>
 ): BaseConnectionRule<T, T> = BaseConnectionRule(
     consumer = consumer,
@@ -48,21 +48,21 @@ infix fun <T : Any> Flow<T>.connectWith(
 /**
  *
  */
-infix fun <Out : Any, In : Any> Flow<Out>.connectWith(
+infix fun <Out : Any, In : Any> Flow<Out>.connectTo(
     consumer: Consumer<In>
 ): Pair<Flow<Out>, Consumer<In>> = this to consumer
 
 /**
  *
  */
-infix fun <Out : Any, In : Any> Flow<Out>.connectEventWith(
+infix fun <Out : Any, In : Any> Flow<Out>.connectEventTo(
     eventListener: StoreEventListener<In>
 ): Pair<Flow<Out>, Consumer<In>> = this to Consumer { event -> eventListener.onEvent(event) }
 
 /**
  *
  */
-infix fun <T : Any> Flow<T>.connectEventWith(
+infix fun <T : Any> Flow<T>.connectEventTo(
     eventListener: StoreEventListener<T>
 ): BaseConnectionRule<T, T> = BaseConnectionRule(
     consumer = { event -> eventListener.onEvent(event) },
