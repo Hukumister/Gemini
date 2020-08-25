@@ -42,7 +42,7 @@ infix fun <T : Any> Flow<T>.connectWith(
 ): BaseConnectionRule<T, T> = BaseConnectionRule(
     consumer = consumer,
     flow = this,
-    transformer = IdentityTransformer
+    transformer = identityTransformer()
 )
 
 /**
@@ -67,7 +67,7 @@ infix fun <T : Any> Flow<T>.connectEventWith(
 ): BaseConnectionRule<T, T> = BaseConnectionRule(
     consumer = { event -> eventListener.onEvent(event) },
     flow = this,
-    transformer = IdentityTransformer
+    transformer = identityTransformer()
 )
 
 /**
