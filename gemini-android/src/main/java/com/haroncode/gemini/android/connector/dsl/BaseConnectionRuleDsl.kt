@@ -3,6 +3,7 @@
 package com.haroncode.gemini.android.connector.dsl
 
 import com.haroncode.gemini.StoreEventListener
+import com.haroncode.gemini.StoreView
 import com.haroncode.gemini.connector.BaseConnectionRule
 import com.haroncode.gemini.connector.Transformer
 import com.haroncode.gemini.connector.identityTransformer
@@ -19,21 +20,25 @@ inline infix fun <T : Any, R : Any> Flow<T>.connectTo(
     consumer: Consumer<R>
 ): Pair<Flow<T>, Consumer<R>> = this to consumer
 
-inline infix fun <State : Any> Store<*, State, *>.stateTo(
-    consumer: Consumer<State>
-): BaseConnectionRule<State, State> = BaseConnectionRule(
+inline infix fun <T : Any> Flow<T>.connectTo(
+    consumer: Consumer<T>
+): BaseConnectionRule<T, T> = BaseConnectionRule(
     consumer = consumer,
-    flow = stateFlow,
+    flow = this,
     transformer = identityTransformer()
 )
 
+inline infix fun <State : Any> Store<*, State, *>.stateTo(
+    consumer: Consumer<State>
+): BaseConnectionRule<State, State> = stateFlow connectTo consumer
+
+inline infix fun <Action : Any> StoreView<*, Action>.actionTo(
+    consumer: Consumer<Action>
+): BaseConnectionRule<Action, Action> = actionFlow connectTo consumer
+
 inline infix fun <Event : Any> Store<*, *, Event>.eventTo(
     eventListener: StoreEventListener<Event>
-): BaseConnectionRule<Event, Event> = BaseConnectionRule(
-    consumer = eventListener::onEvent,
-    flow = eventFlow,
-    transformer = identityTransformer()
-)
+): BaseConnectionRule<Event, Event> = eventFlow connectTo eventListener::onEvent
 
 inline infix fun <Out : Any, In : Any> BaseConnectionRule<Out, In>.transform(
     crossinline transformer: Transformer<In, In>
