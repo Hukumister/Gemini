@@ -4,8 +4,8 @@ import androidx.savedstate.SavedStateRegistryOwner
 import com.haroncode.gemini.android.lifecycle.LifecycleStrategy
 import com.haroncode.gemini.android.lifecycle.StartStopStrategy
 import com.haroncode.gemini.android.lifecycle.StoreCancelObserver
-import com.haroncode.gemini.connector.AbstractConnectionRule
 import com.haroncode.gemini.connector.AutoCancelStoreRule
+import com.haroncode.gemini.connector.BaseConnectionRule
 import com.haroncode.gemini.connector.ConnectionRulesFactory
 
 /**
@@ -14,8 +14,7 @@ import com.haroncode.gemini.connector.ConnectionRulesFactory
  */
 object StoreViewConnector {
 
-    fun <T : SavedStateRegistryOwner> withFactory(factory: ConnectionRulesFactory<T>) =
-        ConnectionProcessor(factory)
+    fun <T : SavedStateRegistryOwner> withFactory(factory: ConnectionRulesFactory<T>) = ConnectionProcessor(factory)
 
     class ConnectionProcessor<T : SavedStateRegistryOwner>(private val factory: ConnectionRulesFactory<T>) {
 
@@ -29,7 +28,7 @@ object StoreViewConnector {
         fun connect(view: T) {
             val connectionRules = factory.create(view)
 
-            lifecycleStrategy.connect(view, connectionRules.filterIsInstance<AbstractConnectionRule>())
+            lifecycleStrategy.connect(view, connectionRules.filterIsInstance<BaseConnectionRule<*, *>>())
 
             val autoCancelStoreRuleCollection = connectionRules.filterIsInstance<AutoCancelStoreRule>()
             view.lifecycle.addObserver(StoreCancelObserver(autoCancelStoreRuleCollection))
