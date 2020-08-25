@@ -1,14 +1,17 @@
 package com.haroncode.gemini.connector
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 
 /**
  * @author HaronCode
  * @author kdk96
  */
-typealias Transformer<In, Out> = (Flow<In>) -> Flow<Out>
+fun interface Transformer<in In, out Out> {
 
-private val IDENTITY_TRANSFORMER: Transformer<Any, Any> = { flow -> flow }
+    fun transform(input: Flow<In>): Flow<Out>
+}
 
-@Suppress("UNCHECKED_CAST")
-fun <T : Any> identityTransformer() = IDENTITY_TRANSFORMER as Transformer<T, T>
+internal object IdentityTransformer : Transformer<Any, Nothing> {
+    override fun transform(input: Flow<Any>): Flow<Nothing> = emptyFlow()
+}
