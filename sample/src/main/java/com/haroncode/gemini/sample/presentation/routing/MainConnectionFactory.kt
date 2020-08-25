@@ -1,12 +1,8 @@
 package com.haroncode.gemini.sample.presentation.routing
 
 import com.haroncode.gemini.android.connector.DelegateConnectionRulesFactory
-import com.haroncode.gemini.android.connector.dsl.connectTo
-import com.haroncode.gemini.android.connector.dsl.connectionRulesFactory
-import com.haroncode.gemini.android.connector.dsl.stateTo
-import com.haroncode.gemini.android.connector.dsl.transform
+import com.haroncode.gemini.android.connector.connectionRulesFactory
 import com.haroncode.gemini.connector.ConnectionRulesFactory
-import com.haroncode.gemini.connector.identityTransformer
 import com.haroncode.gemini.sample.ui.MainFragment
 import javax.inject.Inject
 
@@ -15,8 +11,7 @@ class MainConnectionFactory @Inject constructor(
 ) : DelegateConnectionRulesFactory<MainFragment>() {
 
     override val connectionRulesFactory: ConnectionRulesFactory<MainFragment> = connectionRulesFactory { view ->
-        rule { view.actionFlow connectTo store transform identityTransformer() }
-        rule { store stateTo view }
+        baseRule { store to view }
         autoCancel { store } // magic is here )))
     }
 }
