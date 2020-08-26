@@ -11,9 +11,6 @@ import kotlinx.coroutines.flow.map
 
 sealed class ConnectionRule
 
-/**
- *
- */
 class AutoCancelStoreRule(
     private val store: Store<*, *, *>
 ) : ConnectionRule() {
@@ -21,9 +18,6 @@ class AutoCancelStoreRule(
     fun cancel() = store.coroutineScope.cancel()
 }
 
-/**
- *
- */
 open class BaseConnectionRule<Out : Any, In : Any>(
     val consumer: Consumer<In>,
     val flow: Flow<Out>,
@@ -35,52 +29,30 @@ open class BaseConnectionRule<Out : Any, In : Any>(
         .collect { consumer.accept(it) }
 }
 
-
-/**
- *
- */
 infix fun <Event : Any> Store<*, *, Event>.bindEventTo(
     eventListener: StoreEventListener<Event>
-) = eventFlow bindTo eventListener
+): BaseConnectionRule<Event, Event> = eventFlow bindTo eventListener
 
-/**
- *
- */
 infix fun <Event : Any, ViewEvent : Any> Store<*, *, Event>.bindEventTo(
     eventListener: StoreEventListener<ViewEvent>
-) = stateFlow bindTo eventListener
+): Pair<Flow<Event>, Consumer<ViewEvent>> = eventFlow bindTo eventListener
 
-/**
- *
- */
 infix fun <State : Any> Store<*, State, *>.bindStateTo(
     consumer: Consumer<State>
-) = stateFlow bindTo consumer
+): BaseConnectionRule<State, State> = stateFlow bindTo consumer
 
-/**
- *
- */
 infix fun <State : Any, ViewState : Any> Store<*, State, *>.bindStateTo(
     consumer: Consumer<ViewState>
-) = stateFlow bindTo consumer
+): Pair<Flow<State>, Consumer<ViewState>> = stateFlow bindTo consumer
 
-/**
- *
- */
 infix fun <Action : Any> StoreView<Action, *>.bindActionTo(
     consumer: Consumer<Action>
-) = actionFlow bindTo consumer
+): BaseConnectionRule<Action, Action> = actionFlow bindTo consumer
 
-/**
- *
- */
 infix fun <ViewAction : Any, Action : Any> StoreView<ViewAction, *>.bindActionTo(
     consumer: Consumer<Action>
-) = actionFlow bindTo consumer
+): Pair<Flow<ViewAction>, Consumer<Action>> = actionFlow bindTo consumer
 
-/**
- *
- */
 infix fun <T : Any> Flow<T>.bindTo(
     consumer: Consumer<T>
 ): BaseConnectionRule<T, T> = BaseConnectionRule(
@@ -89,23 +61,14 @@ infix fun <T : Any> Flow<T>.bindTo(
     transformer = identityTransformer()
 )
 
-/**
- *
- */
 infix fun <Out : Any, In : Any> Flow<Out>.bindTo(
     consumer: Consumer<In>
 ): Pair<Flow<Out>, Consumer<In>> = this to consumer
 
-/**
- *
- */
 infix fun <Out : Any, In : Any> Flow<Out>.bindTo(
     eventListener: StoreEventListener<In>
-): Pair<Flow<Out>, Consumer<In>> = this to Consumer { event -> eventListener.onEvent(event) }
+): Pair<Flow<Out>, Consumer<In>> = this to Consumer(eventListener::onEvent)
 
-/**
- *
- */
 infix fun <T : Any> Flow<T>.bindTo(
     eventListener: StoreEventListener<T>
 ): BaseConnectionRule<T, T> = BaseConnectionRule(
@@ -114,9 +77,6 @@ infix fun <T : Any> Flow<T>.bindTo(
     transformer = identityTransformer()
 )
 
-/**
- *
- */
 infix fun <Out : Any, In : Any> Pair<Flow<Out>, Consumer<In>>.transform(
     transformer: Transformer<Out, In>
 ): BaseConnectionRule<Out, In> = BaseConnectionRule(
@@ -125,9 +85,6 @@ infix fun <Out : Any, In : Any> Pair<Flow<Out>, Consumer<In>>.transform(
     transformer = { flow -> flow.let(transformer::transform) }
 )
 
-/**
- *
- */
 infix fun <Out : Any, In : Any> BaseConnectionRule<Out, In>.transform(
     outputTransformer: Transformer<In, In>
 ): BaseConnectionRule<Out, In> = BaseConnectionRule(
@@ -140,9 +97,6 @@ infix fun <Out : Any, In : Any> BaseConnectionRule<Out, In>.transform(
     }
 )
 
-/**
- *
- */
 infix fun <Out : Any, In : Any> Pair<Flow<Out>, Consumer<In>>.map(
     mapper: suspend (Out) -> In
 ): BaseConnectionRule<Out, In> = BaseConnectionRule(
@@ -151,9 +105,6 @@ infix fun <Out : Any, In : Any> Pair<Flow<Out>, Consumer<In>>.map(
     transformer = { flow -> flow.map(mapper::invoke) }
 )
 
-/**
- *
- */
 infix fun <Out : Any, In : Any> BaseConnectionRule<Out, In>.map(
     mapper: suspend (Out) -> In
 ): BaseConnectionRule<Out, In> = BaseConnectionRule(
