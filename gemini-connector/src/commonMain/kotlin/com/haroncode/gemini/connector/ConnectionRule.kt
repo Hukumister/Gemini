@@ -5,9 +5,7 @@ import com.haroncode.gemini.StoreView
 import com.haroncode.gemini.element.Store
 import com.haroncode.gemini.functional.Consumer
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 
 sealed class ConnectionRule
 
@@ -29,13 +27,17 @@ open class BaseConnectionRule<Out : Any, In : Any>(
         .collect { consumer.accept(it) }
 }
 
-infix fun <Event : Any> Store<*, *, Event>.bindEventTo(
-    eventListener: StoreEventListener<Event>
-): BaseConnectionRule<Event, Event> = eventFlow bindTo eventListener
+infix fun <T : Any> Flow<T>.bindTo(
+    consumer: Consumer<T>
+): BaseConnectionRule<T, T> = BaseConnectionRule(
+    consumer = consumer,
+    flow = this,
+    transformer = identityTransformer()
+)
 
-infix fun <Event : Any, ViewEvent : Any> Store<*, *, Event>.bindEventTo(
-    eventListener: StoreEventListener<ViewEvent>
-): Pair<Flow<Event>, Consumer<ViewEvent>> = eventFlow bindTo eventListener
+infix fun <Out : Any, In : Any> Flow<Out>.bindTo(
+    consumer: Consumer<In>
+): Pair<Flow<Out>, Consumer<In>> = this to consumer
 
 infix fun <State : Any> Store<*, State, *>.bindStateTo(
     consumer: Consumer<State>
@@ -53,29 +55,13 @@ infix fun <ViewAction : Any, Action : Any> StoreView<ViewAction, *>.bindActionTo
     consumer: Consumer<Action>
 ): Pair<Flow<ViewAction>, Consumer<Action>> = actionFlow bindTo consumer
 
-infix fun <T : Any> Flow<T>.bindTo(
-    consumer: Consumer<T>
-): BaseConnectionRule<T, T> = BaseConnectionRule(
-    consumer = consumer,
-    flow = this,
-    transformer = identityTransformer()
-)
+infix fun <Event : Any> Store<*, *, Event>.bindEventTo(
+    eventListener: StoreEventListener<Event>
+): BaseConnectionRule<Event, Event> = eventFlow bindTo Consumer(eventListener::onEvent)
 
-infix fun <Out : Any, In : Any> Flow<Out>.bindTo(
-    consumer: Consumer<In>
-): Pair<Flow<Out>, Consumer<In>> = this to consumer
-
-infix fun <Out : Any, In : Any> Flow<Out>.bindTo(
-    eventListener: StoreEventListener<In>
-): Pair<Flow<Out>, Consumer<In>> = this to Consumer(eventListener::onEvent)
-
-infix fun <T : Any> Flow<T>.bindTo(
-    eventListener: StoreEventListener<T>
-): BaseConnectionRule<T, T> = BaseConnectionRule(
-    consumer = { event -> eventListener.onEvent(event) },
-    flow = this,
-    transformer = identityTransformer()
-)
+infix fun <Event : Any, ViewEvent : Any> Store<*, *, Event>.bindEventTo(
+    eventListener: StoreEventListener<ViewEvent>
+): Pair<Flow<Event>, Consumer<ViewEvent>> = eventFlow bindTo Consumer(eventListener::onEvent)
 
 infix fun <Out : Any, In : Any> Pair<Flow<Out>, Consumer<In>>.transform(
     transformer: Transformer<Out, In>
