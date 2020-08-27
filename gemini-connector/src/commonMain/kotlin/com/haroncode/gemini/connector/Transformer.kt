@@ -11,6 +11,7 @@ fun interface Transformer<in In, out Out> {
     fun transform(input: Flow<In>): Flow<Out>
 }
 
+@Suppress("UNCHECKED_CAST")
 fun <T : Any> identityTransformer() = IdentityTransformer as Transformer<T, T>
 
 object IdentityTransformer : Transformer<Any, Any> {
