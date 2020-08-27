@@ -7,7 +7,7 @@ import com.haroncode.gemini.connector.AutoCancelStoreRule
  * @author HaronCode
  * @author kdk96
  */
-class StoreCancelObserver(
+internal class StoreCancelObserver(
     private val autoCancelStoreRuleCollection: Collection<AutoCancelStoreRule>
 ) : ExtendedLifecycleObserver() {
 
