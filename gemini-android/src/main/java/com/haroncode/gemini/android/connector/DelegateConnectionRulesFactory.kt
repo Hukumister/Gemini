@@ -41,15 +41,12 @@ class ConnectionRuleListBuilder {
         connectionRules += storeView bindActionTo store
     }
 
-    fun rule(connectionRule: () -> BaseConnectionRule<*, *>) {
-        connectionRule.invoke()
-            .let(connectionRules::add)
+    fun rule(connectionRuleProvider: () -> BaseConnectionRule<*, *>) {
+        connectionRules += connectionRuleProvider.invoke()
     }
 
     fun autoCancel(storeProvider: () -> Store<*, *, *>) {
-        storeProvider.invoke()
-            .let(::AutoCancelStoreRule)
-            .let(connectionRules::add)
+        connectionRules += AutoCancelStoreRule(storeProvider.invoke())
     }
 
     fun build() = connectionRules.toList()
