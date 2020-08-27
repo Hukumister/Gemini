@@ -104,11 +104,3 @@ infix fun <Out : Any, In : Any> Pair<Flow<Out>, Consumer<In>>.map(
     flow = first,
     transformer = { flow -> flow.map(mapper::invoke) }
 )
-
-infix fun <Out : Any, In : Any> BaseConnectionRule<Out, In>.map(
-    mapper: suspend (Out) -> In
-): BaseConnectionRule<Out, In> = BaseConnectionRule(
-    consumer = consumer,
-    flow = flow,
-    transformer = { flow -> flow.map(mapper::invoke) }
-)
