@@ -6,7 +6,7 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import com.haroncode.gemini.StoreEventListener
-import com.haroncode.gemini.android.connector.StoreViewConnector
+import com.haroncode.gemini.android.connector.StoreViewBinder
 import com.haroncode.gemini.sample.R
 import com.haroncode.gemini.sample.base.PublisherFragment
 import com.haroncode.gemini.sample.databinding.FragmentAuthBinding
@@ -30,8 +30,8 @@ class AuthFragment :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        StoreViewConnector.withFactory(factory)
-            .connect(this)
+        StoreViewBinder.of(shouldSave = false) { factory }
+            .bind(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
