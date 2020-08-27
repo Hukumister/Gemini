@@ -30,7 +30,7 @@ class CounterFragment : PublisherFragment<Action, State>(R.layout.fragment_count
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentCounterBinding.bind(view)
         binding.increaseButton.setOnClickListener { postAction(Action.Increment) }
-        binding.decreaseButton.setOnClickListener { postAction(Action.Increment) }
+        binding.decreaseButton.setOnClickListener { postAction(Action.Decrement) }
     }
 
     override fun onViewStateChanged(viewState: State) {

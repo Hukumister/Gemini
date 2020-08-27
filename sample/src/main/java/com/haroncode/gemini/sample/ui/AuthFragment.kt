@@ -57,7 +57,7 @@ class AuthFragment :
     }
 
     companion object {
-        fun newInstance() = CounterFragment()
+        fun newInstance() = AuthFragment()
     }
 
     override fun onEvent(event: AuthStore.Event) = when (event) {

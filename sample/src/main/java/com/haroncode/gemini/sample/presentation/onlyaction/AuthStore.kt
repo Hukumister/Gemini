@@ -9,7 +9,6 @@ import com.haroncode.gemini.sample.domain.model.auth.AuthResponse
 import com.haroncode.gemini.sample.domain.repository.AuthRepository
 import com.haroncode.gemini.sample.presentation.onlyaction.AuthStore.Action.AuthResult
 import com.haroncode.gemini.store.OnlyActionStore
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -23,7 +22,6 @@ class AuthStore @Inject constructor(
     reducer = ReducerImpl(),
     eventProducer = EventProducerImpl(),
     middleware = MiddlewareImpl(authRepository),
-    coroutineDispatcher = Dispatchers.Main,
 ) {
 
     sealed class Action {

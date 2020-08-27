@@ -5,7 +5,6 @@ import com.haroncode.gemini.sample.di.scope.PerFragment
 import com.haroncode.gemini.sample.presentation.justreducer.CounterStore.Action
 import com.haroncode.gemini.sample.presentation.justreducer.CounterStore.State
 import com.haroncode.gemini.store.ReducerStore
-import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject
 
 // it's very important to save instance of store between rotation of screen
@@ -13,7 +12,6 @@ import javax.inject.Inject
 class CounterStore @Inject constructor() : ReducerStore<Action, State, Nothing>(
     initialState = State(),
     reducer = ReducerImpl(),
-    coroutineDispatcher = Dispatchers.Main
 ) {
 
     sealed class Action {
