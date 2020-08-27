@@ -1,21 +1,25 @@
 package com.haroncode.gemini.sample.base
 
 import androidx.annotation.LayoutRes
-import com.haroncode.gemini.core.StoreView
-import io.reactivex.processors.PublishProcessor
-import org.reactivestreams.Subscriber
+import com.haroncode.gemini.StoreView
+import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
 
 abstract class PublisherFragment<Action : Any, ViewState : Any> @JvmOverloads constructor(
     @LayoutRes layoutRes: Int = 0
 ) : BaseFragment(layoutRes), StoreView<Action, ViewState> {
 
-    protected val actionProcessor = PublishProcessor.create<Action>()
+    protected val broadcastChannel = BroadcastChannel<Action>(Channel.BUFFERED)
 
-    fun postAction(action: Action) = actionProcessor.onNext(action)
+    fun postAction(action: Action) = broadcastChannel.offer(action)
 
     abstract fun onViewStateChanged(viewState: ViewState)
 
-    final override fun accept(viewState: ViewState) = onViewStateChanged(viewState)
+    override val actionFlow: Flow<Action> = broadcastChannel.asFlow()
 
-    override fun subscribe(subscriber: Subscriber<in Action>) = actionProcessor.subscribe(subscriber)
+    override fun accept(value: ViewState) {
+        onViewStateChanged(value)
+    }
 }

@@ -3,11 +3,11 @@ package com.haroncode.gemini.sample
 import android.app.Application
 import com.haroncode.gemini.sample.di.AppModule
 import com.haroncode.gemini.sample.di.DI
-import java.util.UUID
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 import toothpick.configuration.Configuration
 import toothpick.ktp.KTP
+import java.util.UUID
 
 class App : Application() {
 

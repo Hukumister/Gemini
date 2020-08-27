@@ -4,8 +4,9 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.core.view.isVisible
-import com.haroncode.gemini.android.StoreViewConnector
-import com.haroncode.gemini.core.StoreEventListener
+import androidx.core.widget.doOnTextChanged
+import com.haroncode.gemini.StoreEventListener
+import com.haroncode.gemini.android.connector.StoreViewConnector
 import com.haroncode.gemini.sample.R
 import com.haroncode.gemini.sample.base.PublisherFragment
 import com.haroncode.gemini.sample.databinding.FragmentAuthBinding
@@ -14,11 +15,10 @@ import com.haroncode.gemini.sample.presentation.onlyaction.AuthStore
 import com.haroncode.gemini.sample.presentation.onlyaction.AuthStore.Action
 import com.haroncode.gemini.sample.presentation.onlyaction.AuthStore.Action.LoginClick
 import com.haroncode.gemini.sample.presentation.onlyaction.AuthStore.State
-import com.jakewharton.rxbinding3.widget.textChanges
-import io.reactivex.BackpressureStrategy
 import javax.inject.Inject
 
-class AuthFragment : PublisherFragment<Action, State>(R.layout.fragment_auth),
+class AuthFragment :
+    PublisherFragment<Action, State>(R.layout.fragment_auth),
     StoreEventListener<AuthStore.Event> {
 
     @Inject
@@ -38,24 +38,14 @@ class AuthFragment : PublisherFragment<Action, State>(R.layout.fragment_auth),
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentAuthBinding.bind(view)
         binding.loginButton.setOnClickListener { postAction(LoginClick) }
-    }
 
-    override fun onStart() {
-        super.onStart()
+        binding.emailEditText.doOnTextChanged { text, _, _, _ ->
+            postAction(Action.ChangeEmail(text.toString()))
+        }
 
-        binding.emailEditText.textChanges()
-            .skipInitialValue()
-            .toFlowable(BackpressureStrategy.LATEST)
-            .map(CharSequence::toString)
-            .map(Action::ChangeEmail)
-            .subscribe(actionProcessor)
-
-        binding.passwordEdit.textChanges()
-            .skipInitialValue()
-            .toFlowable(BackpressureStrategy.LATEST)
-            .map(CharSequence::toString)
-            .map(Action::ChangePassword)
-            .subscribe(actionProcessor)
+        binding.passwordEdit.doOnTextChanged { text, _, _, _ ->
+            postAction(Action.ChangePassword(text.toString()))
+        }
     }
 
     override fun onViewStateChanged(viewState: State) {
@@ -67,7 +57,7 @@ class AuthFragment : PublisherFragment<Action, State>(R.layout.fragment_auth),
     }
 
     companion object {
-        fun newInstance() = CounterFragment()
+        fun newInstance() = AuthFragment()
     }
 
     override fun onEvent(event: AuthStore.Event) = when (event) {

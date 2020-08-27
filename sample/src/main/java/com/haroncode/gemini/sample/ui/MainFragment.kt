@@ -2,7 +2,7 @@ package com.haroncode.gemini.sample.ui
 
 import android.os.Bundle
 import android.view.View
-import com.haroncode.gemini.android.StoreViewConnector
+import com.haroncode.gemini.android.connector.StoreViewConnector
 import com.haroncode.gemini.sample.R
 import com.haroncode.gemini.sample.base.PublisherFragment
 import com.haroncode.gemini.sample.databinding.FragmentMainBinding

@@ -1,25 +1,21 @@
 package com.haroncode.gemini.sample.presentation.onlyaction
 
-import com.haroncode.gemini.android.connection.DelegateConnectionRuleFactory
-import com.haroncode.gemini.connection.ConnectionRule
-import com.haroncode.gemini.dsl.connectTo
-import com.haroncode.gemini.dsl.connectionFactory
-import com.haroncode.gemini.dsl.eventsTo
-import com.haroncode.gemini.dsl.observeOn
-import com.haroncode.gemini.sample.domain.system.SchedulersProvider
+import com.haroncode.gemini.android.connector.DelegateConnectionRulesFactory
+import com.haroncode.gemini.android.connector.connectionRulesFactory
+import com.haroncode.gemini.connector.ConnectionRulesFactory
+import com.haroncode.gemini.connector.bindEventTo
+import com.haroncode.gemini.sample.di.scope.PerFragment
 import com.haroncode.gemini.sample.ui.AuthFragment
 import javax.inject.Inject
 
+@PerFragment
 class AuthConnectionFactory @Inject constructor(
-    private val store: AuthStore,
-    private val schedulersProvider: SchedulersProvider
-) : DelegateConnectionRuleFactory<AuthFragment>() {
+    private val store: AuthStore
+) : DelegateConnectionRulesFactory<AuthFragment>() {
 
-    override val connectionRuleFactory: ConnectionRule.Factory<AuthFragment> = connectionFactory { view ->
-        rule { view connectTo store }
-        rule { store connectTo view observeOn schedulersProvider.ui() }
-
-        rule { store eventsTo view observeOn schedulersProvider.ui() }
-        autoDispose { store } // magic is here )))
+    override val connectionRulesFactory: ConnectionRulesFactory<AuthFragment> = connectionRulesFactory { view ->
+        baseRule { store to view }
+        rule { store bindEventTo view }
+        autoCancel { store } // magic is here )))
     }
 }

@@ -1,29 +1,27 @@
 package com.haroncode.gemini.sample.presentation.onlyaction
 
-import com.haroncode.gemini.core.elements.EventProducer
-import com.haroncode.gemini.core.elements.Middleware
-import com.haroncode.gemini.core.elements.Reducer
+import com.haroncode.gemini.element.EventProducer
+import com.haroncode.gemini.element.Middleware
+import com.haroncode.gemini.element.Reducer
 import com.haroncode.gemini.sample.di.scope.PerFragment
 import com.haroncode.gemini.sample.domain.model.Resource
 import com.haroncode.gemini.sample.domain.model.auth.AuthResponse
 import com.haroncode.gemini.sample.domain.repository.AuthRepository
-import com.haroncode.gemini.sample.domain.system.SchedulersProvider
-import com.haroncode.gemini.sample.presentation.onlyaction.AuthStore.*
 import com.haroncode.gemini.sample.presentation.onlyaction.AuthStore.Action.AuthResult
-import com.haroncode.gemini.sample.util.asFlowable
 import com.haroncode.gemini.store.OnlyActionStore
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
-import org.reactivestreams.Publisher
 
 @PerFragment
 class AuthStore @Inject constructor(
-    authRepository: AuthRepository,
-    schedulersProvider: SchedulersProvider
-) : OnlyActionStore<Action, State, Event>(
+    authRepository: AuthRepository
+) : OnlyActionStore<AuthStore.Action, AuthStore.State, AuthStore.Event>(
     initialState = State(),
     reducer = ReducerImpl(),
     eventProducer = EventProducerImpl(),
-    middleware = MiddlewareImpl(authRepository, schedulersProvider)
+    middleware = MiddlewareImpl(authRepository),
 ) {
 
     sealed class Action {
@@ -51,10 +49,10 @@ class AuthStore @Inject constructor(
 
     class EventProducerImpl : EventProducer<State, Action, Event> {
 
-        override fun invoke(state: State, action: Action): Event? {
+        override fun produce(state: State, effect: Action): Event? {
             return when {
-                action is AuthResult && action.resource is Resource.Error -> Event.Fail(action.resource.throwable)
-                action is AuthResult && action.resource is Resource.Data -> Event.Success
+                effect is AuthResult && effect.resource is Resource.Error -> Event.Fail(effect.resource.throwable)
+                effect is AuthResult && effect.resource is Resource.Data -> Event.Success
                 else -> null
             }
         }
@@ -62,26 +60,26 @@ class AuthStore @Inject constructor(
 
     class ReducerImpl : Reducer<State, Action> {
 
-        override fun invoke(state: State, action: Action): State = when (action) {
+        override fun reduce(state: State, effect: Action): State = when (effect) {
             is Action.ChangeEmail -> {
-                val emailErrorHint = emptyHint(action.login)
+                val emailErrorHint = emptyHint(effect.login)
                 val isButtonLoginEnable = state.passwordErrorHint.isNullOrEmpty() && emailErrorHint.isEmpty()
                 state.copy(
-                    email = action.login,
+                    email = effect.login,
                     emailErrorHint = emailErrorHint,
                     isButtonLoginEnable = isButtonLoginEnable
                 )
             }
             is Action.ChangePassword -> {
-                val passwordErrorHint = emptyHint(action.password)
+                val passwordErrorHint = emptyHint(effect.password)
                 val isButtonLoginEnable = state.emailErrorHint.isNullOrEmpty() && passwordErrorHint.isEmpty()
                 state.copy(
-                    password = action.password,
+                    password = effect.password,
                     passwordErrorHint = passwordErrorHint,
                     isButtonLoginEnable = isButtonLoginEnable
                 )
             }
-            is AuthResult -> state.copy(isLoading = action.resource is Resource.Loading)
+            is AuthResult -> state.copy(isLoading = effect.resource is Resource.Loading)
             else -> state
         }
 
@@ -94,14 +92,14 @@ class AuthStore @Inject constructor(
 
     class MiddlewareImpl(
         private val authRepository: AuthRepository,
-        private val schedulersProvider: SchedulersProvider
     ) : Middleware<Action, State, Action> {
 
-        override fun invoke(action: Action, state: State): Publisher<Action> = when (action) {
-            is Action.LoginClick -> authRepository.auth(state.email, state.password)
-                .observeOn(schedulersProvider.computation())
-                .map(::AuthResult)
-            else -> action.asFlowable()
+        override fun execute(action: Action, state: State): Flow<Action> = when (action) {
+            is Action.LoginClick ->
+                authRepository
+                    .auth(state.email, state.password)
+                    .map { AuthResult(it) }
+            else -> flowOf(action)
         }
     }
 }

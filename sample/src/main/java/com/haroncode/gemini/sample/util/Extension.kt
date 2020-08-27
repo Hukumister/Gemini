@@ -3,12 +3,10 @@
 package com.haroncode.gemini.sample.util
 
 import com.haroncode.gemini.sample.domain.model.Resource
-import io.reactivex.Flowable
-import io.reactivex.Single
-import io.reactivex.annotations.BackpressureKind
-import io.reactivex.annotations.BackpressureSupport
-import io.reactivex.annotations.CheckReturnValue
-import io.reactivex.annotations.SchedulerSupport
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 import ru.terrakok.cicerone.Navigator
 import ru.terrakok.cicerone.android.support.SupportAppScreen
 import ru.terrakok.cicerone.commands.BackTo
@@ -29,12 +27,6 @@ fun Navigator.setLaunchScreen(screen: SupportAppScreen) {
  * Wrap T to Product<T>
  * Flowable<T> -> Flowable<Product<T>>
  */
-@CheckReturnValue
-@BackpressureSupport(BackpressureKind.UNBOUNDED_IN)
-@SchedulerSupport(SchedulerSupport.NONE)
-inline fun <T> Single<T>.asResource(): Flowable<Resource<T>> = map<Resource<T>> { data -> Resource.Data(data) }
-    .toFlowable()
-    .onErrorReturn { throwable -> Resource.Error(throwable) }
-    .startWith(Resource.Loading)
-
-inline fun <T> T.asFlowable() = Flowable.just(this)
+inline fun <T> Flow<T>.asResource(): Flow<Resource<T>> = map<T, Resource<T>> { data -> Resource.Data(data) }
+    .catch { throwable -> emit(Resource.Error(throwable)) }
+    .onStart { emit(Resource.Loading) }

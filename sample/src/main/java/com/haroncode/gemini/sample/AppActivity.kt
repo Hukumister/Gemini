@@ -6,12 +6,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.haroncode.gemini.sample.di.DI
 import com.haroncode.gemini.sample.util.setLaunchScreen
-import javax.inject.Inject
 import ru.terrakok.cicerone.Navigator
 import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.android.support.SupportAppNavigator
 import ru.terrakok.cicerone.commands.Command
 import toothpick.Toothpick
+import javax.inject.Inject
 
 class AppActivity : AppCompatActivity() {
 

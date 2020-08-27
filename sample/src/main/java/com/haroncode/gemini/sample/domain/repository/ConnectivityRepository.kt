@@ -1,7 +1,7 @@
 package com.haroncode.gemini.sample.domain.repository
 
-import io.reactivex.Flowable
+import kotlinx.coroutines.flow.Flow
 
 interface ConnectivityRepository {
-    fun observeConnectionState(): Flowable<Boolean>
+    fun observeConnectionState(): Flow<Boolean>
 }

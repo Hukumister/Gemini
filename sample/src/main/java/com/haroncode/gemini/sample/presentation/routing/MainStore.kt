@@ -4,11 +4,11 @@ import com.haroncode.gemini.sample.Screens
 import com.haroncode.gemini.sample.di.scope.PerFragment
 import com.haroncode.gemini.sample.presentation.routing.MainStore.Action
 import com.haroncode.gemini.store.OnlyActionStore
-import io.reactivex.Flowable
-import io.reactivex.disposables.Disposable
-import io.reactivex.rxkotlin.subscribeBy
-import javax.inject.Inject
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import ru.terrakok.cicerone.Router
+import javax.inject.Inject
 
 @PerFragment
 class MainStore @Inject constructor(
@@ -16,7 +16,7 @@ class MainStore @Inject constructor(
 ) : OnlyActionStore<Action, Unit, Action>(
     initialState = Unit,
     reducer = { _, _ -> Unit },
-    middleware = { action, _ -> Flowable.just(action) },
+    middleware = { action, _ -> flowOf(action) },
     eventProducer = { _, action -> action }
 ) {
 
@@ -26,15 +26,13 @@ class MainStore @Inject constructor(
     }
 
     init {
-        Flowable.fromPublisher(eventSource)
-            .subscribeBy { event ->
+        eventFlow
+            .onEach { event ->
                 when (event) {
                     Action.COUNTER -> router.navigateTo(Screens.Counter)
                     Action.AUTH -> router.navigateTo(Screens.Auth)
                 }
             }
-            .autoDispose()
+            .launchIn(coroutineScope)
     }
-
-    private fun Disposable.autoDispose() = add(this)
 }
