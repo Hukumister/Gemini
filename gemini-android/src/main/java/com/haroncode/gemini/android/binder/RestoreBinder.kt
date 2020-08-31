@@ -1,4 +1,4 @@
-package com.haroncode.gemini.android.connector
+package com.haroncode.gemini.android.binder
 
 import android.os.Bundle
 import androidx.lifecycle.LifecycleOwner
@@ -6,29 +6,17 @@ import androidx.savedstate.SavedStateRegistry
 import androidx.savedstate.SavedStateRegistryOwner
 import com.haroncode.gemini.android.lifecycle.ExtendedLifecycleObserver
 import com.haroncode.gemini.android.lifecycle.LifecycleStrategy
-import com.haroncode.gemini.android.lifecycle.StartStopStrategy
 import com.haroncode.gemini.android.lifecycle.StoreCancelObserver
 import com.haroncode.gemini.connector.AutoCancelStoreRule
 import com.haroncode.gemini.connector.BaseConnectionRule
 import com.haroncode.gemini.connector.ConnectionRulesFactory
 
-/**
- * @author HaronCode
- * @author kdk96
- */
-class StoreViewBinder<T : SavedStateRegistryOwner> private constructor(
-    private val factoryProvider: () -> ConnectionRulesFactory<T>,
+internal class RestoreBinder<View : SavedStateRegistryOwner>(
+    private val factoryProvider: () -> ConnectionRulesFactory<View>,
     private val lifecycleStrategy: LifecycleStrategy,
-    private val shouldSave: Boolean
-) {
+) : Binder<View> {
 
-    fun bind(view: T) = if (shouldSave) {
-        restoreBind(view)
-    } else {
-        simpleBind(view)
-    }
-
-    private fun restoreBind(view: T) {
+    override fun bind(view: View) {
         val factoryNameSaver = FactoryNameSaver(view.savedStateRegistry)
 
         val factoryName = factoryNameSaver.restoreOrCreateName()
@@ -48,29 +36,7 @@ class StoreViewBinder<T : SavedStateRegistryOwner> private constructor(
         factoryNameSaver.saveName(factoryName)
     }
 
-    private fun simpleBind(view: T) {
-        val connectionRules = factoryProvider().create(view)
-
-        lifecycleStrategy.connect(view, connectionRules.filterIsInstance<BaseConnectionRule<*, *>>())
-
-        val autoCancelStoreRuleCollection = connectionRules.filterIsInstance<AutoCancelStoreRule>()
-        view.lifecycle.addObserver(StoreCancelObserver(autoCancelStoreRuleCollection))
-    }
-
-    companion object {
-
-        fun <T : SavedStateRegistryOwner> of(
-            lifecycleStrategy: LifecycleStrategy = StartStopStrategy,
-            shouldSave: Boolean = true,
-            factoryProvider: () -> ConnectionRulesFactory<T>
-        ) = StoreViewBinder(
-            factoryProvider = factoryProvider,
-            lifecycleStrategy = lifecycleStrategy,
-            shouldSave = shouldSave
-        )
-    }
-
-    internal class FactoryNameSaver(private val stateRegistry: SavedStateRegistry) {
+    private class FactoryNameSaver(private val stateRegistry: SavedStateRegistry) {
 
         companion object {
 
@@ -98,7 +64,7 @@ class StoreViewBinder<T : SavedStateRegistryOwner> private constructor(
         private fun createNewName(): String = "${TAG}_${stateRegistry.hashCode()}"
     }
 
-    internal class ClearFactoryDecorator(
+    private class ClearFactoryDecorator(
         private val name: String,
         private val storeCancelObserver: StoreCancelObserver
     ) : ExtendedLifecycleObserver() {
@@ -109,4 +75,5 @@ class StoreViewBinder<T : SavedStateRegistryOwner> private constructor(
             ConnectionRulesFactoryManager.clear(name)
         }
     }
+
 }
