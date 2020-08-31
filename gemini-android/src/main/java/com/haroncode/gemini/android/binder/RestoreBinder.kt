@@ -8,11 +8,11 @@ import com.haroncode.gemini.android.lifecycle.ExtendedLifecycleObserver
 import com.haroncode.gemini.android.lifecycle.LifecycleStrategy
 import com.haroncode.gemini.android.lifecycle.StoreCancelObserver
 import com.haroncode.gemini.connector.AutoCancelStoreRule
-import com.haroncode.gemini.connector.BaseConnectionRule
-import com.haroncode.gemini.connector.ConnectionRulesFactory
+import com.haroncode.gemini.connector.ComposeConnectionRule
+import com.haroncode.gemini.connector.ConnectionRule
 
 internal class RestoreBinder<View : SavedStateRegistryOwner>(
-    private val factoryProvider: () -> ConnectionRulesFactory<View>,
+    private val factoryProvider: () -> ConnectionRule.Factory<View>,
     private val lifecycleStrategy: LifecycleStrategy,
 ) : Binder<View> {
 
@@ -21,11 +21,15 @@ internal class RestoreBinder<View : SavedStateRegistryOwner>(
 
         val factoryName = factoryNameSaver.restoreOrCreateName()
         val factory = ConnectionRulesFactoryManager.restoreStore(factoryName) ?: factoryProvider()
-        val connectionRules = factory.create(view)
+        val connectionRule = factory.create(view)
 
-        lifecycleStrategy.connect(view, connectionRules.filterIsInstance<BaseConnectionRule<*, *>>())
+        lifecycleStrategy.connect(view, connectionRule)
 
-        val autoCancelStoreRuleCollection = connectionRules.filterIsInstance<AutoCancelStoreRule>()
+        val composeConnectionRule = connectionRule as? ComposeConnectionRule
+
+        val autoCancelStoreRuleCollection = composeConnectionRule?.connectionRules
+            .orEmpty()
+            .filterIsInstance<AutoCancelStoreRule>()
 
         val storeCancelObserver = StoreCancelObserver(autoCancelStoreRuleCollection)
         val clearFactoryDecorator = ClearFactoryDecorator(factoryName, storeCancelObserver)

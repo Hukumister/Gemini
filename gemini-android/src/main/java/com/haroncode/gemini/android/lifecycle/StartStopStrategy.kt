@@ -3,7 +3,7 @@ package com.haroncode.gemini.android.lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.whenStarted
-import com.haroncode.gemini.connector.BaseConnectionRule
+import com.haroncode.gemini.connector.ConnectionRule
 import kotlinx.coroutines.launch
 
 /**
@@ -14,13 +14,11 @@ object StartStopStrategy : LifecycleStrategy {
 
     override fun connect(
         lifecycleOwner: LifecycleOwner,
-        rules: Collection<BaseConnectionRule<*, *>>
+        rule: ConnectionRule
     ) {
         with(lifecycleOwner) {
             lifecycle.coroutineScope.launch {
-                rules.forEach { rule ->
-                    launch { whenStarted { rule.connect() } }
-                }
+                launch { whenStarted { rule.connect() } }
             }
         }
     }

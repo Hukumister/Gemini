@@ -4,8 +4,8 @@ import androidx.lifecycle.LifecycleOwner
 import com.haroncode.gemini.StoreView
 import com.haroncode.gemini.connector.AutoCancelStoreRule
 import com.haroncode.gemini.connector.BaseConnectionRule
+import com.haroncode.gemini.connector.ComposeConnectionRule
 import com.haroncode.gemini.connector.ConnectionRule
-import com.haroncode.gemini.connector.ConnectionRulesFactory
 import com.haroncode.gemini.connector.bindActionTo
 import com.haroncode.gemini.connector.bindStateTo
 import com.haroncode.gemini.element.Store
@@ -14,19 +14,22 @@ import com.haroncode.gemini.element.Store
  * @author HaronCode
  * @author kdk96
  */
-abstract class DelegateConnectionRulesFactory<T : LifecycleOwner> : ConnectionRulesFactory<T> {
+abstract class DelegateConnectionRulesFactory<T : LifecycleOwner> : ConnectionRule.Factory<T> {
 
-    abstract val connectionRulesFactory: ConnectionRulesFactory<T>
+    abstract val connectionRulesFactory: ConnectionRule.Factory<T>
 
-    override fun create(param: T): Collection<ConnectionRule> = connectionRulesFactory.create(param)
+    override fun create(param: T): ConnectionRule = connectionRulesFactory.create(param)
 }
 
 inline fun <reified T : Any> connectionRulesFactory(
     crossinline factory: ConnectionRuleListBuilder.(param: T) -> Unit
-): ConnectionRulesFactory<T> = ConnectionRulesFactory { param ->
-    val builder = ConnectionRuleListBuilder()
-    builder.factory(param)
-    builder.build()
+): ConnectionRule.Factory<T> = object : ConnectionRule.Factory<T> {
+
+    override fun create(param: T): ConnectionRule {
+        val builder = ConnectionRuleListBuilder()
+        builder.factory(param)
+        return builder.build()
+    }
 }
 
 class ConnectionRuleListBuilder {
@@ -49,5 +52,5 @@ class ConnectionRuleListBuilder {
         connectionRules += AutoCancelStoreRule(storeProvider.invoke())
     }
 
-    fun build() = connectionRules.toList()
+    fun build() = ComposeConnectionRule(connectionRules.toList())
 }

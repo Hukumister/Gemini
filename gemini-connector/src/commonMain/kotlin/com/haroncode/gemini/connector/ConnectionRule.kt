@@ -5,26 +5,47 @@ import com.haroncode.gemini.StoreView
 import com.haroncode.gemini.element.Store
 import com.haroncode.gemini.functional.Consumer
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
 
-sealed class ConnectionRule
+interface ConnectionRule {
+
+    suspend fun connect()
+
+    interface Factory<T> {
+
+        fun create(param: T): ConnectionRule
+    }
+}
 
 class AutoCancelStoreRule(
     private val store: Store<*, *, *>
-) : ConnectionRule() {
+) : ConnectionRule {
 
     fun cancel() = store.coroutineScope.cancel()
+
+    override suspend fun connect() = Unit
 }
 
 open class BaseConnectionRule<Out : Any, In : Any>(
     val consumer: Consumer<In>,
     val flow: Flow<Out>,
     val transformer: Transformer<Out, In>
-) : ConnectionRule() {
+) : ConnectionRule {
 
-    suspend fun connect() = flow
+    override suspend fun connect() = flow
         .let(transformer::transform)
         .collect { consumer.accept(it) }
+}
+
+class ComposeConnectionRule(
+    val connectionRules: List<ConnectionRule>
+) : ConnectionRule {
+
+    override suspend fun connect() {
+        connectionRules.forEach { it.connect() }
+    }
 }
 
 infix fun <T : Any> Flow<T>.bindTo(
