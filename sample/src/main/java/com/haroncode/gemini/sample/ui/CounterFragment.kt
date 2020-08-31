@@ -2,7 +2,7 @@ package com.haroncode.gemini.sample.ui
 
 import android.os.Bundle
 import android.view.View
-import com.haroncode.gemini.android.connector.StoreViewBinder
+import com.haroncode.gemini.android.binder.StoreViewBinding
 import com.haroncode.gemini.sample.R
 import com.haroncode.gemini.sample.base.PublisherFragment
 import com.haroncode.gemini.sample.databinding.FragmentCounterBinding
@@ -22,7 +22,7 @@ class CounterFragment : PublisherFragment<Action, State>(R.layout.fragment_count
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        StoreViewBinder.of { counterFactory }
+        StoreViewBinding.withRestore { counterFactory }
             .bind(this)
     }
 

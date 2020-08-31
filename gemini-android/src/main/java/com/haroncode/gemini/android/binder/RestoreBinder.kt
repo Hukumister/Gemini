@@ -75,5 +75,4 @@ internal class RestoreBinder<View : SavedStateRegistryOwner>(
             ConnectionRulesFactoryManager.clear(name)
         }
     }
-
 }

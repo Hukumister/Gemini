@@ -1,7 +1,7 @@
 package com.haroncode.gemini.sample.presentation.onlyaction
 
-import com.haroncode.gemini.android.connector.DelegateConnectionRulesFactory
-import com.haroncode.gemini.android.connector.connectionRulesFactory
+import com.haroncode.gemini.android.binder.DelegateConnectionRulesFactory
+import com.haroncode.gemini.android.binder.connectionRulesFactory
 import com.haroncode.gemini.connector.ConnectionRulesFactory
 import com.haroncode.gemini.connector.bindEventTo
 import com.haroncode.gemini.sample.di.scope.PerFragment
