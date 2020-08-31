@@ -1,4 +1,4 @@
-package com.haroncode.gemini.android.connector
+package com.haroncode.gemini.android.binder
 
 import com.haroncode.gemini.connector.ConnectionRulesFactory
 

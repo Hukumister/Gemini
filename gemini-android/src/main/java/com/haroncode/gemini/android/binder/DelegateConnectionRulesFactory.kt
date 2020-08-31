@@ -1,4 +1,4 @@
-package com.haroncode.gemini.android.connector
+package com.haroncode.gemini.android.binder
 
 import androidx.lifecycle.LifecycleOwner
 import com.haroncode.gemini.StoreView
