@@ -14,15 +14,15 @@ import androidx.savedstate.SavedStateRegistryOwner
 /**
  * @author kdk96
  */
-abstract class ExtendedLifecycleObserver : LifecycleObserver, SavedStateRegistry.SavedStateProvider {
+internal abstract class ExtendedLifecycleObserver : LifecycleObserver, SavedStateRegistry.SavedStateProvider {
 
     private var instanceStateSaved = false
 
-    protected open fun onFinish(owner: LifecycleOwner) = Unit
+    open fun onFinish(owner: LifecycleOwner) = Unit
 
     @CallSuper
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    protected open fun onCreate(owner: LifecycleOwner) {
+    open fun onCreate(owner: LifecycleOwner) {
         if (owner is SavedStateRegistryOwner) {
             owner.savedStateRegistry.registerSavedStateProvider("${KEY}_${hashCode()}", this)
         }
@@ -30,13 +30,13 @@ abstract class ExtendedLifecycleObserver : LifecycleObserver, SavedStateRegistry
 
     @CallSuper
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
-    protected open fun onStart(owner: LifecycleOwner) {
+    open fun onStart(owner: LifecycleOwner) {
         instanceStateSaved = false
     }
 
     @CallSuper
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    protected open fun onResume(owner: LifecycleOwner) {
+    open fun onResume(owner: LifecycleOwner) {
         instanceStateSaved = false
     }
 
@@ -47,7 +47,7 @@ abstract class ExtendedLifecycleObserver : LifecycleObserver, SavedStateRegistry
 
     @CallSuper
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    protected open fun onDestroy(owner: LifecycleOwner) {
+    open fun onDestroy(owner: LifecycleOwner) {
         val isFinishing = when (owner) {
             is AppCompatActivity -> owner.isFinishing
             is Fragment -> owner.activity?.isFinishing == true || owner.isRealRemoving

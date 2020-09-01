@@ -1,5 +1,5 @@
 include ':gemini-core',
         ':gemini-core-test',
-        ':gemini-connector',
+        ':gemini-binder',
         ':gemini-android',
         ':sample'
