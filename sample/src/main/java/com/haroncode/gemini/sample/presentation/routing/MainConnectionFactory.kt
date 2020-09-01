@@ -1,6 +1,7 @@
 package com.haroncode.gemini.sample.presentation.routing
 
 import com.haroncode.gemini.android.binder.DelegateConnectionRulesFactory
+import com.haroncode.gemini.android.binder.connectionRulesFactory
 import com.haroncode.gemini.connector.ConnectionRulesFactory
 import com.haroncode.gemini.sample.di.scope.PerFragment
 import com.haroncode.gemini.sample.ui.MainFragment

@@ -10,11 +10,12 @@ import com.haroncode.gemini.sample.presentation.justreducer.CounterConnectionFac
 import com.haroncode.gemini.sample.presentation.justreducer.CounterStore.Action
 import com.haroncode.gemini.sample.presentation.justreducer.CounterStore.State
 import javax.inject.Inject
+import javax.inject.Provider
 
 class CounterFragment : PublisherFragment<Action, State>(R.layout.fragment_counter) {
 
     @Inject
-    lateinit var counterFactory: CounterConnectionFactory
+    lateinit var factory: Provider<CounterConnectionFactory>
 
     private var _binding: FragmentCounterBinding? = null
     private val binding get() = _binding!!
@@ -22,7 +23,7 @@ class CounterFragment : PublisherFragment<Action, State>(R.layout.fragment_count
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        StoreViewBinding.withRestore { counterFactory }
+        StoreViewBinding.withRestore(factoryProvider = factory::get)
             .bind(this)
     }
 

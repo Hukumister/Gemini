@@ -10,6 +10,7 @@ import com.haroncode.gemini.android.lifecycle.StoreCancelObserver
 import com.haroncode.gemini.connector.AutoCancelStoreRule
 import com.haroncode.gemini.connector.BaseConnectionRule
 import com.haroncode.gemini.connector.ConnectionRulesFactory
+import java.util.*
 
 internal class RestoreBinder<View : SavedStateRegistryOwner>(
     private val factoryProvider: () -> ConnectionRulesFactory<View>,
@@ -40,28 +41,31 @@ internal class RestoreBinder<View : SavedStateRegistryOwner>(
 
         companion object {
 
-            private const val TAG = "store_view"
-
-            private const val KEY_FACTORY_SAVER_NAME = "factory_saver_name"
-            private const val KEY_FACTORY_NAME = "factory_name"
+            private const val TAG = "store_view_factory"
+            private const val KEY_FACTORY_SAVER_NAME = "gemini.RestoreBinder.FactoryNameSaver.KEY_FACTORY_SAVER_NAME"
+            private const val KEY_FACTORY_NAME = "gemini.RestoreBinder.FactoryNameSaver.KEY_FACTORY_NAME"
         }
 
-        fun restoreOrCreateName(): String {
-            return if (stateRegistry.isRestored) {
-                val bundle = stateRegistry.consumeRestoredStateForKey(KEY_FACTORY_SAVER_NAME)
-                bundle?.getString(KEY_FACTORY_NAME) ?: run { createNewName() }
-            } else {
-                createNewName()
-            }
+        fun restoreOrCreateName(): String = if (stateRegistry.isRestored) {
+            val bundle = stateRegistry.consumeRestoredStateForKey(KEY_FACTORY_SAVER_NAME)
+            bundle?.getString(KEY_FACTORY_NAME) ?: createNewName()
+        } else {
+            createNewName()
         }
 
-        fun saveName(factoryName: String) {
+        fun saveName(factoryName: String) = try {
+            saveNameInternal(factoryName)
+        } catch (ex: IllegalArgumentException) {
+            throw IllegalStateException("It's forbidden to use several factories on one fragment/activity")
+        }
+
+        private fun saveNameInternal(factoryName: String) {
             stateRegistry.registerSavedStateProvider(KEY_FACTORY_SAVER_NAME) {
                 Bundle().apply { putString(KEY_FACTORY_NAME, factoryName) }
             }
         }
 
-        private fun createNewName(): String = "${TAG}_${stateRegistry.hashCode()}"
+        private fun createNewName(): String = "${TAG}_${UUID.randomUUID()}"
     }
 
     private class ClearFactoryDecorator(

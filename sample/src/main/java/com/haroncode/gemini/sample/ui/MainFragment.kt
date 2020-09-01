@@ -9,6 +9,7 @@ import com.haroncode.gemini.sample.databinding.FragmentMainBinding
 import com.haroncode.gemini.sample.presentation.routing.MainConnectionFactory
 import com.haroncode.gemini.sample.presentation.routing.MainStore
 import javax.inject.Inject
+import javax.inject.Provider
 
 class MainFragment : PublisherFragment<MainStore.Action, Unit>(R.layout.fragment_main) {
 
@@ -16,11 +17,11 @@ class MainFragment : PublisherFragment<MainStore.Action, Unit>(R.layout.fragment
     private val binding get() = _binding!!
 
     @Inject
-    lateinit var factory: MainConnectionFactory
+    lateinit var factory: Provider<MainConnectionFactory>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        StoreViewBinding.withRestore { factory }
+        StoreViewBinding.withRestore(factoryProvider = factory::get)
             .bind(this)
     }
 
