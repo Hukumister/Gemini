@@ -10,7 +10,7 @@ import com.haroncode.gemini.android.binder.StoreViewBinding
 import com.haroncode.gemini.sample.R
 import com.haroncode.gemini.sample.base.PublisherFragment
 import com.haroncode.gemini.sample.databinding.FragmentAuthBinding
-import com.haroncode.gemini.sample.presentation.onlyaction.AuthConnectionFactory
+import com.haroncode.gemini.sample.presentation.onlyaction.AuthBindingFactory
 import com.haroncode.gemini.sample.presentation.onlyaction.AuthStore
 import com.haroncode.gemini.sample.presentation.onlyaction.AuthStore.Action
 import com.haroncode.gemini.sample.presentation.onlyaction.AuthStore.Action.LoginClick
@@ -23,7 +23,7 @@ class AuthFragment :
     StoreEventListener<AuthStore.Event> {
 
     @Inject
-    lateinit var factory: Provider<AuthConnectionFactory>
+    lateinit var factory: Provider<AuthBindingFactory>
 
     private var _binding: FragmentAuthBinding? = null
     private val binding get() = _binding!!

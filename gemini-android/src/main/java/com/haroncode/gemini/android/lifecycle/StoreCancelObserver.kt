@@ -1,7 +1,7 @@
 package com.haroncode.gemini.android.lifecycle
 
 import androidx.lifecycle.LifecycleOwner
-import com.haroncode.gemini.connector.AutoCancelStoreRule
+import com.haroncode.gemini.binder.AutoCancelStoreRule
 
 /**
  * @author HaronCode

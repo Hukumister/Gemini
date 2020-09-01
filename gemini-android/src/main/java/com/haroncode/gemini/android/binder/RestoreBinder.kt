@@ -7,13 +7,14 @@ import androidx.savedstate.SavedStateRegistryOwner
 import com.haroncode.gemini.android.lifecycle.ExtendedLifecycleObserver
 import com.haroncode.gemini.android.lifecycle.LifecycleStrategy
 import com.haroncode.gemini.android.lifecycle.StoreCancelObserver
-import com.haroncode.gemini.connector.AutoCancelStoreRule
-import com.haroncode.gemini.connector.BaseConnectionRule
-import com.haroncode.gemini.connector.ConnectionRulesFactory
+import com.haroncode.gemini.binder.AutoCancelStoreRule
+import com.haroncode.gemini.binder.BaseBindingRule
+import com.haroncode.gemini.binder.Binder
+import com.haroncode.gemini.binder.BindingRulesFactory
 import java.util.*
 
 internal class RestoreBinder<View : SavedStateRegistryOwner>(
-    private val factoryProvider: () -> ConnectionRulesFactory<View>,
+    private val factoryProvider: () -> BindingRulesFactory<View>,
     private val lifecycleStrategy: LifecycleStrategy,
 ) : Binder<View> {
 
@@ -21,19 +22,19 @@ internal class RestoreBinder<View : SavedStateRegistryOwner>(
         val factoryNameSaver = FactoryNameSaver(view.savedStateRegistry)
 
         val factoryName = factoryNameSaver.restoreOrCreateName()
-        val factory = ConnectionRulesFactoryManager.restoreStore(factoryName) ?: factoryProvider()
-        val connectionRules = factory.create(view)
+        val factory = BindingRulesFactoryManager.restoreFactory(factoryName) ?: factoryProvider()
+        val bindingRules = factory.create(view)
 
-        lifecycleStrategy.connect(view, connectionRules.filterIsInstance<BaseConnectionRule<*, *>>())
+        lifecycleStrategy.connect(view, bindingRules.filterIsInstance<BaseBindingRule<*, *>>())
 
-        val autoCancelStoreRuleCollection = connectionRules.filterIsInstance<AutoCancelStoreRule>()
+        val autoCancelStoreRuleCollection = bindingRules.filterIsInstance<AutoCancelStoreRule>()
 
         val storeCancelObserver = StoreCancelObserver(autoCancelStoreRuleCollection)
         val clearFactoryDecorator = ClearFactoryDecorator(factoryName, storeCancelObserver)
 
         view.lifecycle.addObserver(clearFactoryDecorator)
 
-        ConnectionRulesFactoryManager.saveFactory(factoryName, factory)
+        BindingRulesFactoryManager.saveFactory(factoryName, factory)
         factoryNameSaver.saveName(factoryName)
     }
 
@@ -76,7 +77,7 @@ internal class RestoreBinder<View : SavedStateRegistryOwner>(
         override fun onFinish(owner: LifecycleOwner) {
             super.onFinish(owner)
             storeCancelObserver.onFinish(owner)
-            ConnectionRulesFactoryManager.clear(name)
+            BindingRulesFactoryManager.clear(name)
         }
     }
 }

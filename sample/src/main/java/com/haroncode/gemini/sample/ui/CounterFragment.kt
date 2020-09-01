@@ -6,7 +6,7 @@ import com.haroncode.gemini.android.binder.StoreViewBinding
 import com.haroncode.gemini.sample.R
 import com.haroncode.gemini.sample.base.PublisherFragment
 import com.haroncode.gemini.sample.databinding.FragmentCounterBinding
-import com.haroncode.gemini.sample.presentation.justreducer.CounterConnectionFactory
+import com.haroncode.gemini.sample.presentation.justreducer.CounterBindingFactory
 import com.haroncode.gemini.sample.presentation.justreducer.CounterStore.Action
 import com.haroncode.gemini.sample.presentation.justreducer.CounterStore.State
 import javax.inject.Inject
@@ -15,7 +15,7 @@ import javax.inject.Provider
 class CounterFragment : PublisherFragment<Action, State>(R.layout.fragment_counter) {
 
     @Inject
-    lateinit var factory: Provider<CounterConnectionFactory>
+    lateinit var factory: Provider<CounterBindingFactory>
 
     private var _binding: FragmentCounterBinding? = null
     private val binding get() = _binding!!

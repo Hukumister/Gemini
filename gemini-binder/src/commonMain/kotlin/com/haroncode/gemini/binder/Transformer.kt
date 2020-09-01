@@ -1,4 +1,4 @@
-package com.haroncode.gemini.connector
+package com.haroncode.gemini.binder
 
 import kotlinx.coroutines.flow.Flow
 
@@ -14,6 +14,6 @@ fun interface Transformer<in In, out Out> {
 @Suppress("UNCHECKED_CAST")
 fun <T : Any> identityTransformer() = IdentityTransformer as Transformer<T, T>
 
-object IdentityTransformer : Transformer<Any, Any> {
+private object IdentityTransformer : Transformer<Any, Any> {
     override fun transform(input: Flow<Any>): Flow<Any> = input
 }

@@ -6,7 +6,7 @@ import com.haroncode.gemini.android.binder.StoreViewBinding
 import com.haroncode.gemini.sample.R
 import com.haroncode.gemini.sample.base.PublisherFragment
 import com.haroncode.gemini.sample.databinding.FragmentMainBinding
-import com.haroncode.gemini.sample.presentation.routing.MainConnectionFactory
+import com.haroncode.gemini.sample.presentation.routing.MainBindingFactory
 import com.haroncode.gemini.sample.presentation.routing.MainStore
 import javax.inject.Inject
 import javax.inject.Provider
@@ -17,7 +17,7 @@ class MainFragment : PublisherFragment<MainStore.Action, Unit>(R.layout.fragment
     private val binding get() = _binding!!
 
     @Inject
-    lateinit var factory: Provider<MainConnectionFactory>
+    lateinit var factory: Provider<MainBindingFactory>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
