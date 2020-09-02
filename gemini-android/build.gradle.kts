@@ -3,7 +3,7 @@ plugins {
     kotlin("android")
 }
 
-apply(from = "${project.rootDir}/сodequality/ktlint.gradle")
+apply(from = "${project.rootDir}/сodequality/ktlint.gradle.kts")
 
 android {
     compileSdkVersion(Versions.android.compileSdk)
