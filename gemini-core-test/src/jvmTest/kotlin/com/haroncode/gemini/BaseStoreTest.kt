@@ -56,12 +56,12 @@ class BaseStoreTest {
         baseStore.coroutineScope.launch {
             launch {
                 testActionChannel.asFlow()
-                    .collect { baseStore.invoke(it) }
+                    .collect(baseStore::accept)
             }
 
             stateJob = launch {
                 baseStore.stateFlow
-                    .collect { testStates.add(it) }
+                    .collect(testStates::add)
             }
         }
     }
