@@ -2,13 +2,14 @@ package com.haroncode.gemini.sample.ui
 
 import android.os.Bundle
 import android.view.View
-import com.haroncode.gemini.android.connector.StoreViewConnector
+import com.haroncode.gemini.android.binder.StoreViewBinding
 import com.haroncode.gemini.sample.R
 import com.haroncode.gemini.sample.base.PublisherFragment
 import com.haroncode.gemini.sample.databinding.FragmentMainBinding
-import com.haroncode.gemini.sample.presentation.routing.MainConnectionFactory
+import com.haroncode.gemini.sample.presentation.routing.MainBindingFactory
 import com.haroncode.gemini.sample.presentation.routing.MainStore
 import javax.inject.Inject
+import javax.inject.Provider
 
 class MainFragment : PublisherFragment<MainStore.Action, Unit>(R.layout.fragment_main) {
 
@@ -16,11 +17,12 @@ class MainFragment : PublisherFragment<MainStore.Action, Unit>(R.layout.fragment
     private val binding get() = _binding!!
 
     @Inject
-    lateinit var factory: MainConnectionFactory
+    lateinit var factory: Provider<MainBindingFactory>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        StoreViewConnector.withFactory(factory).connect(this)
+        StoreViewBinding.withRestore(factoryProvider = factory::get)
+            .bind(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

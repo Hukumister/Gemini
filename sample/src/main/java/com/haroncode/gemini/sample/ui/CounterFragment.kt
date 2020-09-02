@@ -2,19 +2,20 @@ package com.haroncode.gemini.sample.ui
 
 import android.os.Bundle
 import android.view.View
-import com.haroncode.gemini.android.connector.StoreViewConnector
+import com.haroncode.gemini.android.binder.StoreViewBinding
 import com.haroncode.gemini.sample.R
 import com.haroncode.gemini.sample.base.PublisherFragment
 import com.haroncode.gemini.sample.databinding.FragmentCounterBinding
-import com.haroncode.gemini.sample.presentation.justreducer.CounterConnectionFactory
+import com.haroncode.gemini.sample.presentation.justreducer.CounterBindingFactory
 import com.haroncode.gemini.sample.presentation.justreducer.CounterStore.Action
 import com.haroncode.gemini.sample.presentation.justreducer.CounterStore.State
 import javax.inject.Inject
+import javax.inject.Provider
 
 class CounterFragment : PublisherFragment<Action, State>(R.layout.fragment_counter) {
 
     @Inject
-    lateinit var counterFactory: CounterConnectionFactory
+    lateinit var factory: Provider<CounterBindingFactory>
 
     private var _binding: FragmentCounterBinding? = null
     private val binding get() = _binding!!
@@ -22,8 +23,8 @@ class CounterFragment : PublisherFragment<Action, State>(R.layout.fragment_count
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        StoreViewConnector.withFactory(counterFactory)
-            .connect(this)
+        StoreViewBinding.withRestore(factoryProvider = factory::get)
+            .bind(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

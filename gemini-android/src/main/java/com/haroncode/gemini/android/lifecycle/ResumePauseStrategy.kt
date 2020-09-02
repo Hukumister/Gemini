@@ -3,7 +3,7 @@ package com.haroncode.gemini.android.lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.whenResumed
-import com.haroncode.gemini.connector.BaseConnectionRule
+import com.haroncode.gemini.binder.BaseBindingRule
 import kotlinx.coroutines.launch
 
 /**
@@ -14,12 +14,12 @@ object ResumePauseStrategy : LifecycleStrategy {
 
     override fun connect(
         lifecycleOwner: LifecycleOwner,
-        rules: Collection<BaseConnectionRule<*, *>>
+        rules: Collection<BaseBindingRule<*, *>>
     ) {
         with(lifecycleOwner) {
             lifecycle.coroutineScope.launch {
                 rules.forEach { rule ->
-                    launch { whenResumed { rule.connect() } }
+                    launch { whenResumed { rule.bind() } }
                 }
             }
         }

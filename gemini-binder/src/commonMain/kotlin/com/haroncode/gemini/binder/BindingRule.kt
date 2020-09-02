@@ -1,4 +1,4 @@
-package com.haroncode.gemini.connector
+package com.haroncode.gemini.binder
 
 import com.haroncode.gemini.StoreEventListener
 import com.haroncode.gemini.StoreView
@@ -7,29 +7,29 @@ import com.haroncode.gemini.functional.Consumer
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.*
 
-sealed class ConnectionRule
+sealed class BindingRule
 
 class AutoCancelStoreRule(
     private val store: Store<*, *, *>
-) : ConnectionRule() {
+) : BindingRule() {
 
     fun cancel() = store.coroutineScope.cancel()
 }
 
-open class BaseConnectionRule<Out : Any, In : Any>(
+open class BaseBindingRule<Out : Any, In : Any>(
     val consumer: Consumer<In>,
     val flow: Flow<Out>,
     val transformer: Transformer<Out, In>
-) : ConnectionRule() {
+) : BindingRule() {
 
-    suspend fun connect() = flow
+    suspend fun bind() = flow
         .let(transformer::transform)
         .collect { consumer.accept(it) }
 }
 
 infix fun <T : Any> Flow<T>.bindTo(
     consumer: Consumer<T>
-): BaseConnectionRule<T, T> = BaseConnectionRule(
+): BaseBindingRule<T, T> = BaseBindingRule(
     consumer = consumer,
     flow = this,
     transformer = identityTransformer()
@@ -41,7 +41,7 @@ infix fun <Out : Any, In : Any> Flow<Out>.bindTo(
 
 infix fun <State : Any> Store<*, State, *>.bindStateTo(
     consumer: Consumer<State>
-): BaseConnectionRule<State, State> = stateFlow bindTo consumer
+): BaseBindingRule<State, State> = stateFlow bindTo consumer
 
 infix fun <State : Any, ViewState : Any> Store<*, State, *>.bindStateTo(
     consumer: Consumer<ViewState>
@@ -49,7 +49,7 @@ infix fun <State : Any, ViewState : Any> Store<*, State, *>.bindStateTo(
 
 infix fun <Action : Any> StoreView<Action, *>.bindActionTo(
     consumer: Consumer<Action>
-): BaseConnectionRule<Action, Action> = actionFlow bindTo consumer
+): BaseBindingRule<Action, Action> = actionFlow bindTo consumer
 
 infix fun <ViewAction : Any, Action : Any> StoreView<ViewAction, *>.bindActionTo(
     consumer: Consumer<Action>
@@ -57,7 +57,7 @@ infix fun <ViewAction : Any, Action : Any> StoreView<ViewAction, *>.bindActionTo
 
 infix fun <Event : Any> Store<*, *, Event>.bindEventTo(
     eventListener: StoreEventListener<Event>
-): BaseConnectionRule<Event, Event> = eventFlow bindTo Consumer(eventListener::onEvent)
+): BaseBindingRule<Event, Event> = eventFlow bindTo Consumer(eventListener::onEvent)
 
 infix fun <Event : Any, ViewEvent : Any> Store<*, *, Event>.bindEventTo(
     eventListener: StoreEventListener<ViewEvent>
@@ -65,15 +65,15 @@ infix fun <Event : Any, ViewEvent : Any> Store<*, *, Event>.bindEventTo(
 
 infix fun <Out : Any, In : Any> Pair<Flow<Out>, Consumer<In>>.transform(
     transformer: Transformer<Out, In>
-): BaseConnectionRule<Out, In> = BaseConnectionRule(
+): BaseBindingRule<Out, In> = BaseBindingRule(
     consumer = second,
     flow = first,
     transformer = { flow -> flow.let(transformer::transform) }
 )
 
-infix fun <Out : Any, In : Any> BaseConnectionRule<Out, In>.transform(
+infix fun <Out : Any, In : Any> BaseBindingRule<Out, In>.transform(
     outputTransformer: Transformer<In, In>
-): BaseConnectionRule<Out, In> = BaseConnectionRule(
+): BaseBindingRule<Out, In> = BaseBindingRule(
     consumer = consumer,
     flow = flow,
     transformer = { flow ->
@@ -85,7 +85,7 @@ infix fun <Out : Any, In : Any> BaseConnectionRule<Out, In>.transform(
 
 infix fun <Out : Any, In : Any> Pair<Flow<Out>, Consumer<In>>.map(
     mapper: suspend (Out) -> In
-): BaseConnectionRule<Out, In> = BaseConnectionRule(
+): BaseBindingRule<Out, In> = BaseBindingRule(
     consumer = second,
     flow = first,
     transformer = { flow -> flow.map(mapper::invoke) }
