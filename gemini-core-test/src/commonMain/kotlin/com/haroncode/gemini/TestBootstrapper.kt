@@ -7,5 +7,5 @@ class TestBootstrapper(
     private val testActionFlow: Flow<TestAction>
 ) : Bootstrapper<TestAction> {
 
-    override fun invoke() = testActionFlow
+    override fun bootstrap() = testActionFlow
 }

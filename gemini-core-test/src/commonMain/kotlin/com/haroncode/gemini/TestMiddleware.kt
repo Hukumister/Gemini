@@ -36,7 +36,7 @@ class TestMiddleware(
     private val asyncWorkDispatcher: CoroutineDispatcher
 ) : Middleware<TestAction, TestState, TestEffect> {
 
-    override fun invoke(action: TestAction, state: TestState): Flow<TestEffect> = when (action) {
+    override fun execute(action: TestAction, state: TestState): Flow<TestEffect> = when (action) {
         Unfulfillable -> emptyFlow()
         FulfillableInstantly -> flowOf(InstantEffect(1))
         ActionForEvent -> flowOf(EffectForEvent)

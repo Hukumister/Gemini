@@ -13,7 +13,7 @@ import com.haroncode.gemini.element.Reducer
 
 class TestReducer : Reducer<TestState, TestEffect> {
 
-    override fun invoke(state: TestState, effect: TestEffect): TestState = when (effect) {
+    override fun reduce(state: TestState, effect: TestEffect): TestState = when (effect) {
         is InstantEffect -> state.copy(counter = state.counter + effect.amount)
         is FinishedAsync -> state.copy(counter = state.counter + effect.amount, loading = false)
         is ConditionalThingHappened -> state.copy(counter = state.counter * effect.multiplier)
