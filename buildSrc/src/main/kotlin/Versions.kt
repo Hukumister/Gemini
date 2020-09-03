@@ -7,7 +7,7 @@ object Versions {
 
     object android {
         const val gradlePlugin = "4.0.1"
-        const val minSdk = 19
+        const val minSdk = 21
         const val compileSdk = 30
         const val targetSdk = 30
         const val buildTools = "30.0.2"
