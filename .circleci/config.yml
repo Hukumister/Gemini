@@ -5,7 +5,7 @@ jobs:
     working_directory: ~/code
 
     docker:
-      - image: circleci/android:api-29
+      - image: circleci/android:api-30
 
     environment:
       JVM_OPTS: -Xmx3200m
@@ -22,7 +22,7 @@ jobs:
 
       - run:
           name: Download Dependencies
-          command: ./gradlew androidDependencies
+          command: ./gradlew --no-daemon androidDependencies
 
       - save_cache:
           paths:
@@ -30,20 +30,16 @@ jobs:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
 
       - run:
-          name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
-          command: sudo chmod +x ./gradlew
-
-      - run:
           name: Run ktlint
-          command: ./gradlew ktlint
+          command: ./gradlew --no-daemon ktlint
 
       - run:
           name: Run lint
-          command: ./gradlew lint
+          command: ./gradlew --no-daemon lint
 
       - run:
           name: Run Tests
-          command: ./gradlew allTests
+          command: ./gradlew --no-daemon allTests
 
       - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
           path: app/build/reports
