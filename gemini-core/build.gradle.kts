@@ -1,8 +1,7 @@
 plugins {
+    id("ktlint-plugin")
     kotlin("multiplatform")
 }
-
-apply(from = "${project.rootDir}/сodequality/ktlint.gradle.kts")
 
 kotlin {
     jvm()

@@ -1,10 +1,9 @@
 plugins {
     id("com.android.application")
+    id("ktlint-plugin")
     kotlin("android")
     kotlin("kapt")
 }
-
-apply(from = "${project.rootDir}/сodequality/ktlint.gradle.kts")
 
 android {
     compileSdkVersion(Versions.android.compileSdk)

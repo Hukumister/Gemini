@@ -35,3 +35,10 @@ dependencies {
 
     compileOnly("com.android.tools.build:gradle:4.0.1")
 }
+
+gradlePlugin {
+    plugins.register("ktlint-plugin") {
+        id = "ktlint-plugin"
+        implementationClass = "ktlint.KtlintPlugin"
+    }
+}

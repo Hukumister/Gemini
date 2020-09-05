@@ -1,9 +1,8 @@
 plugins {
+    id("ktlint-plugin")
     kotlin("multiplatform")
     id("com.android.library")
 }
-
-apply(from = "${project.rootDir}/сodequality/ktlint.gradle.kts")
 
 kotlin {
     android()
