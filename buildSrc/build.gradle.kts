@@ -1,23 +1,8 @@
-buildscript {
-    repositories {
-        mavenCentral()
-        google()
-        gradlePluginPortal()
-    }
-
-    dependencies {
-        classpath("com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.1")
-        classpath("com.github.dcendents:android-maven-gradle-plugin:2.1")
-    }
-}
-
 plugins {
-    `kotlin-dsl`
     groovy
-    `java-library`
-    `java-gradle-plugin`
-    "com.jfrog.bintray"
-    "com.github.dcendents.android-maven"
+    `kotlin-dsl`
+    id("java-library")
+    id("java-gradle-plugin")
 }
 
 repositories {
@@ -30,10 +15,15 @@ dependencies {
     implementation(gradleApi())
     implementation(localGroovy())
 
-    implementation("com.github.dcendents:android-maven-gradle-plugin:2.1")
-    implementation("com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.1")
-
+    implementation("com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5")
     compileOnly("com.android.tools.build:gradle:4.0.1")
+}
+
+gradlePlugin {
+    plugins.register("publish-plugin") {
+        id = "publish-plugin"
+        implementationClass = "publish.PublishPlugin"
+    }
 }
 
 gradlePlugin {
