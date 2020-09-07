@@ -1,10 +1,17 @@
 plugins {
+    id("publish-plugin")
     id("ktlint-plugin")
     kotlin("multiplatform")
 }
 
+val geminiVersion: String by project
+val geminiGroup: String by project
+
+version = geminiVersion
+group = geminiGroup
+
 kotlin {
-    jvm()
+    jvm { withJava() }
     ios()
 
     sourceSets {

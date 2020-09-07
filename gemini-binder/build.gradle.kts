@@ -1,7 +1,36 @@
 plugins {
     id("ktlint-plugin")
+    id("publish-plugin")
     kotlin("multiplatform")
     id("com.android.library")
+}
+
+val geminiVersion: String by project
+val geminiGroup: String by project
+
+version = geminiVersion
+group = geminiGroup
+
+tasks.register<Jar>("javadocJar") {
+    archiveVersion.set(geminiVersion)
+    from(android.sourceSets["main"].java.srcDirs)
+    archiveClassifier.set("javadocJar")
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            create<MavenPublication>("debug") {
+                from(components["debug"])
+                artifact(tasks.getByName("javadocJar"))
+            }
+
+            create<MavenPublication>("release") {
+                from(components["release"])
+                artifact(tasks.getByName("javadocJar"))
+            }
+        }
+    }
 }
 
 kotlin {
@@ -33,4 +62,9 @@ android {
         minSdkVersion(Versions.android.minSdk)
         targetSdkVersion(Versions.android.targetSdk)
     }
+}
+
+dependencies {
+    implementation(Deps.kotlinx.coroutines)
+    api(project(":gemini-core"))
 }

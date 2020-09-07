@@ -21,7 +21,7 @@ data class PublishingData(
             issueTrackerUrl = project.findProperty("issue.tracker.url")?.toString() ?: "",
             licenseName = project.findProperty("licence.name")?.toString(),
             githubRepo = project.findProperty("github.repository")?.toString(),
-            versionName = project.findProperty("github.repository")?.toString(),
+            versionName = project.findProperty("version.name")?.toString(),
             organization = project.findProperty("organization")?.toString()
         )
     }
