@@ -1,16 +1,10 @@
-package com.haroncode.gemini.android.binder
+package com.haroncode.gemini.binder
 
 import androidx.savedstate.SavedStateRegistryOwner
-import com.haroncode.gemini.android.lifecycle.LifecycleStrategy
-import com.haroncode.gemini.android.lifecycle.StartStopStrategy
-import com.haroncode.gemini.binder.Binder
-import com.haroncode.gemini.binder.BindingRulesFactory
+import com.haroncode.gemini.lifecycle.LifecycleStrategy
+import com.haroncode.gemini.lifecycle.StartStopStrategy
 
-/**
- * @author HaronCode
- * @author kdk96
- */
-object StoreViewBinding {
+actual object StoreViewBinding {
 
     fun <T : SavedStateRegistryOwner> with(
         lifecycleStrategy: LifecycleStrategy = StartStopStrategy,

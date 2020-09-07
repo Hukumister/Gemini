@@ -1,6 +1,4 @@
-package com.haroncode.gemini.android.binder
-
-import com.haroncode.gemini.binder.BindingRulesFactory
+package com.haroncode.gemini.binder
 
 internal object BindingRulesFactoryManager {
 

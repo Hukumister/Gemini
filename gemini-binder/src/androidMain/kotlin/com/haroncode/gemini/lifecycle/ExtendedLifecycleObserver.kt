@@ -1,5 +1,4 @@
-package com.haroncode.gemini.android.lifecycle
-
+package com.haroncode.gemini.lifecycle
 import android.os.Bundle
 import androidx.annotation.CallSuper
 import androidx.appcompat.app.AppCompatActivity
@@ -79,6 +78,6 @@ internal abstract class ExtendedLifecycleObserver : LifecycleObserver, SavedStat
         }
 
     companion object {
-        private const val KEY = "ExtendedLifecycleObserver"
+        private const val KEY = "com.haroncode.gemini.lifecycle.ExtendedLifecycleObserver"
     }
 }

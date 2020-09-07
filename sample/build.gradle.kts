@@ -52,5 +52,5 @@ dependencies {
 
     implementation(Deps.timber)
 
-    implementation(project(":gemini-android"))
+    implementation(project(":gemini-binder"))
 }

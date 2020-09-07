@@ -5,7 +5,9 @@ import com.haroncode.gemini.StoreView
 import com.haroncode.gemini.element.Store
 import com.haroncode.gemini.functional.Consumer
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
 
 sealed class BindingRule
 
