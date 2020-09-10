@@ -1,17 +1,13 @@
-package com.haroncode.gemini.android.binder
+package com.haroncode.gemini.binder
 
 import android.os.Bundle
 import androidx.lifecycle.LifecycleOwner
 import androidx.savedstate.SavedStateRegistry
 import androidx.savedstate.SavedStateRegistryOwner
-import com.haroncode.gemini.android.lifecycle.ExtendedLifecycleObserver
-import com.haroncode.gemini.android.lifecycle.LifecycleStrategy
-import com.haroncode.gemini.android.lifecycle.StoreCancelObserver
-import com.haroncode.gemini.binder.AutoCancelStoreRule
-import com.haroncode.gemini.binder.BaseBindingRule
-import com.haroncode.gemini.binder.Binder
-import com.haroncode.gemini.binder.BindingRulesFactory
-import java.util.*
+import com.haroncode.gemini.lifecycle.ExtendedLifecycleObserver
+import com.haroncode.gemini.lifecycle.LifecycleStrategy
+import com.haroncode.gemini.lifecycle.StoreCancelObserver
+import java.util.UUID
 
 internal class RestoreBinder<View : SavedStateRegistryOwner>(
     private val factoryProvider: () -> BindingRulesFactory<View>,
@@ -25,7 +21,7 @@ internal class RestoreBinder<View : SavedStateRegistryOwner>(
         val factory = BindingRulesFactoryManager.restoreFactory(factoryName) ?: factoryProvider()
         val bindingRules = factory.create(view)
 
-        lifecycleStrategy.connect(view, bindingRules.filterIsInstance<BaseBindingRule<*, *>>())
+        lifecycleStrategy.bind(view, bindingRules.filterIsInstance<BaseBindingRule<*, *>>())
 
         val autoCancelStoreRuleCollection = bindingRules.filterIsInstance<AutoCancelStoreRule>()
 

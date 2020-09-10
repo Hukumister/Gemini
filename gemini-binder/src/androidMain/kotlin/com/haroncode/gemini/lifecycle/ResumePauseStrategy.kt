@@ -1,4 +1,4 @@
-package com.haroncode.gemini.android.lifecycle
+package com.haroncode.gemini.lifecycle
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.coroutineScope
@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
  */
 object ResumePauseStrategy : LifecycleStrategy {
 
-    override fun connect(
+    override fun bind(
         lifecycleOwner: LifecycleOwner,
         rules: Collection<BaseBindingRule<*, *>>
     ) {

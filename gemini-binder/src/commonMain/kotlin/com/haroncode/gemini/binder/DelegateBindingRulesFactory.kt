@@ -1,20 +1,12 @@
-package com.haroncode.gemini.android.binder
-
-import androidx.lifecycle.LifecycleOwner
+package com.haroncode.gemini.binder
 import com.haroncode.gemini.StoreView
-import com.haroncode.gemini.binder.AutoCancelStoreRule
-import com.haroncode.gemini.binder.BaseBindingRule
-import com.haroncode.gemini.binder.BindingRule
-import com.haroncode.gemini.binder.BindingRulesFactory
-import com.haroncode.gemini.binder.bindActionTo
-import com.haroncode.gemini.binder.bindStateTo
 import com.haroncode.gemini.element.Store
 
 /**
  * @author HaronCode
  * @author kdk96
  */
-abstract class DelegateBindingRulesFactory<T : LifecycleOwner> : BindingRulesFactory<T> {
+abstract class DelegateBindingRulesFactory<T : Any> : BindingRulesFactory<T> {
 
     abstract val bindingRulesFactory: BindingRulesFactory<T>
 

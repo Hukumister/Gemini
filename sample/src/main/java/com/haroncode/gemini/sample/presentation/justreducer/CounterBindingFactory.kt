@@ -1,18 +1,18 @@
 package com.haroncode.gemini.sample.presentation.justreducer
 
-import com.haroncode.gemini.android.binder.DelegateBindingRulesFactory
-import com.haroncode.gemini.android.binder.bindingRulesFactory
 import com.haroncode.gemini.binder.BindingRulesFactory
+import com.haroncode.gemini.binder.DelegateBindingRulesFactory
+import com.haroncode.gemini.binder.bindingRulesFactory
 import com.haroncode.gemini.sample.di.scope.PerFragment
-import com.haroncode.gemini.sample.ui.CounterFragment
+import com.haroncode.gemini.sample.ui.CounterStoreViewDelegate
 import javax.inject.Inject
 
 @PerFragment
 class CounterBindingFactory @Inject constructor(
     private val store: CounterStore
-) : DelegateBindingRulesFactory<CounterFragment>() {
+) : DelegateBindingRulesFactory<CounterStoreViewDelegate>() {
 
-    override val bindingRulesFactory: BindingRulesFactory<CounterFragment> = bindingRulesFactory { view ->
+    override val bindingRulesFactory: BindingRulesFactory<CounterStoreViewDelegate> = bindingRulesFactory { view ->
         baseRule { store to view }
         autoCancel { store } // magic is here )))
     }

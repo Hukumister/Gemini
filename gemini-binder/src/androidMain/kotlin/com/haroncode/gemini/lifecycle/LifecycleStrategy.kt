@@ -1,4 +1,4 @@
-package com.haroncode.gemini.android.lifecycle
+package com.haroncode.gemini.lifecycle
 
 import androidx.lifecycle.LifecycleOwner
 import com.haroncode.gemini.binder.BaseBindingRule
@@ -9,7 +9,7 @@ import com.haroncode.gemini.binder.BaseBindingRule
  */
 interface LifecycleStrategy {
 
-    fun connect(
+    fun bind(
         lifecycleOwner: LifecycleOwner,
         rules: Collection<BaseBindingRule<*, *>>
     )

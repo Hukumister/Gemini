@@ -6,7 +6,7 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import com.haroncode.gemini.StoreEventListener
-import com.haroncode.gemini.android.binder.StoreViewBinding
+import com.haroncode.gemini.binder.StoreViewBinding
 import com.haroncode.gemini.sample.R
 import com.haroncode.gemini.sample.base.PublisherFragment
 import com.haroncode.gemini.sample.databinding.FragmentAuthBinding
