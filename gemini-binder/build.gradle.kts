@@ -5,29 +5,21 @@ plugins {
     id("com.android.library")
 }
 
-val geminiVersion = findProperty("group") as String
-val geminiGroup = findProperty("version") as String
+val geminiGroup = findProperty("group") as String
+val geminiVersion = findProperty("version") as String
 
 version = geminiVersion
 group = geminiGroup
-
-tasks.register<Jar>("javadocJar") {
-    archiveVersion.set(geminiVersion)
-    from(android.sourceSets["main"].java.srcDirs)
-    archiveClassifier.set("javadocJar")
-}
 
 afterEvaluate {
     publishing {
         publications {
             create<MavenPublication>("debug") {
                 from(components["debug"])
-                artifact(tasks.getByName("javadocJar"))
             }
 
             create<MavenPublication>("release") {
                 from(components["release"])
-                artifact(tasks.getByName("javadocJar"))
             }
         }
     }
