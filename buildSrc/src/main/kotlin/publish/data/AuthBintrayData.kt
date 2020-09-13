@@ -22,7 +22,9 @@ data class AuthBintrayData(
         private fun readFromLocal(project: Project): AuthBintrayData? {
             val properties = Properties()
             val file = project.rootProject.file("local.properties")
-            FileInputStream(file).useToRun { properties.load(this) }
+            if (file.exists()) {
+                FileInputStream(file).useToRun { properties.load(this) }
+            }
             val user = properties.getProperty("BINTRAY_USER") ?: return null
             val key = properties.getProperty("BINTRAY_API_KEY") ?: return null
             return AuthBintrayData(

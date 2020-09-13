@@ -9,20 +9,18 @@ data class PublishingData(
     val issueTrackerUrl: String,
 
     val licenseName: String?,
-    val organization: String?,
-    val versionName: String?
+    val organization: String?
 ) {
 
     companion object {
 
         fun from(project: Project): PublishingData = PublishingData(
-            repoName = project.findProperty("repository.name")?.toString() ?: "",
-            vcsUrl = project.findProperty("vsc.url")?.toString() ?: "",
-            issueTrackerUrl = project.findProperty("issue.tracker.url")?.toString() ?: "",
-            licenseName = project.findProperty("licence.name")?.toString(),
-            githubRepo = project.findProperty("github.repository")?.toString(),
-            versionName = project.findProperty("version.name")?.toString(),
-            organization = project.findProperty("organization")?.toString()
+            repoName = project.findProperty("publish.repository.name")?.toString() ?: "",
+            vcsUrl = project.findProperty("publish.vsc.url")?.toString() ?: "",
+            issueTrackerUrl = project.findProperty("publish.issue.tracker.url")?.toString() ?: "",
+            licenseName = project.findProperty("publish.licence.name")?.toString(),
+            githubRepo = project.findProperty("publish.github.repository")?.toString(),
+            organization = project.findProperty("publish.organization")?.toString()
         )
     }
 

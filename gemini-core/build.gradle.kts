@@ -4,8 +4,10 @@ plugins {
     kotlin("multiplatform")
 }
 
-val geminiVersion: String by project
-val geminiGroup: String by project
+val geminiVersion = findProperty("group") as String
+val geminiGroup = findProperty("version") as String
+
+println(findProperty("BINTRAY_USER"))
 
 version = geminiVersion
 group = geminiGroup

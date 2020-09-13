@@ -45,7 +45,7 @@ class PublishPlugin : Plugin<Project> {
                 userOrg = publishingData.organization
                 issueTrackerUrl = publishingData.issueTrackerUrl
                 version.released = Date().toString()
-                version.name = publishingData.versionName
+                version.name = target.version as String
                 setLicenses(publishingData.licenseName)
             }
         }

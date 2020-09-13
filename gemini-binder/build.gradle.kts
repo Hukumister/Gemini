@@ -5,8 +5,8 @@ plugins {
     id("com.android.library")
 }
 
-val geminiVersion: String by project
-val geminiGroup: String by project
+val geminiVersion = findProperty("group") as String
+val geminiGroup = findProperty("version") as String
 
 version = geminiVersion
 group = geminiGroup
