@@ -1,22 +1,20 @@
 plugins {
-    groovy
     `kotlin-dsl`
-    id("java-library")
-    id("java-gradle-plugin")
 }
 
 repositories {
-    mavenCentral()
     google()
-    gradlePluginPortal()
+    jcenter()
 }
 
 dependencies {
-    implementation(gradleApi())
-    implementation(localGroovy())
+    implementation(Deps.bintray)
+    compileOnly(Deps.androidGradlePlugin)
+}
 
-    implementation("com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5")
-    compileOnly("com.android.tools.build:gradle:4.0.1")
+kotlin {
+    // Add Deps to compilation, so it will become available in main project
+    sourceSets.getByName("main").kotlin.srcDir("buildSrc/src/main/kotlin")
 }
 
 gradlePlugin {

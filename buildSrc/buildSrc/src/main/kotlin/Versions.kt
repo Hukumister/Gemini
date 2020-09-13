@@ -26,4 +26,6 @@ object Versions {
     const val cicerone = "5.1.1"
 
     const val timber = "4.7.1"
+
+    const val bintray = "1.8.5"
 }

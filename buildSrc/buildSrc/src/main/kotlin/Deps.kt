@@ -23,7 +23,11 @@ object Deps {
         const val compiler = "com.github.stephanenicolas.toothpick:toothpick-compiler:${Versions.toothpick}"
     }
 
+
     const val cicerone = "ru.terrakok.cicerone:cicerone:${Versions.cicerone}"
 
     const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
+
+    const val bintray = "com.jfrog.bintray.gradle:gradle-bintray-plugin:${Versions.bintray}"
+
 }
