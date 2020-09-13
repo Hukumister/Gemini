@@ -1,35 +1,26 @@
 package publish.data
 
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.support.useToRun
-import java.io.FileInputStream
-import java.util.*
+import publish.util.LocalProperties
 
 data class AuthBintrayData(
     val user: String,
     val key: String
 ) {
 
+    val isEmpty: Boolean
+        get() = user.isEmpty() && key.isEmpty()
+
     companion object {
 
-        fun from(project: Project): AuthBintrayData {
-            return readFromLocal(project) ?: AuthBintrayData(
-                user = System.getProperty("BINTRAY_USER"),
-                key = System.getProperty("BINTRAY_API_KEY")
-            )
-        }
+        private const val BINTRAY_USER = "BINTRAY_USER"
+        private const val BINTRAY_API_KEY = "BINTRAY_API_KEY"
 
-        private fun readFromLocal(project: Project): AuthBintrayData? {
-            val properties = Properties()
-            val file = project.rootProject.file("local.properties")
-            if (file.exists()) {
-                FileInputStream(file).useToRun { properties.load(this) }
-            }
-            val user = properties.getProperty("BINTRAY_USER") ?: return null
-            val key = properties.getProperty("BINTRAY_API_KEY") ?: return null
+        fun from(project: Project): AuthBintrayData {
+            val localProperties = LocalProperties(project)
             return AuthBintrayData(
-                user = user,
-                key = key
+                user = localProperties[BINTRAY_USER] ?: System.getProperty(BINTRAY_USER) ?: "",
+                key = localProperties[BINTRAY_API_KEY] ?: System.getProperty(BINTRAY_API_KEY) ?: ""
             )
         }
     }

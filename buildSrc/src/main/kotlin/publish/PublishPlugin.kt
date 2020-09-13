@@ -25,6 +25,9 @@ class PublishPlugin : Plugin<Project> {
         val publishingData = PublishingData.from(project)
         val authData = AuthBintrayData.from(project)
 
+        if (authData.isEmpty) {
+            project.logger.warn("Auth bintray data is empty")
+        }
         setupBintrayPublishingInformation(project, publishingData, authData)
         setupBintrayPublishing(project)
     }
