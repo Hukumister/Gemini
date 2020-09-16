@@ -13,7 +13,7 @@ class KtlintPlugin : Plugin<Project> {
 
     override fun apply(target: Project) {
         val ktlint: Configuration by target.configurations.creating
-        target.dependencies{
+        target.dependencies {
             ktlint("com.pinterest:ktlint:0.38.1")
         }
         target.tasks.register<JavaExec>("ktlint") {

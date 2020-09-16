@@ -47,8 +47,10 @@ class PublishPlugin : Plugin<Project> {
                 githubRepo = publishingData.githubRepo
                 userOrg = publishingData.organization
                 issueTrackerUrl = publishingData.issueTrackerUrl
-                version.released = Date().toString()
-                version.name = target.version as String
+                version.apply {
+                    released = Date().toString()
+                    name = target.version as String
+                }
                 setLicenses(publishingData.licenseName)
             }
         }
