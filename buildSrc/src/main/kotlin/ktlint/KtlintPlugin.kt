@@ -39,4 +39,3 @@ class KtlintPlugin : Plugin<Project> {
         }
     }
 }
-

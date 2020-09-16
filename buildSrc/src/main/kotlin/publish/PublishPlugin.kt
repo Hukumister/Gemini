@@ -84,7 +84,4 @@ class PublishPlugin : Plugin<Project> {
             }
         }
     }
-
 }
-
-

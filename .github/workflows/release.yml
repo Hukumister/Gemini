@@ -52,4 +52,4 @@ jobs:
           path: build-reports.zip
 
       - name: Upload to Bintray
-        run: ./gradlew publishToMavenLocal bintrayUpload
+        run: ./gradlew publishToMavenLocal bintrayUpload -Pbintray_user=${{ secrets.BINTRAY_USER }} -Pbintray_key=${{ secrets.BINTRAY_KEY }}
