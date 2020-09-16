@@ -1,10 +1,9 @@
 # Gemini
 [![jCenter](https://api.bintray.com/packages/haroncode/maven/gemini-core/images/download.svg)](https://bintray.com/haroncode/maven/gemini-core/_latestVersion)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)  
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![CircleCI](https://circleci.com/gh/HaronCode/Gemini.svg?style=svg)](https://circleci.com/gh/HaronCode/Gemini)
 
-This library is designed to simplify build the mvi architecture (a link to the articles by Hannes Dorfmann
-http://hannesdorfmann.com/android/mosby3-mvi-1), in android.
+This library is designed to simplify build the MVI architecture in android.
 
 ## Installing
 Available through bintray.com.
@@ -20,18 +19,22 @@ allprojects {
 ```
 
 Add the dependencies:
-- Core classes:
+- Multiplatform:
 ```groovy
-implementation "com.haroncode.gemini:gemini-core:${latest-version}"
+implementation("com.haroncode.gemini:gemini-core:${latest-version}")
 ```
-- Android helper classes for connection:
+- Android:
 ```groovy
-implementation "com.haroncode.gemini:gemini-android:${latest-version}"
+releaseImplementation("com.haroncode.gemini:gemini-binder-android:${latest-version}")
+debugImplementation("com.haroncode.gemini:gemini-binder-android-debug:${latest-version}")
 ```
-- Kotlin dsl to create connection rules:
-```groovy
-implementation "com.haroncode.gemini:gemini-dsl:${latest-version}"
-```
+## Getting start
+Now we're working for documentation and sample, but if you need sample right now you can find usage of library here https://github.com/HaronCode/WordLearn
+
+## Store working scheme
+
+<img width="500 px" src="/doc/gemini_store_scheme.svg"/>
+
 ## Participants
 + idea, code and documentation - Zaltsman Nikita (@HaronCode)
 + review, code, writing unit tests - Kinayatov Dias (@kdk96)

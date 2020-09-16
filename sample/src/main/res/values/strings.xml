@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Gemini sample</string>
+
+    <string name="fragment_counter_amount_format" formatted="true">Количество кликов %1$s</string>
+    <string name="fragment_counter_increase_button">Увеличичить</string>
+    <string name="fragment_counter_decrease_button">Уменьшить</string>
+</resources>
