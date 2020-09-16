@@ -1,12 +1,18 @@
 plugins {
+    id("ktlint-plugin")
+    id("publish-plugin")
     kotlin("multiplatform")
     id("com.android.library")
 }
 
-apply(from = "${project.rootDir}/сodequality/ktlint.gradle.kts")
+val geminiGroup = findProperty("group") as String
+val geminiVersion = findProperty("version") as String
+
+version = geminiVersion
+group = geminiGroup
 
 kotlin {
-    android()
+    android { publishLibraryVariants("release", "debug") }
     ios()
 
     sourceSets {

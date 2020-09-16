@@ -1,37 +1,30 @@
-buildscript {
-    repositories {
-        mavenCentral()
-        google()
-        gradlePluginPortal()
-    }
-
-    dependencies {
-        classpath("com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.1")
-        classpath("com.github.dcendents:android-maven-gradle-plugin:2.1")
-    }
-}
-
 plugins {
     `kotlin-dsl`
-    groovy
-    `java-library`
-    `java-gradle-plugin`
-    "com.jfrog.bintray"
-    "com.github.dcendents.android-maven"
 }
 
 repositories {
-    mavenCentral()
     google()
-    gradlePluginPortal()
+    jcenter()
 }
 
 dependencies {
-    implementation(gradleApi())
-    implementation(localGroovy())
+    implementation(Deps.bintrayGradlePlugin)
+    implementation(Deps.androidGradlePlugin)
+    implementation(Deps.kotlinGradlePlugin)
+}
 
-    implementation("com.github.dcendents:android-maven-gradle-plugin:2.1")
-    implementation("com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.1")
+kotlin {
+    // Add Deps to compilation, so it will become available in main project
+    sourceSets.getByName("main").kotlin.srcDir("buildSrc/src/main/kotlin")
+}
 
-    compileOnly("com.android.tools.build:gradle:4.0.1")
+gradlePlugin {
+    plugins.register("publish-plugin") {
+        id = "publish-plugin"
+        implementationClass = "publish.PublishPlugin"
+    }
+    plugins.register("ktlint-plugin") {
+        id = "ktlint-plugin"
+        implementationClass = "ktlint.KtlintPlugin"
+    }
 }

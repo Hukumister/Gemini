@@ -1,8 +1,14 @@
 plugins {
+    id("publish-plugin")
+    id("ktlint-plugin")
     kotlin("multiplatform")
 }
 
-apply(from = "${project.rootDir}/сodequality/ktlint.gradle.kts")
+val geminiGroup = findProperty("group") as String
+val geminiVersion = findProperty("version") as String
+
+version = geminiVersion
+group = geminiGroup
 
 kotlin {
     jvm()
