@@ -11,7 +11,7 @@ version = geminiVersion
 group = geminiGroup
 
 kotlin {
-    jvm { withJava() }
+    jvm()
     ios()
 
     sourceSets {

@@ -14,7 +14,7 @@ class KtlintPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         val ktlint: Configuration by target.configurations.creating
         target.dependencies {
-            ktlint("com.pinterest:ktlint:0.38.1")
+            ktlint(Deps.ktlint)
         }
         target.tasks.register<JavaExec>("ktlint") {
             description = "Check Kotlin code style."

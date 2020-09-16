@@ -19,8 +19,8 @@ data class AuthBintrayData(
         fun from(project: Project): AuthBintrayData {
             val localProperties = LocalProperties(project)
             return AuthBintrayData(
-                user = localProperties[BINTRAY_USER] ?: System.getProperty(BINTRAY_USER) ?: "",
-                key = localProperties[BINTRAY_API_KEY] ?: System.getProperty(BINTRAY_API_KEY) ?: ""
+                user = localProperties[BINTRAY_USER] ?: System.getProperty(BINTRAY_USER).orEmpty(),
+                key = localProperties[BINTRAY_API_KEY] ?: System.getProperty(BINTRAY_API_KEY).orEmpty()
             )
         }
     }

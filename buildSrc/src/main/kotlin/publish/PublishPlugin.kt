@@ -1,6 +1,5 @@
 package publish
 
-
 import com.jfrog.bintray.gradle.BintrayExtension
 import com.jfrog.bintray.gradle.BintrayPlugin
 import com.jfrog.bintray.gradle.tasks.BintrayUploadTask

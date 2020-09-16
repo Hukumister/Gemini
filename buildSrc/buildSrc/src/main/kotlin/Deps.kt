@@ -3,6 +3,8 @@ object Deps {
 
     const val androidGradlePlugin = "com.android.tools.build:gradle:${Versions.android.gradlePlugin}"
 
+    const val bintrayGradlePlugin = "com.jfrog.bintray.gradle:gradle-bintray-plugin:${Versions.bintray}"
+
     object kotlinx {
         const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.kotlinx.coroutines}"
         const val coroutinesTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.kotlinx.coroutines}"
@@ -23,11 +25,9 @@ object Deps {
         const val compiler = "com.github.stephanenicolas.toothpick:toothpick-compiler:${Versions.toothpick}"
     }
 
-
     const val cicerone = "ru.terrakok.cicerone:cicerone:${Versions.cicerone}"
 
     const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
 
-    const val bintray = "com.jfrog.bintray.gradle:gradle-bintray-plugin:${Versions.bintray}"
-
+    const val ktlint = "com.pinterest:ktlint:${Versions.ktlint}"
 }

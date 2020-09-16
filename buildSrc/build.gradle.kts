@@ -8,7 +8,7 @@ repositories {
 }
 
 dependencies {
-    implementation(Deps.bintray)
+    implementation(Deps.bintrayGradlePlugin)
     implementation(Deps.androidGradlePlugin)
     implementation(Deps.kotlinGradlePlugin)
 }
@@ -23,9 +23,6 @@ gradlePlugin {
         id = "publish-plugin"
         implementationClass = "publish.PublishPlugin"
     }
-}
-
-gradlePlugin {
     plugins.register("ktlint-plugin") {
         id = "ktlint-plugin"
         implementationClass = "ktlint.KtlintPlugin"

@@ -36,7 +36,7 @@ jobs:
       - name: Ktlint check
         uses: ./gradlew ktlint
 
-      - name: Build MacOs
+      - name: Build macOS
         if: matrix.os == 'macOS-latest'
         run: ./gradlew build
 

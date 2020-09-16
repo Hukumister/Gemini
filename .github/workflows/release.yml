@@ -32,13 +32,8 @@ jobs:
       - name: Validate Gradle Wrapper
         uses: gradle/wrapper-validation-action@v1
 
-      - name: Build MacOs
-        if: matrix.os == 'macOS-latest'
-        run: ./gradlew build
-
-      - name: Build Linux
-        if: matrix.os == 'ubuntu-latest'
-        run: ./gradlew build
+      - name: Upload to Bintray
+        run: ./gradlew publishToMavenLocal bintrayUpload -Pbintray_user=${{ secrets.BINTRAY_USER }} -Pbintray_key=${{ secrets.BINTRAY_KEY }}
 
       - name: Bundle the build report
         if: failure()
@@ -49,7 +44,4 @@ jobs:
         uses: actions/upload-artifact@master
         with:
           name: error-report
-          path: build-reports.zip
-
-      - name: Upload to Bintray
-        run: ./gradlew publishToMavenLocal bintrayUpload -Pbintray_user=${{ secrets.BINTRAY_USER }} -Pbintray_key=${{ secrets.BINTRAY_KEY }}
+          path: build-reports
