@@ -19,17 +19,14 @@ allprojects {
 ```
 
 Add the dependencies:
-- Core classes:
+- Multiplatform:
 ```groovy
-implementation "com.haroncode.gemini:gemini-core:${latest-version}"
+implementation("com.haroncode.gemini:gemini-core:${latest-version}")
 ```
-- Android helper classes for connection:
+- Android:
 ```groovy
-implementation "com.haroncode.gemini:gemini-android:${latest-version}"
-```
-- Kotlin dsl to create connection rules:
-```groovy
-implementation "com.haroncode.gemini:gemini-dsl:${latest-version}"
+releaseImplementation("com.haroncode.gemini:gemini-binder-android:${latest-version}")
+debugImplementation("com.haroncode.gemini:gemini-binder-android-debug:${latest-version}")
 ```
 ## Getting start
 Now we're working for documentation and sample, but if you need sample right now you can find usage of library here https://github.com/HaronCode/WordLearn
