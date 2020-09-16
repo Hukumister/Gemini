@@ -34,15 +34,15 @@ jobs:
         uses: gradle/wrapper-validation-action@v1
 
       - name: Ktlint check
-        run: ./gradlew ktlint
+        run: ./gradlew --no-daemon ktlint
 
       - name: Build macOS
         if: matrix.os == 'macOS-latest'
-        run: ./gradlew build
+        run: ./gradlew --no-daemon build
 
       - name: Build Linux
         if: matrix.os == 'ubuntu-latest'
-        run: ./gradlew build
+        run: ./gradlew --no-daemon build
 
       - name: Bundle the build report
         if: failure()

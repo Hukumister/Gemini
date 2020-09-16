@@ -33,7 +33,7 @@ jobs:
         uses: gradle/wrapper-validation-action@v1
 
       - name: Upload to Bintray
-        run: ./gradlew publishToMavenLocal bintrayUpload -Pbintray_user=${{ secrets.BINTRAY_USER }} -Pbintray_key=${{ secrets.BINTRAY_KEY }}
+        run: ./gradlew --no-daemon publishToMavenLocal bintrayUpload -Pbintray_user=${{ secrets.BINTRAY_USER }} -Pbintray_key=${{ secrets.BINTRAY_KEY }}
 
       - name: Bundle the build report
         if: failure()
