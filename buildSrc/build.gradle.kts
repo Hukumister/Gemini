@@ -9,7 +9,8 @@ repositories {
 
 dependencies {
     implementation(Deps.bintray)
-    compileOnly(Deps.androidGradlePlugin)
+    implementation(Deps.androidGradlePlugin)
+    implementation(Deps.kotlinGradlePlugin)
 }
 
 kotlin {

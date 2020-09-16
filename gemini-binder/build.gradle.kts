@@ -11,22 +11,8 @@ val geminiVersion = findProperty("version") as String
 version = geminiVersion
 group = geminiGroup
 
-afterEvaluate {
-    publishing {
-        publications {
-            create<MavenPublication>("debug") {
-                from(components["debug"])
-            }
-
-            create<MavenPublication>("release") {
-                from(components["release"])
-            }
-        }
-    }
-}
-
 kotlin {
-    android()
+    android { publishLibraryVariants("release", "debug") }
     ios()
 
     sourceSets {
@@ -54,9 +40,4 @@ android {
         minSdkVersion(Versions.android.minSdk)
         targetSdkVersion(Versions.android.targetSdk)
     }
-}
-
-dependencies {
-    implementation(Deps.kotlinx.coroutines)
-    api(project(":gemini-core"))
 }
