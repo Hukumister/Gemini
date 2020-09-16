@@ -1,3 +1,4 @@
+# This is a workflow to build
 name: Build
 
 on:
@@ -10,12 +11,18 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [ ubuntu-latest]
+        os: [macOS-latest]
     runs-on: ${{matrix.os}}
     name: Build on ${{matrix.os}}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Install Java
+          uses: actions/setup-java@v1
+          with:
+            java-version: 1.8
+
       - name: Set up cache
         uses: actions/cache@v2
         with:
@@ -23,14 +30,25 @@ jobs:
           key: ${{ matrix.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
           restore-keys: |
             ${{ matrix.os }}-gradle-
+
       - name: Validate Gradle Wrapper
         uses: gradle/wrapper-validation-action@v1
+
+      - name: Ktlint check
+        uses: ./gradlew ktlint
+
+      - name: Build MacOs
+        if: matrix.os == 'macOS-latest'
+        run: ./gradlew build
+
       - name: Build Linux
         if: matrix.os == 'ubuntu-latest'
         run: ./gradlew build
+
       - name: Bundle the build report
         if: failure()
         run: find . -type d -name 'reports' | zip -@ -r build-reports.zip
+
       - name: Upload the build report
         if: failure()
         uses: actions/upload-artifact@master
