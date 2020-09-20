@@ -14,13 +14,13 @@ data class AuthBintrayData(
     companion object {
 
         private const val BINTRAY_USER = "BINTRAY_USER"
-        private const val BINTRAY_API_KEY = "BINTRAY_API_KEY"
+        private const val BINTRAY_KEY = "BINTRAY_KEY"
 
         fun from(project: Project): AuthBintrayData {
             val localProperties = LocalProperties(project)
             return AuthBintrayData(
                 user = localProperties[BINTRAY_USER] ?: System.getProperty(BINTRAY_USER).orEmpty(),
-                key = localProperties[BINTRAY_API_KEY] ?: System.getProperty(BINTRAY_API_KEY).orEmpty()
+                key = localProperties[BINTRAY_KEY] ?: System.getProperty(BINTRAY_KEY).orEmpty()
             )
         }
     }

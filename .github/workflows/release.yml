@@ -33,7 +33,7 @@ jobs:
         uses: gradle/wrapper-validation-action@v1
 
       - name: Upload to Bintray
-        run: ./gradlew --no-daemon publishToMavenLocal bintrayUpload -Pbintray_user=${{ secrets.BINTRAY_USER }} -Pbintray_key=${{ secrets.BINTRAY_KEY }}
+        run: ./gradlew --no-daemon publishToMavenLocal bintrayUpload -PBINTRAY_USER=${{ secrets.BINTRAY_USER }} -PBINTRAY_KEY=${{ secrets.BINTRAY_KEY }}
 
       - name: Bundle the build report
         if: failure()
@@ -46,17 +46,16 @@ jobs:
           name: error-report
           path: build-reports
 
-
-    macos-host-check:
-      name: Check on macOS
-      runs-on: macOS-latest
-      needs: [Release upload]
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v2
-        - name: Install Java
-          uses: actions/setup-java@v1
-          with:
-            java-version: 1.8
-        - name: Check publication
-          run: ./gradlew :check-publication:build -Pcheck_publication
+  macos-host-check:
+    name: Check on macOS
+    runs-on: macOS-latest
+    needs: [build]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: Check publication
+        run: ./gradlew :check-publication:build -Pcheck_publication
