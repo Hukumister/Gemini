@@ -28,8 +28,8 @@ implementation("com.haroncode.gemini:gemini-core:${latest-version}")
 releaseImplementation("com.haroncode.gemini:gemini-binder-android:${latest-version}")
 debugImplementation("com.haroncode.gemini:gemini-binder-android-debug:${latest-version}")
 ```
-## Getting start
-Now we're working for documentation and sample, but if you need sample right now you can find usage of library here https://github.com/HaronCode/WordLearn
+## Wiki
+Your can find wiki here https://github.com/HaronCode/Gemini/wiki
 
 ## Store working scheme
 
