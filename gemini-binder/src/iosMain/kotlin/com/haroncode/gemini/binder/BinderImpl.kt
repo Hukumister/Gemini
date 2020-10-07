@@ -1,6 +1,7 @@
 package com.haroncode.gemini.binder
 
 import com.haroncode.gemini.StoreViewDelegate
+import com.haroncode.gemini.binder.rule.AutoCancelStoreRule
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
@@ -11,7 +12,6 @@ internal class BinderImpl<Action : Any, State : Any>(
     override fun bind(view: StoreViewDelegate<Action, State>) {
         val bindingRules = factoryProvider().create(view)
         val coroutineScope = view.coroutineScope
-        val baseBindingRules = bindingRules.filterIsInstance<BaseBindingRule<*, *>>()
 
         view.lifecycleObserver = object : StoreViewDelegate.LifecycleObserver {
 
@@ -19,7 +19,7 @@ internal class BinderImpl<Action : Any, State : Any>(
 
             override fun start() {
                 bindingJob = coroutineScope.launch {
-                    baseBindingRules.forEach { rule -> launch { rule.bind() } }
+                    bindingRules.forEach { rule -> launch { rule.bind() } }
                 }
             }
 

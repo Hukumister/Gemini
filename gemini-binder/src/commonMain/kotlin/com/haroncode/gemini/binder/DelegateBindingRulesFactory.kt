@@ -1,5 +1,10 @@
 package com.haroncode.gemini.binder
+
 import com.haroncode.gemini.StoreView
+import com.haroncode.gemini.binder.rule.AutoCancelStoreRule
+import com.haroncode.gemini.binder.rule.BindingRule
+import com.haroncode.gemini.binder.rule.bindActionTo
+import com.haroncode.gemini.binder.rule.bindStateTo
 import com.haroncode.gemini.element.Store
 
 /**
@@ -33,7 +38,7 @@ class BindingRuleListBuilder {
         rules += storeView bindActionTo store
     }
 
-    fun rule(bindingRuleProvider: () -> BaseBindingRule<*, *>) {
+    fun rule(bindingRuleProvider: () -> BindingRule) {
         rules += bindingRuleProvider.invoke()
     }
 
