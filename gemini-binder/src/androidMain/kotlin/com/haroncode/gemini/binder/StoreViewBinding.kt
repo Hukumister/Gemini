@@ -1,8 +1,8 @@
 package com.haroncode.gemini.binder
 
 import androidx.savedstate.SavedStateRegistryOwner
-import com.haroncode.gemini.lifecycle.LifecycleStrategy
-import com.haroncode.gemini.lifecycle.StartStopStrategy
+import com.haroncode.gemini.lifecycle.strategy.LifecycleStrategy
+import com.haroncode.gemini.lifecycle.strategy.StartStopStrategy
 
 actual object StoreViewBinding {
 
