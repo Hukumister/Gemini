@@ -1,30 +1,22 @@
-package com.haroncode.gemini.binder
+package com.haroncode.gemini.binder.rule
 
 import com.haroncode.gemini.StoreEventListener
 import com.haroncode.gemini.StoreView
+import com.haroncode.gemini.binder.Transformer
+import com.haroncode.gemini.binder.identityTransformer
 import com.haroncode.gemini.element.Store
 import com.haroncode.gemini.functional.Consumer
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
-
-sealed class BindingRule
-
-class AutoCancelStoreRule(
-    private val store: Store<*, *, *>
-) : BindingRule() {
-
-    fun cancel() = store.coroutineScope.cancel()
-}
 
 open class BaseBindingRule<Out : Any, In : Any>(
     val consumer: Consumer<In>,
     val flow: Flow<Out>,
     val transformer: Transformer<Out, In>
-) : BindingRule() {
+) : BindingRule {
 
-    suspend fun bind() = flow
+    override suspend fun bind() = flow
         .let(transformer::transform)
         .collect { consumer.accept(it) }
 }
