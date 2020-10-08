@@ -1,4 +1,5 @@
-package com.haroncode.gemini.binder
+package com.haroncode.gemini.binder.rule
+
 import com.haroncode.gemini.StoreView
 import com.haroncode.gemini.element.Store
 
@@ -33,7 +34,7 @@ class BindingRuleListBuilder {
         rules += storeView bindActionTo store
     }
 
-    fun rule(bindingRuleProvider: () -> BaseBindingRule<*, *>) {
+    fun rule(bindingRuleProvider: () -> BindingRule) {
         rules += bindingRuleProvider.invoke()
     }
 

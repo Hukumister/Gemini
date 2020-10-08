@@ -1,5 +1,7 @@
 package com.haroncode.gemini.binder
 
+import com.haroncode.gemini.binder.rule.BindingRulesFactory
+
 internal object BindingRulesFactoryManager {
 
     private val factories: MutableMap<String, BindingRulesFactory<*>> = mutableMapOf()
