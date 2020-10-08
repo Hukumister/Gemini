@@ -29,7 +29,7 @@ releaseImplementation("com.haroncode.gemini:gemini-binder-android:${latest-versi
 debugImplementation("com.haroncode.gemini:gemini-binder-android-debug:${latest-version}")
 ```
 ## Wiki
-Your can find wiki here https://github.com/HaronCode/Gemini/wiki
+You can find wiki here https://github.com/HaronCode/Gemini/wiki
 
 ## Store working scheme
 
