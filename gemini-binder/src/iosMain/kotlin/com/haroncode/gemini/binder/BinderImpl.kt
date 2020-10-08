@@ -2,6 +2,7 @@ package com.haroncode.gemini.binder
 
 import com.haroncode.gemini.StoreViewDelegate
 import com.haroncode.gemini.binder.rule.AutoCancelStoreRule
+import com.haroncode.gemini.binder.rule.BindingRulesFactory
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 

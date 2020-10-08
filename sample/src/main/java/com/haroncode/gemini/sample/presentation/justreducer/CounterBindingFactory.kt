@@ -1,8 +1,8 @@
 package com.haroncode.gemini.sample.presentation.justreducer
 
-import com.haroncode.gemini.binder.BindingRulesFactory
-import com.haroncode.gemini.binder.DelegateBindingRulesFactory
-import com.haroncode.gemini.binder.bindingRulesFactory
+import com.haroncode.gemini.binder.rule.BindingRulesFactory
+import com.haroncode.gemini.binder.rule.DelegateBindingRulesFactory
+import com.haroncode.gemini.binder.rule.bindingRulesFactory
 import com.haroncode.gemini.sample.di.scope.PerFragment
 import com.haroncode.gemini.sample.ui.CounterStoreViewDelegate
 import javax.inject.Inject

@@ -2,16 +2,16 @@ package com.haroncode.gemini.binder
 
 import android.os.Bundle
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.coroutineScope
 import androidx.savedstate.SavedStateRegistry
 import androidx.savedstate.SavedStateRegistryOwner
 import com.haroncode.gemini.binder.coordinator.Coordinator
 import com.haroncode.gemini.binder.rule.AutoCancelStoreRule
-import com.haroncode.gemini.lifecycle.BindingRuleComposer
+import com.haroncode.gemini.binder.rule.BindingRulesFactory
 import com.haroncode.gemini.lifecycle.ExtendedLifecycleObserver
 import com.haroncode.gemini.lifecycle.StoreCancelObserver
 import com.haroncode.gemini.lifecycle.StoreLifecycleObserver
 import com.haroncode.gemini.lifecycle.strategy.LifecycleStrategy
+import kotlinx.coroutines.Dispatchers
 import java.util.UUID
 
 internal class RestoreBinder<View : SavedStateRegistryOwner>(
@@ -26,18 +26,13 @@ internal class RestoreBinder<View : SavedStateRegistryOwner>(
         val factory = BindingRulesFactoryManager.restoreFactory(factoryName) ?: factoryProvider()
         val bindingRules = factory.create(view)
 
-        val coroutineScope = view.lifecycle.coroutineScope
-        val bindingRuleComposer = BindingRuleComposer(coroutineScope, bindingRules)
-
         val autoCancelStoreRuleCollection = bindingRules.filterIsInstance<AutoCancelStoreRule>()
 
-        val storeLifecycleObserver = StoreLifecycleObserver(lifecycleStrategy, Coordinator(coroutineScope, bindingRuleComposer))
-        view.lifecycle.addObserver(storeLifecycleObserver)
-        view.lifecycle.addObserver(StoreCancelObserver(autoCancelStoreRuleCollection))
-
+        val storeLifecycleObserver = StoreLifecycleObserver(lifecycleStrategy, Coordinator(Dispatchers.Main.immediate, bindingRules))
         val storeCancelObserver = StoreCancelObserver(autoCancelStoreRuleCollection)
         val clearFactoryDecorator = ClearFactoryDecorator(factoryName)
 
+        view.lifecycle.addObserver(storeLifecycleObserver)
         view.lifecycle.addObserver(storeCancelObserver)
         view.lifecycle.addObserver(clearFactoryDecorator)
 

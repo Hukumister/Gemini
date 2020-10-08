@@ -1,6 +1,7 @@
 package com.haroncode.gemini.binder
 
 import androidx.savedstate.SavedStateRegistryOwner
+import com.haroncode.gemini.binder.rule.BindingRulesFactory
 import com.haroncode.gemini.lifecycle.strategy.LifecycleStrategy
 import com.haroncode.gemini.lifecycle.strategy.StartStopStrategy
 

@@ -1,6 +1,4 @@
-package com.haroncode.gemini.binder
-
-import com.haroncode.gemini.binder.rule.BindingRule
+package com.haroncode.gemini.binder.rule
 
 /**
  * @author HaronCode

@@ -1,10 +1,6 @@
-package com.haroncode.gemini.binder
+package com.haroncode.gemini.binder.rule
 
 import com.haroncode.gemini.StoreView
-import com.haroncode.gemini.binder.rule.AutoCancelStoreRule
-import com.haroncode.gemini.binder.rule.BindingRule
-import com.haroncode.gemini.binder.rule.bindActionTo
-import com.haroncode.gemini.binder.rule.bindStateTo
 import com.haroncode.gemini.element.Store
 
 /**
