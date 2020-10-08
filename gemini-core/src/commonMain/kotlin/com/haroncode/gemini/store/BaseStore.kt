@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
@@ -81,7 +82,10 @@ open class BaseStore<Action : Any, State : Any, Event : Any, Effect : Any>(
             .onEach(stateChannel::send)
             .launchIn(coroutineScope)
 
-        actionChannel.asFlow()
+        merge(
+            actionChannel.asFlow(),
+            bootstrapperWrapper?.bootstrap() ?: emptyFlow()
+        )
             .flatMapMerge { action -> middlewareWrapper.execute(action, stateChannel.value) }
             .onEach(effectChannel::send)
             .launchIn(coroutineScope)
@@ -98,10 +102,6 @@ open class BaseStore<Action : Any, State : Any, Event : Any, Effect : Any>(
                 .onEach(eventChannel::send)
                 .launchIn(coroutineScope)
         }
-
-        bootstrapperWrapper?.bootstrap()
-            ?.onEach { action -> accept(action) }
-            ?.launchIn(coroutineScope)
     }
 
     override fun accept(value: Action) {
