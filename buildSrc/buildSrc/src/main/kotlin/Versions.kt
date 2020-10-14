@@ -2,7 +2,7 @@ object Versions {
     const val kotlin = "1.4.0"
 
     object kotlinx {
-        const val coroutines = "1.3.9"
+        const val coroutines = "1.4.0-M1"
     }
 
     object android {
