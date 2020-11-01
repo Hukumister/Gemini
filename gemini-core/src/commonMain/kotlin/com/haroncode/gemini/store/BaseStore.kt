@@ -10,11 +10,11 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.channels.BroadcastChannel
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.emitAll
@@ -24,6 +24,8 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.scan
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
 
@@ -43,13 +45,13 @@ open class BaseStore<Action : Any, State : Any, Event : Any, Effect : Any>(
 
     final override val coroutineScope: CoroutineScope = CoroutineScope(SupervisorJob() + coroutineDispatcher)
 
-    private val stateChannel = ConflatedBroadcastChannel(initialState)
-    private val actionChannel = BroadcastChannel<Action>(Channel.BUFFERED)
-    private val eventChannel = BroadcastChannel<Event>(Channel.BUFFERED)
+    private val _stateFlow = MutableStateFlow(initialState)
+    private val actionFlow = MutableSharedFlow<Action>()
+    private val _eventFlow = MutableSharedFlow<Event>()
 
-    final override val stateFlow: Flow<State> = stateChannel.asFlow()
+    final override val stateFlow: StateFlow<State> = _stateFlow
 
-    final override val eventFlow: Flow<Event> = eventChannel.asFlow()
+    final override val eventFlow: Flow<Event> = _eventFlow
 
     init {
         val reducerWrapper: Reducer<State, Effect>
@@ -73,21 +75,19 @@ open class BaseStore<Action : Any, State : Any, Event : Any, Effect : Any>(
             }
         }
 
-        val effectChannel = BroadcastChannel<Effect>(Channel.BUFFERED)
-        val effectFlow = effectChannel.asFlow()
-
-        stateFlow.zip(effectFlow) { state, effect ->
-            reducerWrapper.reduce(state, effect)
-        }
-            .onEach(stateChannel::send)
-            .launchIn(coroutineScope)
-
-        merge(
-            actionChannel.asFlow(),
+        val effectFlow = merge(
+            actionFlow,
             bootstrapperWrapper?.bootstrap() ?: emptyFlow()
         )
-            .flatMapMerge { action -> middlewareWrapper.execute(action, stateChannel.value) }
-            .onEach(effectChannel::send)
+            .flatMapMerge { action -> middlewareWrapper.execute(action, _stateFlow.value) }
+            .shareIn(coroutineScope, SharingStarted.WhileSubscribed(), replay = 1)
+
+        val stateFlow = effectFlow
+            .scan(initialState, reducerWrapper::reduce)
+            .shareIn(coroutineScope, SharingStarted.WhileSubscribed(), replay = 1)
+
+        stateFlow
+            .onEach(_stateFlow::emit)
             .launchIn(coroutineScope)
 
         if (eventProducerWrapper != null) {
@@ -99,14 +99,14 @@ open class BaseStore<Action : Any, State : Any, Event : Any, Effect : Any>(
                         ?.let(::flowOf)
                         ?: emptyFlow()
                 }
-                .onEach(eventChannel::send)
+                .onEach(_eventFlow::emit)
                 .launchIn(coroutineScope)
         }
     }
 
     override fun accept(value: Action) {
         coroutineScope.launch {
-            actionChannel.send(value)
+            actionFlow.emit(value)
         }
     }
 
