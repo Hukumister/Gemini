@@ -8,7 +8,8 @@ data class PublishingData(
     val githubRepo: String?,
     val issueTrackerUrl: String,
     val licenseName: String?,
-    val organization: String?
+    val organization: String?,
+    val publishAfterUpload: Boolean
 ) {
 
     companion object {
@@ -19,7 +20,8 @@ data class PublishingData(
             issueTrackerUrl = project.findProperty("publish.issue.tracker.url")?.toString().orEmpty(),
             licenseName = project.findProperty("publish.licence.name")?.toString(),
             githubRepo = project.findProperty("publish.github.repository")?.toString(),
-            organization = project.findProperty("publish.organization")?.toString()
+            organization = project.findProperty("publish.organization")?.toString(),
+            publishAfterUpload = project.findProperty("publish.publishAfterUpload")?.toString()?.toBoolean() ?: false
         )
     }
 }

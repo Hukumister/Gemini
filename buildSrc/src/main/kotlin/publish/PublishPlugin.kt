@@ -39,6 +39,7 @@ class PublishPlugin : Plugin<Project> {
         target.extensions.getByType(BintrayExtension::class.java).apply {
             user = authData.user
             key = authData.key
+            publish = publishingData.publishAfterUpload
             pkg.apply {
                 repo = publishingData.repoName
                 name = target.name
