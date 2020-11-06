@@ -3,29 +3,31 @@ package com.haroncode.gemini
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 
 actual open class StoreViewDelegate<Action : Any, State : Any>(
     private val stateConsumer: (State) -> Unit
 ) : StoreView<Action, State> {
 
-    internal val coroutineScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
+    internal val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
     internal var lifecycleObserver: LifecycleObserver? = null
 
-    private val actionChannel = BroadcastChannel<Action>(Channel.BUFFERED)
+    private val actionChannel = Channel<Action>(Channel.BUFFERED)
 
-    override val actionFlow: Flow<Action> = actionChannel.asFlow()
+    override val actionFlow: Flow<Action> = actionChannel.receiveAsFlow()
 
     override fun accept(value: State) {
         stateConsumer.invoke(value)
     }
 
     actual fun emit(action: Action) {
-        actionChannel.offer(action)
+        coroutineScope.launch {
+            actionChannel.send(action)
+        }
     }
 
     fun start() {
