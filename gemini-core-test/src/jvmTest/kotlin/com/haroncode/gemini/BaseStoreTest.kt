@@ -11,9 +11,7 @@ import com.haroncode.gemini.TestAction.Unfulfillable
 import com.haroncode.gemini.store.BaseStore
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.channels.BroadcastChannel
-import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
-import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestCoroutineDispatcher
@@ -26,11 +24,11 @@ import kotlin.test.assertTrue
 class BaseStoreTest {
 
     private lateinit var testDispatcher: TestCoroutineDispatcher
-    private lateinit var testBootstrapperChannel: BroadcastChannel<TestAction>
+    private lateinit var testBootstrapperFlow: MutableSharedFlow<TestAction>
     private lateinit var testErrorHandler: TestErrorHandler<TestState>
     private lateinit var baseStore: BaseStore<TestAction, TestState, TestEvent, TestEffect>
 
-    private lateinit var testActionChannel: BroadcastChannel<TestAction>
+    private lateinit var testActionFlow: MutableSharedFlow<TestAction>
     private lateinit var testStates: MutableList<TestState>
 
     private lateinit var stateJob: Job
@@ -38,24 +36,24 @@ class BaseStoreTest {
     @BeforeTest
     fun setup() {
         testDispatcher = TestCoroutineDispatcher()
-        testBootstrapperChannel = BroadcastChannel(BUFFERED)
+        testBootstrapperFlow = MutableSharedFlow()
         testErrorHandler = TestErrorHandler()
         baseStore = BaseStore(
             initialState = TestState(),
             middleware = TestMiddleware(testDispatcher),
             reducer = TestReducer(),
-            bootstrapper = TestBootstrapper(testBootstrapperChannel.asFlow()),
+            bootstrapper = TestBootstrapper(testBootstrapperFlow),
             eventProducer = TestEventProducer(),
             errorHandler = testErrorHandler,
             coroutineDispatcher = testDispatcher
         )
 
-        testActionChannel = BroadcastChannel(BUFFERED)
+        testActionFlow = MutableSharedFlow()
         testStates = mutableListOf()
 
         baseStore.coroutineScope.launch {
             launch {
-                testActionChannel.asFlow()
+                testActionFlow
                     .collect(baseStore::accept)
             }
 
@@ -86,7 +84,7 @@ class BaseStoreTest {
             FulfillableInstantly
         )
 
-        actions.forEach { testBootstrapperChannel.send(it) }
+        actions.forEach { testBootstrapperFlow.emit(it) }
 
         assertEquals(2, testStates.size)
     }
@@ -99,7 +97,7 @@ class BaseStoreTest {
             Unfulfillable
         )
 
-        actions.forEach { testActionChannel.send(it) }
+        actions.forEach { testActionFlow.emit(it) }
 
         assertEquals(1, testStates.size)
     }
@@ -113,7 +111,7 @@ class BaseStoreTest {
                 FulfillableInstantly
             )
 
-            actions.forEach { testActionChannel.send(it) }
+            actions.forEach { testActionFlow.emit(it) }
 
             assertEquals(1 + actions.size, testStates.size)
         }
@@ -127,7 +125,7 @@ class BaseStoreTest {
                 TranslatesTo3Effects
             )
 
-            actions.forEach { testActionChannel.send(it) }
+            actions.forEach { testActionFlow.emit(it) }
 
             assertEquals(1 + actions.size * 3, testStates.size)
         }
@@ -146,7 +144,7 @@ class BaseStoreTest {
                 TranslatesTo3Effects // maps to 3
             )
 
-            actions.forEach { testActionChannel.send(it) }
+            actions.forEach { testActionFlow.emit(it) }
 
             assertEquals(8 + 1, testStates.size)
             val expectedState = TestState(
@@ -160,7 +158,7 @@ class BaseStoreTest {
     fun `there should be no state emission after store cancellation`() = runBlockingTest {
         val mockServerDelayMs = 10L
 
-        testActionChannel.send(FulfillableAsync(mockServerDelayMs))
+        testActionFlow.emit(FulfillableAsync(mockServerDelayMs))
 
         assertEquals(2, testStates.size)
 
@@ -185,7 +183,7 @@ class BaseStoreTest {
     fun `last state should be delivered after reconnect`() = runBlockingTest {
         val mockServerDelayMs = 10L
 
-        testActionChannel.send(FulfillableAsync(mockServerDelayMs))
+        testActionFlow.emit(FulfillableAsync(mockServerDelayMs))
 
         assertEquals(2, testStates.size)
 
@@ -215,7 +213,7 @@ class BaseStoreTest {
 
     @Test
     fun `error handler handles exception in middleware`() = runBlockingTest {
-        testActionChannel.send(FulfillableInstantly)
+        testActionFlow.emit(FulfillableInstantly)
 
         val expectedState = TestState(
             counter = INITIAL_COUNTER + 1,
@@ -224,12 +222,12 @@ class BaseStoreTest {
 
         assertEquals(expectedState, testStates.last())
 
-        testActionChannel.send(LeadsToExceptionInMiddleware)
+        testActionFlow.emit(LeadsToExceptionInMiddleware)
 
         assertEquals(expectedState, testErrorHandler.lastState)
         assertTrue(testErrorHandler.lastThrowable is Exception)
 
-        testActionChannel.send(FulfillableInstantly)
+        testActionFlow.emit(FulfillableInstantly)
 
         val expectedStateAfterErrorHandling = expectedState.copy(counter = expectedState.counter + 1)
 
@@ -238,7 +236,7 @@ class BaseStoreTest {
 
     @Test
     fun `error handler handles exception in reducer`() = runBlockingTest {
-        testActionChannel.send(FulfillableInstantly)
+        testActionFlow.emit(FulfillableInstantly)
 
         val expectedState = TestState(
             counter = INITIAL_COUNTER + 1,
@@ -247,12 +245,12 @@ class BaseStoreTest {
 
         assertEquals(expectedState, testStates.last())
 
-        testActionChannel.send(TranslatesToExceptionInReducer)
+        testActionFlow.emit(TranslatesToExceptionInReducer)
 
         assertEquals(expectedState, testErrorHandler.lastState)
         assertTrue(testErrorHandler.lastThrowable is IllegalStateException)
 
-        testActionChannel.send(FulfillableInstantly)
+        testActionFlow.emit(FulfillableInstantly)
 
         val expectedStateAfterErrorHandling = expectedState.copy(counter = expectedState.counter + 1)
 
@@ -274,7 +272,7 @@ class BaseStoreTest {
                 .collect { events += it }
         }
 
-        actions.forEach { testActionChannel.send(it) }
+        actions.forEach { testActionFlow.emit(it) }
 
         job.cancel()
 
@@ -296,7 +294,7 @@ class BaseStoreTest {
                 .collect { events += it }
         }
 
-        actions.forEach { testActionChannel.send(it) }
+        actions.forEach { testActionFlow.emit(it) }
 
         job.cancel()
 
@@ -311,7 +309,7 @@ class BaseStoreTest {
             FulfillableInstantly
         )
 
-        actions.forEach { testActionChannel.send(it) }
+        actions.forEach { testActionFlow.emit(it) }
 
         val events = mutableListOf<TestEvent>()
         val job = launch {
@@ -321,7 +319,7 @@ class BaseStoreTest {
 
         assertTrue(events.isEmpty())
 
-        testActionChannel.send(ActionForEvent)
+        testActionFlow.emit(ActionForEvent)
 
         job.cancel()
 
