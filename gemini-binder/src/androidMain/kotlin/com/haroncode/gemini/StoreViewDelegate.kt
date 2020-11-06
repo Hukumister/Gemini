@@ -1,11 +1,12 @@
 package com.haroncode.gemini
 
+import androidx.lifecycle.lifecycleScope
 import androidx.savedstate.SavedStateRegistryOwner
 import com.haroncode.gemini.functional.Consumer
-import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 
 actual open class StoreViewDelegate<Action : Any, State : Any>(
     savedStateRegistryOwner: SavedStateRegistryOwner,
@@ -14,11 +15,13 @@ actual open class StoreViewDelegate<Action : Any, State : Any>(
     Consumer<State> by stateConsumer,
     SavedStateRegistryOwner by savedStateRegistryOwner {
 
-    private val actionChannel = BroadcastChannel<Action>(Channel.BUFFERED)
+    private val actionChannel = Channel<Action>(Channel.BUFFERED)
 
-    override val actionFlow: Flow<Action> = actionChannel.asFlow()
+    override val actionFlow: Flow<Action> = actionChannel.receiveAsFlow()
 
     actual fun emit(action: Action) {
-        actionChannel.offer(action)
+        lifecycleScope.launch {
+            actionChannel.send(action)
+        }
     }
 }
