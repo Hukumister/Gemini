@@ -15,6 +15,8 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.emitAll
@@ -49,9 +51,9 @@ open class BaseStore<Action : Any, State : Any, Event : Any, Effect : Any>(
     private val actionFlow = MutableSharedFlow<Action>()
     private val _eventFlow = MutableSharedFlow<Event>()
 
-    final override val stateFlow: StateFlow<State> = _stateFlow
+    final override val stateFlow: StateFlow<State> = _stateFlow.asStateFlow()
 
-    final override val eventFlow: Flow<Event> = _eventFlow
+    final override val eventFlow: Flow<Event> = _eventFlow.asSharedFlow()
 
     init {
         val reducerWrapper: Reducer<State, Effect>
