@@ -1,12 +1,12 @@
 object Versions {
-    const val kotlin = "1.4.10"
+    const val kotlin = "1.4.20"
 
     object kotlinx {
-        const val coroutines = "1.4.1"
+        const val coroutines = "1.4.2"
     }
 
     object android {
-        const val gradlePlugin = "4.1.0"
+        const val gradlePlugin = "4.1.1"
         const val minSdk = 21
         const val compileSdk = 30
         const val targetSdk = 30
