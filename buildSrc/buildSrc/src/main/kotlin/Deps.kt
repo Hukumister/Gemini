@@ -15,6 +15,7 @@ object Deps {
     object androidx {
         const val appCompat = "androidx.appcompat:appcompat:${Versions.androidx.appCompat}"
         const val lifecycleKtx = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.androidx.lifecycle}"
+        const val viewModel = "androidx.lifecycle:lifecycle-viewmodel:${Versions.androidx.lifecycle}"
         const val coreKtx = "androidx.core:core-ktx:${Versions.androidx.core}"
         const val material = "com.google.android.material:material:${Versions.androidx.material}"
         const val constraintLayout = "androidx.constraintlayout:constraintlayout:${Versions.androidx.constraintLayout}"

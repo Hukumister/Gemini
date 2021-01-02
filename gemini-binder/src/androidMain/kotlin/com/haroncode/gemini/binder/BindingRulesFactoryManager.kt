@@ -2,6 +2,10 @@ package com.haroncode.gemini.binder
 
 import com.haroncode.gemini.binder.rule.BindingRulesFactory
 
+@Deprecated(
+    message = "Will be removed in upcoming release, have to use getStore extension to retain and cancel store instance in ViewModel",
+    replaceWith = ReplaceWith("getStore(provider)", imports = ["com.haroncode.gemini.keeper.getStore"])
+)
 internal object BindingRulesFactoryManager {
 
     private val factories: MutableMap<String, BindingRulesFactory<*>> = mutableMapOf()

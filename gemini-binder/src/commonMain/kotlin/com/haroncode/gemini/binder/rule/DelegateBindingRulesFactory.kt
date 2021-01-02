@@ -38,6 +38,10 @@ class BindingRuleListBuilder {
         rules += bindingRuleProvider.invoke()
     }
 
+    @Deprecated(
+        message = "Will be removed in upcoming release, have to use getStore extension to retain and cancel store instance in ViewModel",
+        replaceWith = ReplaceWith("getStore(provider)", imports = ["com.haroncode.gemini.keeper.getStore"])
+    )
     fun autoCancel(storeProvider: () -> Store<*, *, *>) {
         rules += AutoCancelStoreRule(storeProvider.invoke())
     }

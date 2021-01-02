@@ -26,6 +26,7 @@ kotlin {
             dependencies {
                 implementation(Deps.androidx.appCompat)
                 implementation(Deps.androidx.lifecycleKtx)
+                implementation(Deps.androidx.viewModel)
             }
         }
     }

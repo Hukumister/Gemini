@@ -13,6 +13,10 @@ import androidx.savedstate.SavedStateRegistryOwner
 /**
  * @author kdk96
  */
+@Deprecated(
+    message = "Will be removed in upcoming release, have to use getStore extension to retain and cancel store instance in ViewModel",
+    replaceWith = ReplaceWith("getStore(provider)", imports = ["com.haroncode.gemini.keeper.getStore"])
+)
 internal abstract class ExtendedLifecycleObserver : LifecycleObserver, SavedStateRegistry.SavedStateProvider {
 
     private var instanceStateSaved = false

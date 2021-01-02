@@ -14,6 +14,10 @@ import com.haroncode.gemini.lifecycle.strategy.LifecycleStrategy
 import kotlinx.coroutines.Dispatchers
 import java.util.UUID
 
+@Deprecated(
+    message = "Will be removed in upcoming release, have to use getStore extension to retain and cancel store instance in ViewModel",
+    replaceWith = ReplaceWith("getStore(provider)", imports = ["com.haroncode.gemini.keeper.getStore"])
+)
 internal class RestoreBinder<View : SavedStateRegistryOwner>(
     private val factoryProvider: () -> BindingRulesFactory<View>,
     private val lifecycleStrategy: LifecycleStrategy,

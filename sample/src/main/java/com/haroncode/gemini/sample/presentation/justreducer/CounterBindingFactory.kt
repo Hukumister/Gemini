@@ -3,17 +3,17 @@ package com.haroncode.gemini.sample.presentation.justreducer
 import com.haroncode.gemini.binder.rule.BindingRulesFactory
 import com.haroncode.gemini.binder.rule.DelegateBindingRulesFactory
 import com.haroncode.gemini.binder.rule.bindingRulesFactory
-import com.haroncode.gemini.sample.di.scope.PerFragment
 import com.haroncode.gemini.sample.ui.CounterStoreViewDelegate
+import com.haroncode.gemini.sample.util.getStore
 import javax.inject.Inject
+import javax.inject.Provider
 
-@PerFragment
 class CounterBindingFactory @Inject constructor(
-    private val store: CounterStore
+    private val storeProvider: Provider<CounterStore>
 ) : DelegateBindingRulesFactory<CounterStoreViewDelegate>() {
 
     override val bindingRulesFactory: BindingRulesFactory<CounterStoreViewDelegate> = bindingRulesFactory { view ->
-        baseRule { store to view }
-        autoCancel { store } // magic is here )))
+        val counterStore = view.getStore(storeProvider)
+        baseRule { counterStore to view }
     }
 }

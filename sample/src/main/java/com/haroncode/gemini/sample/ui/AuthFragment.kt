@@ -16,14 +16,13 @@ import com.haroncode.gemini.sample.presentation.onlyaction.AuthStore.Action
 import com.haroncode.gemini.sample.presentation.onlyaction.AuthStore.Action.LoginClick
 import com.haroncode.gemini.sample.presentation.onlyaction.AuthStore.State
 import javax.inject.Inject
-import javax.inject.Provider
 
 class AuthFragment :
     PublisherFragment<Action, State>(R.layout.fragment_auth),
     StoreEventListener<AuthStore.Event> {
 
     @Inject
-    lateinit var factory: Provider<AuthBindingFactory>
+    lateinit var factory: AuthBindingFactory
 
     private var _binding: FragmentAuthBinding? = null
     private val binding get() = _binding!!
@@ -31,7 +30,7 @@ class AuthFragment :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        StoreViewBinding.withRestore(factoryProvider = factory::get)
+        StoreViewBinding.with(factory)
             .bind(this)
     }
 
