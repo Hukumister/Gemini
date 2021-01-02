@@ -1,5 +1,5 @@
 object Versions {
-    const val kotlin = "1.4.20"
+    const val kotlin = "1.4.21"
 
     object kotlinx {
         const val coroutines = "1.4.2"
