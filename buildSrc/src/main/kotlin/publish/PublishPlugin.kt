@@ -40,6 +40,9 @@ class PublishPlugin : Plugin<Project> {
             user = authData.user
             key = authData.key
             publish = publishingData.publishAfterUpload
+            if (target.plugins.hasPlugin("org.jetbrains.kotlin.android")) {
+                setPublications("gemini-store-keeper")
+            }
             pkg.apply {
                 repo = publishingData.repoName
                 name = target.name
@@ -57,6 +60,9 @@ class PublishPlugin : Plugin<Project> {
     }
 
     private fun setupBintrayPublishing(target: Project) {
+        // TODO: make plugin universal
+        if (target.plugins.hasPlugin("org.jetbrains.kotlin.android")) return
+
         target.tasks.named(BintrayUploadTask.getTASK_NAME(), BintrayUploadTask::class.java) {
             doFirst {
                 val publishing = project.extensions.getByType(PublishingExtension::class)

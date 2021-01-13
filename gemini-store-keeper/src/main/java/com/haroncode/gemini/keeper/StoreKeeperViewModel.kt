@@ -6,6 +6,10 @@ import androidx.lifecycle.ViewModelStoreOwner
 import com.haroncode.gemini.element.Store
 import kotlinx.coroutines.cancel
 
+/**
+ * @author kdk96
+ */
+
 inline fun <reified T, Action : Any, State : Any, Event : Any> ViewModelStoreOwner.getStore(
     noinline provider: () -> T
 ) where T : Store<Action, State, Event> =
