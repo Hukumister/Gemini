@@ -1,6 +1,7 @@
 include(
     ":gemini-core",
     ":gemini-core-test",
+    ":gemini-store-keeper",
     ":gemini-binder",
     ":sample"
 )

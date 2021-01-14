@@ -4,18 +4,18 @@ import com.haroncode.gemini.binder.rule.BindingRulesFactory
 import com.haroncode.gemini.binder.rule.DelegateBindingRulesFactory
 import com.haroncode.gemini.binder.rule.bindEventTo
 import com.haroncode.gemini.binder.rule.bindingRulesFactory
-import com.haroncode.gemini.sample.di.scope.PerFragment
 import com.haroncode.gemini.sample.ui.AuthFragment
+import com.haroncode.gemini.sample.util.getStore
 import javax.inject.Inject
+import javax.inject.Provider
 
-@PerFragment
 class AuthBindingFactory @Inject constructor(
-    private val store: AuthStore
+    private val storeProvider: Provider<AuthStore>
 ) : DelegateBindingRulesFactory<AuthFragment>() {
 
     override val bindingRulesFactory: BindingRulesFactory<AuthFragment> = bindingRulesFactory { view ->
+        val store = view.getStore(storeProvider)
         baseRule { store to view }
         rule { store bindEventTo view }
-        autoCancel { store } // magic is here )))
     }
 }

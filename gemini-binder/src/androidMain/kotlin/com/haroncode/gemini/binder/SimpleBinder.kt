@@ -9,6 +9,10 @@ import com.haroncode.gemini.lifecycle.StoreLifecycleObserver
 import com.haroncode.gemini.lifecycle.strategy.LifecycleStrategy
 import kotlinx.coroutines.Dispatchers
 
+@Deprecated(
+    message = "Will be removed in upcoming release, have to use getStore extension to retain and cancel store instance in ViewModel",
+    replaceWith = ReplaceWith("getStore(provider)", imports = ["com.haroncode.gemini.keeper.getStore"])
+)
 internal class SimpleBinder<View : SavedStateRegistryOwner>(
     private val factoryProvider: () -> BindingRulesFactory<View>,
     private val lifecycleStrategy: LifecycleStrategy,

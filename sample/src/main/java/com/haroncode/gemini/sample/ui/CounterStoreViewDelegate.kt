@@ -1,14 +1,15 @@
 package com.haroncode.gemini.sample.ui
 
-import androidx.savedstate.SavedStateRegistryOwner
+import androidx.lifecycle.ViewModelStoreOwner
 import com.haroncode.gemini.StoreViewDelegate
 import com.haroncode.gemini.functional.Consumer
 import com.haroncode.gemini.sample.presentation.justreducer.CounterStore
 
 class CounterStoreViewDelegate(
-    savedStateRegistryOwner: SavedStateRegistryOwner,
+    counterFragment: CounterFragment,
     stateConsumer: Consumer<CounterStore.State>
 ) : StoreViewDelegate<CounterStore.Action, CounterStore.State>(
-    savedStateRegistryOwner,
+    counterFragment,
     stateConsumer
-)
+),
+    ViewModelStoreOwner by counterFragment

@@ -1,5 +1,5 @@
 object Versions {
-    const val kotlin = "1.4.20"
+    const val kotlin = "1.4.21"
 
     object kotlinx {
         const val coroutines = "1.4.2"
@@ -10,7 +10,7 @@ object Versions {
         const val minSdk = 21
         const val compileSdk = 30
         const val targetSdk = 30
-        const val buildTools = "30.0.2"
+        const val buildTools = "30.0.3"
     }
 
     object androidx {
