@@ -30,4 +30,6 @@ object Versions {
     const val bintray = "1.8.5"
 
     const val ktlint = "0.39.0"
+
+    const val androidTools = "27.1.2"
 }

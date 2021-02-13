@@ -1,3 +1,4 @@
+include(":gemini-lint")
 include(
     ":gemini-core",
     ":gemini-core-test",
