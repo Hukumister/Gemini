@@ -58,16 +58,10 @@ fun <T : Any> generateSampleRulesFactory() = object : BindingRulesFactory<T> {
 """.trimIndent()
 
 val OTHER_BINDER_STUB = """
-package ru.test.app
+package ru.test.lib
 
 object StoreViewBinding {
-  fun <T : LifecycleOwner> with(
-      factory: BindingRulesFactory<T>,
-      lifecycleStrategy: LifecycleStrategy = StartStopStrategy
-  ): Binder<T> = BinderImpl(
-      factory = factory,
-      lifecycleStrategy = lifecycleStrategy
-  )
+  fun <T : LifecycleOwner> with(): Binder<T> = BinderImpl()
 }
 
 interface Binder<View> {
