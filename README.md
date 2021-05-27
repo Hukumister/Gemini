@@ -1,5 +1,4 @@
 # Gemini
-[![jCenter](https://api.bintray.com/packages/haroncode/maven/gemini-core/images/download.svg)](https://bintray.com/haroncode/maven/gemini-core/_latestVersion)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![Build](https://github.com/HaronCode/Gemini/workflows/Build/badge.svg)
 
