@@ -26,6 +26,14 @@ object Deps {
         const val compiler = "com.github.stephanenicolas.toothpick:toothpick-compiler:${Versions.toothpick}"
     }
 
+    object lint {
+        const val core = "com.android.tools.lint:lint:${Versions.androidTools}"
+        const val api = "com.android.tools.lint:lint-api:${Versions.androidTools}"
+        const val checks = "com.android.tools.lint:lint-checks:${Versions.androidTools}"
+        const val tests = "com.android.tools.lint:lint-tests:${Versions.androidTools}"
+    }
+    const val testutils = "com.android.tools:testutils:${Versions.androidTools}"
+
     const val cicerone = "ru.terrakok.cicerone:cicerone:${Versions.cicerone}"
 
     const val timber = "com.jakewharton.timber:timber:${Versions.timber}"

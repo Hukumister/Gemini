@@ -52,4 +52,6 @@ dependencies {
     implementation(Deps.timber)
 
     implementation(project(":gemini-binder"))
+
+    lintChecks(project(":gemini-lint"))
 }
