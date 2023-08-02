@@ -1,21 +1,21 @@
 package com.haroncode.gemini.sample
 
+import com.github.terrakok.cicerone.androidx.FragmentScreen
 import com.haroncode.gemini.sample.ui.AuthFragment
 import com.haroncode.gemini.sample.ui.CounterFragment
 import com.haroncode.gemini.sample.ui.MainFragment
-import ru.terrakok.cicerone.android.support.SupportAppScreen
 
 object Screens {
 
-    object Main : SupportAppScreen() {
-        override fun getFragment() = MainFragment()
+    fun Main() = FragmentScreen {
+        MainFragment()
     }
 
-    object Counter : SupportAppScreen() {
-        override fun getFragment() = CounterFragment.newInstance()
+    fun Counter() = FragmentScreen {
+        CounterFragment.newInstance()
     }
 
-    object Auth : SupportAppScreen() {
-        override fun getFragment() = AuthFragment.newInstance()
+    fun Auth() = FragmentScreen {
+        AuthFragment.newInstance()
     }
 }

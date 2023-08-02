@@ -1,6 +1,4 @@
 plugins {
-    id("publish-plugin")
-    id("ktlint-plugin")
     kotlin("multiplatform")
 }
 
@@ -12,12 +10,14 @@ group = geminiGroup
 
 kotlin {
     jvm()
-    ios()
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
 
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(Deps.kotlinx.coroutines)
+                implementation(libs.coroutines)
             }
         }
     }

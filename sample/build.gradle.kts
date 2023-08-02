@@ -1,18 +1,17 @@
 plugins {
     id("com.android.application")
-    id("ktlint-plugin")
     kotlin("android")
     kotlin("kapt")
 }
 
 android {
-    compileSdkVersion(Versions.android.compileSdk)
-    buildToolsVersion(Versions.android.buildTools)
+    namespace = "com.haroncode.gemini.sample"
+    compileSdk = 33
 
     defaultConfig {
         applicationId = "com.haroncode.gemini.sample"
-        minSdkVersion(Versions.android.minSdk)
-        targetSdkVersion(Versions.android.targetSdk)
+        minSdk = 26
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
     }
@@ -22,34 +21,28 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
-    lintOptions {
-        isAbortOnError = false
-    }
 }
 
 dependencies {
-    implementation(Deps.kotlinx.coroutines)
+    implementation(libs.coroutines)
+    implementation(libs.appcompat)
+    implementation(libs.lifecycle.ktx)
+    implementation(libs.lifecycle.viewmodel)
+    implementation(libs.material)
+    implementation(libs.constraint)
 
-    implementation(Deps.androidx.appCompat)
-    implementation(Deps.androidx.lifecycleKtx)
-    implementation(Deps.androidx.coreKtx)
-    implementation(Deps.androidx.material)
-    implementation(Deps.androidx.constraintLayout)
+    implementation(libs.toothpick)
+    kapt(libs.toothpick.compiler)
 
-    implementation(Deps.toothpick.ktp)
-    kapt(Deps.toothpick.compiler)
-
-    implementation(Deps.cicerone)
-
-    implementation(Deps.timber)
-
+    implementation(libs.cicerone)
+    implementation(libs.timber)
     implementation(project(":gemini-binder"))
 }

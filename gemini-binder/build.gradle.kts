@@ -1,7 +1,6 @@
 plugins {
-    id("ktlint-plugin")
-    id("publish-plugin")
     kotlin("multiplatform")
+    kotlin("native.cocoapods")
     id("com.android.library")
 }
 
@@ -11,22 +10,35 @@ val geminiVersion = findProperty("version") as String
 version = geminiVersion
 group = geminiGroup
 
+@OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
 kotlin {
+    targetHierarchy.default()
+
+    android {
+        compilations.all {
+            kotlinOptions {
+                jvmTarget = "1.8"
+            }
+        }
+    }
+
     android { publishLibraryVariants("release", "debug") }
-    ios()
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
 
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(Deps.kotlinx.coroutines)
+                implementation(libs.coroutines)
                 api(project(":gemini-core"))
             }
         }
         val androidMain by getting {
             dependencies {
-                implementation(Deps.androidx.appCompat)
-                implementation(Deps.androidx.lifecycleKtx)
-                implementation(Deps.androidx.viewModel)
+                implementation(libs.appcompat)
+                implementation(libs.lifecycle.ktx)
+                implementation(libs.lifecycle.viewmodel)
                 api(project(":gemini-store-keeper"))
             }
         }
@@ -34,12 +46,9 @@ kotlin {
 }
 
 android {
-    compileSdkVersion(Versions.android.compileSdk)
-    buildToolsVersion(Versions.android.buildTools)
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-
+    namespace = "com.haroncode.gemini.binder"
+    compileSdk = 33
     defaultConfig {
-        minSdkVersion(Versions.android.minSdk)
-        targetSdkVersion(Versions.android.targetSdk)
+        minSdk = 26
     }
 }
