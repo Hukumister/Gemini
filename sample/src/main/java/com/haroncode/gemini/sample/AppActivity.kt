@@ -4,23 +4,25 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import com.github.terrakok.cicerone.Command
+import com.github.terrakok.cicerone.Navigator
+import com.github.terrakok.cicerone.NavigatorHolder
+import com.github.terrakok.cicerone.androidx.AppNavigator
+import com.github.terrakok.cicerone.androidx.FragmentScreen
 import com.haroncode.gemini.sample.di.DI
 import com.haroncode.gemini.sample.util.setLaunchScreen
-import ru.terrakok.cicerone.Navigator
-import ru.terrakok.cicerone.NavigatorHolder
-import ru.terrakok.cicerone.android.support.SupportAppNavigator
-import ru.terrakok.cicerone.commands.Command
 import toothpick.Toothpick
 import javax.inject.Inject
 
 class AppActivity : AppCompatActivity() {
 
-    private val navigator: Navigator = object : SupportAppNavigator(this, R.id.container) {
+    private val navigator: Navigator = object : AppNavigator(this, R.id.container) {
+
         override fun setupFragmentTransaction(
-            command: Command,
+            screen: FragmentScreen,
+            fragmentTransaction: FragmentTransaction,
             currentFragment: Fragment?,
-            nextFragment: Fragment?,
-            fragmentTransaction: FragmentTransaction
+            nextFragment: Fragment
         ) {
             fragmentTransaction.setReorderingAllowed(true)
         }
@@ -35,7 +37,7 @@ class AppActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_container)
         if (supportFragmentManager.fragments.isEmpty()) {
-            navigator.setLaunchScreen(Screens.Main)
+            navigator.setLaunchScreen(Screens.Main())
         }
     }
 

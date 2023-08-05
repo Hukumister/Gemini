@@ -26,11 +26,11 @@ class ConnectivityRepositoryImpl @Inject constructor(
 
         val callback = object : ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network: Network) {
-                offer(true)
+                trySend(true)
             }
 
             override fun onLost(network: Network) {
-                offer(false)
+                trySend(false)
             }
         }
 

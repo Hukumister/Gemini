@@ -1,26 +1,28 @@
 plugins {
     id("com.android.library")
     kotlin("android")
-    id("ktlint-plugin")
-    id("publish-plugin")
 }
 
 android {
-    compileSdkVersion(Versions.android.compileSdk)
-    buildToolsVersion(Versions.android.buildTools)
-
+    namespace = "com.haroncode.gemini.keeper"
+    compileSdk = 33
     defaultConfig {
-        minSdkVersion(Versions.android.minSdk)
+        minSdk = 26
     }
 
-    libraryVariants.all {
-        generateBuildConfigProvider.configure { enabled = false }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 }
 
 dependencies {
-    implementation(Deps.kotlinx.coroutines)
-    implementation(Deps.androidx.viewModel)
+    implementation(libs.coroutines)
+    implementation(libs.lifecycle.viewmodel)
     api(project(":gemini-core"))
 }
 
@@ -35,18 +37,18 @@ val sourcesJar by tasks.creating(Jar::class) {
     from(android.sourceSets.getByName("main").java.srcDirs)
 }
 
-afterEvaluate {
-    publishing {
-        publications {
-            create<MavenPublication>("gemini-store-keeper") {
-                groupId = geminiGroup
-                artifactId = "gemini-store-keeper"
-                version = geminiVersion
-
-                from(components["release"])
-
-                artifact(sourcesJar)
-            }
-        }
-    }
-}
+//afterEvaluate {
+//    publishing {
+//        publications {
+//            create<MavenPublication>("gemini-store-keeper") {
+//                groupId = geminiGroup
+//                artifactId = "gemini-store-keeper"
+//                version = geminiVersion
+//
+//                from(components["release"])
+//
+//                artifact(sourcesJar)
+//            }
+//        }
+//    }
+//}
