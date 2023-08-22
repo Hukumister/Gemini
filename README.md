@@ -5,27 +5,16 @@
 This library is designed to simplify build the MVI architecture in android.
 
 ## Installing
-Available through bintray.com.
-
-Add the maven repo to your root `build.gradle`
-
-```groovy
-allprojects {
-    repositories {
-        maven { url 'https://dl.bintray.com/haroncode/maven' }
-    }
-}
-```
 
 Add the dependencies:
 - Multiplatform:
 ```groovy
-implementation("com.haroncode.gemini:gemini-core:${latest-version}")
+implementation("io.github.hukumister:gemini-core:${latest-version}")
 ```
 - Android:
 ```groovy
-releaseImplementation("com.haroncode.gemini:gemini-binder-android:${latest-version}")
-debugImplementation("com.haroncode.gemini:gemini-binder-android-debug:${latest-version}")
+releaseImplementation("io.github.hukumister:gemini-binder-android:${latest-version}")
+debugImplementation("io.github.hukumister:gemini-binder-android-debug:${latest-version}")
 ```
 ## Wiki
 You can find wiki here https://github.com/HaronCode/Gemini/wiki
