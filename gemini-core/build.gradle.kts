@@ -1,5 +1,6 @@
 plugins {
     kotlin("multiplatform")
+    id("convention.publication")
 }
 
 val geminiGroup = findProperty("group") as String
