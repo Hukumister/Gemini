@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
     kotlin("android")
+    id("convention.publication")
 }
 
 android {
@@ -31,24 +32,3 @@ val geminiVersion = findProperty("version") as String
 
 version = geminiVersion
 group = geminiGroup
-
-val sourcesJar by tasks.creating(Jar::class) {
-    archiveClassifier.set("sources")
-    from(android.sourceSets.getByName("main").java.srcDirs)
-}
-
-//afterEvaluate {
-//    publishing {
-//        publications {
-//            create<MavenPublication>("gemini-store-keeper") {
-//                groupId = geminiGroup
-//                artifactId = "gemini-store-keeper"
-//                version = geminiVersion
-//
-//                from(components["release"])
-//
-//                artifact(sourcesJar)
-//            }
-//        }
-//    }
-//}

@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
     spec.name                     = 'gemini_binder'
-    spec.version                  = '2.0.0-alpha4'
+    spec.version                  = '2.0.0'
     spec.homepage                 = ''
     spec.source                   = { :http=> ''}
     spec.authors                  = ''

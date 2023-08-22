@@ -20,6 +20,8 @@ include(":gemini-binder")
 include(":gemini-store-keeper")
 include(":sample")
 
+includeBuild("convention-plugins")
+
 if (startParameter.projectProperties.containsKey("check_publication")) {
     include(":check-publication")
 }

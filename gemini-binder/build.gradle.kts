@@ -2,6 +2,7 @@ plugins {
     kotlin("multiplatform")
     kotlin("native.cocoapods")
     id("com.android.library")
+    id("convention.publication")
 }
 
 val geminiGroup = findProperty("group") as String
@@ -22,7 +23,7 @@ kotlin {
         }
     }
 
-    android { publishLibraryVariants("release", "debug") }
+//    android { publishLibraryVariants("release") }
     iosX64()
     iosArm64()
     iosSimulatorArm64()
